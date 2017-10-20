@@ -38,6 +38,8 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 $ source ~/.bash_profile
 ```
 
+NodeJSインストール
+
 ```
 $ nodebrew install-binary v8.6.0
 $ nodebrew use v8.6.0
