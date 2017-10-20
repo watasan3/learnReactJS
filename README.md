@@ -1,6 +1,6 @@
 # サーバ作成
 
-NodeJSパッケージをインストール
+NodeJSパッケージをインストール  
 [express](http://expressjs.com/ja/)というモジュールでサーバを作成します。
 package.json作成
 
