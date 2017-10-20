@@ -75,7 +75,7 @@ test()
 
 関数
 
-```
+```function.js
 // ES5
 var testES5 = function (param) {
   console.log(param)
@@ -91,7 +91,7 @@ testES6('ES6')
 
 クラス
 
-```
+```class.js
 // ES5のクラス（prototype）
 function classES5(){
   this.name = 'ES5';
