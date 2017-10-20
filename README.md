@@ -10,7 +10,7 @@ NodeJSインストール
 
 * Windows:![Nodist](https://github.com/marcelklehr/nodist)
 
-インストーラでNodistをインストール後
+[インストーラ](https://github.com/marcelklehr/nodist/releases)でNodistをインストール後
 
 ```
 $ nodist dist
