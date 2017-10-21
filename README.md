@@ -1,72 +1,114 @@
-# ミニマムなReactJS
+# webpack + Babelでコンポーネントを作成する
 
-ReactJSでDOMをレンダリングするには  
+webpackを使うことで複数のリソースファイルを１つにまとめることができます。  
+さらにBabelと組み合わせることでJSXの変換に加えてブラウザではまだ未対応のimport文などが利用可能になります。  
+これにより、JSファイルからJSファイルのモジュールを呼び出すような構成が可能になります。  
+webpackでビルドするためにパッケージを追加します。  
 
-* ReactJS  
-* React DOM  
-* Babel
+```
+$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
+```
 
-が必要です。  
-簡易のため、上記JSファイルをCDN経由で読み込みます  
+package.jsonは次のようになります。
+
+```package.json
+{
+  "name": "learnReactJS",
+  "version": "1.0.0",
+  "description": "ReactJSでDOMをレンダリングするには",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teradonburi/learnReactJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teradonburi/learnReactJS/issues"
+  },
+  "homepage": "https://github.com/teradonburi/learnReactJS#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "webpack": "^3.8.1"
+  }
+}
+```
+
+index.htmlを次のようにbundle.jsのみ読み込むように書き換えてください
+（bundle.jsはwebpackでビルド後に生成されるファイル想定）
+以降、index.htmlを書き換えることはほぼありません。
 
 ```index.html
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
-  <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.38/browser.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel">
-    ReactDOM.render(
-      <h1>Hello, world!</h1>,
-      document.getElementById('root')
-    )
-  </script>
+  <script type='text/javascript' src="bundle.js" ></script>
 </body>
 </html>
 ```
 
-実際にレンダリングしているのはReactDOM.renderの部分です。  
-ここで注目すべき点はscriptタグ内なのに  
-`<h1>`タグ（DOM）が記述されている点です。  
-実際に実行される際にはBabelにて次のようなJSに変換されます。  
-上記のような一見DOMが混じったようなJSの記法をJSXと呼びます。  
-JSXはBebelによってJSのソースコードに変換(トランスパイル)されます。
-実際にどのように変換されるか見てみましょう。  
-  
-ReactDOM.render部分のみのtest.jsxを作成します。  
+Reactのコンポーネントを作成します。(App.js)  
+ReactのコンポーネントはReact.Componentを継承することで作成します。  
+renderメソッドでDOMを返却するようにします。  
+export defaultで外部のJSからクラスをimportできるようにします。  
 
-```test.jsx
+```App.js
+import React from 'react'
+
+export default class App extends React.Component {
+
+    render () {
+        return <h1>Hello, world!</h1>
+    }
+
+}
+```
+
+index.jsにて作成したReactコンポーネントをimportしてDOMをレンダリングします。  
+ここで注目してほしいのはJSXにて<App />というDOMが指定できるようになっています。  
+React DOMによって作成したReactコンポーネントは新しいDOMとして指定できるようになります。  
+（DOMの振る舞いはReactコンポーネント内部でJSで記述する）  
+最終的なレンダリングはReactコンポーネントのrenderメソッドにて返却されるDOMが描画されます。  
+
+```index.js
+import React  from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
+
 ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('root')
+    <App />,
+    document.getElementById('root')
 )
 ```
 
-BabelとJSXトランスパイラをインストールします。  
+次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
 
 ```
-# Babelコマンドをインストール
-npm install -g babel-cli
-# package.json作成
-npm init --force
-# BabelのJSXトランスパイラプラグインをダウンロード
-npm install --save babel-plugin-transform-react-jsx
+$ node_modules/webpack/bin/webpack.js 
+Hash: e39e8c0585972e41caa9
+Version: webpack 3.8.1
+Time: 3502ms
+    Asset    Size  Chunks                    Chunk Names
+bundle.js  835 kB       0  [emitted]  [big]  main
+  [15] ./index.js 168 bytes {0} [built]
+  [32] ./App.js 214 bytes {0} [built]
+    + 31 hidden modules
 ```
 
-次のコマンドでtest.jsxに対して直接Babelのトランスパイルを行うとcompile.jsが出力されます。
+index.htmlを開くと表示されるはずです。
 
-```
-$ babel --plugins transform-react-jsx test.jsx
-ReactDOM.render(React.createElement(
-  'h1',
-  null,
-  'Hello, world!'
-), document.getElementById('root'));
-```
-
-実態はReactJSのReact.createElementメソッドにて動的にDOMが生成されていることがわかります。
+# ReactJSのデバッグ
