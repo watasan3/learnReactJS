@@ -1,160 +1,122 @@
-# サンプル
+# React Routerによる画面遷移
 
-Reactの基本的なルールを覚えつつ簡単なアプリケーションを作ってみましょう。  
-クリックしたらカウントアップするボックスのコンポーネントを作ってみます。  
-まずボックスのコンポーネントを作ります。(Rect.js)
-
-```Rect.js
-import React from 'react'
-
-export default class Rect extends React.Component {
-
-  constructor (props) {
-    super(props)
-    // ステートオブジェクト
-    this.state = { number : this.props.num }    
-  }
-
-  componentWillMount () {
-    // propsに属性値が渡ってくる
-    const { num, bgcolor } = this.props
-
-    // CSS スタイルはキャメルケースでプロパティを書く
-    this.rectStyle = {
-      background: bgcolor,
-      display: 'table-cell',
-      border: '1px #000 solid',
-      fontSize: 20,
-      width: 30,
-      height: 30,
-      textAlign: 'center',
-      verticalAlign: 'center',
-    }
-
-  }
-
-  // カウントアップ
-  countUp (num) {
-    // ステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
-    this.setState({ number : num + 1 })
-  }
-
-  render () {
-
-    // 複数行になる場合は()で囲む
-    // 返却する最上位のDOMは１つのみ
-    return (
-      <div style={ this.rectStyle } onClick={(e)=> this.countUp(this.state.number)}>
-        <span style={{ color : '#eeeeee' }}>{this.state.number}</span>
-      </div>
-    )
-  }
-}
-```
-
-App.jsではRectコンポーネントを読み込んで表示します。
-
-```
-import React from 'react'
-import Rect from './Rect'
-
-export default class App extends React.Component {
-
-  render () {
-    return (
-      <div>
-        <Rect num={1} bgcolor='#e02020' />
-        <Rect num={2} bgcolor='#20e020' />
-        <Rect num={3} bgcolor='#2020e0' />
-      </div>
-    )
-  }
-}
-```
-
-# Reactコンポーネントのライフサイクルについて
-
-全体図は良い図があったのでそちらを参考にしてください。  
-[React component ライフサイクル図](https://qiita.com/kawachi/items/092bfc281f88e3a6e456)
+ページ遷移（画面切り替え）するにはReact-Routerを使います。  
+React-Routerはバージョンで互換性がないので今回の説明では4系を使います。  
+React-Routerをインストールします。  
   
-初期化時と属性値変更時に呼ばれるcomponentWillMountメソッドと  
-描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
+```
+$npm install -D react-router-dom@4.2.2
+```
 
-# 属性値について
-
-新規に作成したRectコンポーネントには通常のDOMと
-同様に属性値を定義することができます。
+App.jsを次のように修正してください。  
 
 ```App.js
-<Rect num={1} bgcolor='#e02020' />
-```
+import React from 'react'
+// React Routerのコンポーネントを使う
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from 'react-router-dom'
 
-独自に定義したプロパティはpropsオブジェクト内に格納されてRectコンポーネントに渡ってきます。
-
-```Rect.js
-componentWillMount () {
-    // propsに属性値が渡ってくる
-    const { num, bgcolor } = this.props
-```
-
-# CSS Styleについて
-
-JSX内でスタイルを渡すにはキャメルケースで書く必要があります。  
-babelでCSSに変換してもらいます。  
-例えば、font-sizeを適応したい場合はfontSizeと記述する必要があります。  
-
-```Rect.js
-    // CSS スタイルはキャメルケースでプロパティを書く
-    this.rectStyle = {
-      background: bgcolor,
-      display: 'table-cell',
-      border: '1px #000 solid',
-      fontSize: 20,
-      width: 30,
-      height: 30,
-      textAlign: 'center',
-      verticalAlign: 'center',
-    }
-```
-
-JSX内で{}した箇所にはJSを書くことができます。  
-今回はJSのスタイルオブジェクトを渡しています。  
-
-```Rect.js
-   <div style={ this.rectStyle } >
-```
-
-コンポーネント内部で状態を保持したい場合は  
-stateオブジェクトという特殊なオブジェクトを定義します。  
-中身のパラメータに関しては自由に入れて構いません。  
-今回はクリックしたときに数字をカウントアップしたいため  
-numberパラメータを保持するようにしました。  
-
-```Rect.js
-  // ステートオブジェクト
-  this.state = { number : this.props.num }
-```
-
-イベントハンドリングとnumberオブジェクトの更新に関して記述した箇所が次の箇所になります。  
-Reactにはstateオブジェクトのパラメータを更新させるために  
-setStateメソッドが用意されています。  
-クリックされてsetStateメソッドが呼び出されるとstateオブジェクトのパラメータを更新し  
-renderメソッドを呼び出します（再描画される）。  
-
-```Rect.js
-
-  // カウントアップ
-  countUp (num) {
-    // ステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
-    this.setState({ number : num + 1 })
-  }
-
+/*
+class Home extends React.Component {
   render () {
-     return (
-      <div onClick={(e)=> this.countUp(this.state.number)}>
-     )
+    // 返却するDOMが複数行になる場合は()で囲む
+    return (
+      <div>
+        <h2>ホーム</h2>
+      </div>
+    )
   }
+}
+*/
+
+// 上記のReactコンポーネントの簡略記法
+const Home = () => (    
+<div>
+    <h2>ホーム</h2>
+</div>
+)
+
+const Topic = ({ match }) => (
+<div>
+    <h3>{match.params.topicId}</h3>
+</div>
+)
+
+const Topics = ({ match }) => (
+<div>
+    <h2>トピック</h2>
+    <ul>
+    <li>
+        <Link to={`${match.url}/apple`}>
+        Apple
+        </Link>
+    </li>
+    <li>
+        <Link to={`${match.url}/google`}>
+        Google
+        </Link>
+    </li>
+    </ul>
+
+    <Route path={`${match.path}/:topicId`} component={Topic}/>
+    <Route exact path={match.path} render={() => (
+         <h3>トピックを選択してください</h3>
+    )}/>
+</div>
+)
+
+const App = () => (
+<Router>
+    <div>
+    {/* ヘッダー部分 */}
+    <ul>
+        {/* Linkコンポーネントのtoにパスを記述、クリック時にRouteに対応するパスが呼ばれる */}
+        <li><Link to="/">ホーム</Link></li>
+        <li><Link to="/topics">トピック</Link></li>
+    </ul>
+
+    <hr/>
+
+    {/* パスに応じてコンポーネントを動的に差し替える */}
+    {/* exactは初期パス */}
+    <Route exact path="/" component={Home}/>
+    <Route path="/topics" component={Topics}/>
+    </div>
+</Router>
+)
+export default App
 ```
 
-renderメソッド内でsetStateメソッドを直接呼び出してはいけません。  
-render→setState→renderと無限ループになるからです。  
+React Routerはサーバー上でないとCORSの制約にひっかかるので  
+簡易的なサーバ上で動かします。  
+npmのserveモジュールをインストールします。  
+
+```
+$npm install -g serve
+```
+
+次のserveコマンドを実行するとカレントディレクトリがサーバのpublicフォルダになります。
+
+```
+$ serve .
+
+   ┌──────────────────────────────────────────────────┐
+   │                                                  │
+   │   Serving!                                       │
+   │                                                  │
+   │   - Local:            http://localhost:5000      │
+   │   - On Your Network:  http://192.168.1.28:5000   │
+   │                                                  │
+   │   Copied local address to clipboard!             │
+   │                                                  │
+   └──────────────────────────────────────────────────┘
+```
+
+http://localhost:5000
+にアクセスしてみてください
+
+もう少し複雑なことをしたい場合は下記記事が参考になると思います。  
+react-router@v4を使ってみよう：シンプルなtutorial  
