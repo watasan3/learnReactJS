@@ -1,14 +1,32 @@
-# サーバ作成
-
-NodeJSパッケージをインストール  
-[express](http://expressjs.com/ja/)というモジュールでサーバを作成します。  
-パッケージ管理用のpackage.jsonファイルを作成します。
+# npmについて
+NodeJS付属のnpmというパッケージ管理ツールを使うとパッケージをまとめて管理できます。  
+パッケージ管理用のpackage.jsonファイルを作成します。  
 
 ```
 $ npm init --force
 ```
 
-サーバ用のパッケージをインストール
+次のコマンドで使いたいパッケージをインストールすることができます。
+
+```
+$ npm install --save (パッケージ名)
+```
+
+package.jsonに記述された依存パッケージを  
+次のコマンドでまとめてインストールすることができます。  
+(gitにnode_modulesフォルダを管理する必要はありません)  
+
+```
+$ npm install
+```
+
+もしくは後発の[Yarn](https://yarnpkg.com/lang/en/)というパッケージ管理ツールでもインストールできます。
+
+# サーバ作成
+
+NodeJSパッケージをインストール  
+[express](http://expressjs.com/ja/)というモジュールでサーバを作成します。  
+下記コマンドでサーバ用のパッケージをインストール
 
 ```
 $ npm install express --save
