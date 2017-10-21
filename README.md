@@ -189,3 +189,5 @@ export default class App extends React.Component {
   }
 }
 ```
+
+このようにコンポーネントで管理したくないビジネスロジックデータはReduxで管理します。
