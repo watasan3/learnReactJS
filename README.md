@@ -9,4 +9,4 @@ ReactJS勉強会用資料を各ブランチにまとめてます
 - [webpack](https://github.com/teradonburi/learnReactJS/tree/webpack): webpackの導入とReactコンポーネント作成手順
 - [ReactJSBasic](https://github.com/teradonburi/learnReactJS/tree/ReactJSBasic): ReactJSの基本お作法
 - [ReactRouter](https://github.com/teradonburi/learnReactJS/tree/ReactRouter): Reactでの画面遷移(SPA)
-- [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):　状態管理について 
+- [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):状態管理について 
