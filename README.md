@@ -1,5 +1,3 @@
-# learnReactJS
-
 # 環境構築
 
 NodeJSインストール  
@@ -45,3 +43,5 @@ $ nodebrew install-binary v8.6.0
 $ nodebrew use v8.6.0
 $ node -v
 ```
+
+エディタは個人的に[Visual Studio Code](https://code.visualstudio.com/)がおすすめ  
