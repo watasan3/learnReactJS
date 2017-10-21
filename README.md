@@ -1,24 +1,24 @@
 # Reduxによる状態制御
 
-Reduxを用いることでアプリケーション全体の状態を管理し、
-イベントコールバック→一元管理されたストアのパラメータ更新→描画反映
-といったことが楽になります。
-（類似のフレームワークにfluxがあります。）
-参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)
-参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)
-SPAなReactJSと特に相性が良いです。
+Reduxを用いることでアプリケーション全体の状態を管理し、  
+イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
+といったことが楽になります。  
+（類似のフレームワークにfluxがあります。）  
+参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)  
+参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)  
+SPAなReactJSと特に相性が良いです。  
+  
+Reduxは次の思想で設計されています。  
 
-Reduxは次の思想で設計されています。
+1. ストアがいっぱいあると不整合が起きるのでビューに使うコンポーネントから分離して１つのストアに格納する
+2. ストアの状態を更新するためには決められたアクション経由で行う
+3. Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
 
-1.ストアがいっぱいあると不整合が起きるのでビューに使うコンポーネントから分離して１つのストアに格納する
-2.ストアの状態を更新するためには決められたアクション経由で行う
-3.Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
-
-ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですがconnectの記述方法がいくつもあり混乱します。
-[ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)
-
-今回は可読性の良さを重視して、decoratorsを使って実装します。
-追加で下記のRedux関連のパッケージをインストールします。
+ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですがconnectの記述方法がいくつもあり混乱します。  
+[ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)  
+  
+今回は可読性の良さを重視して、decoratorsを使って実装します。  
+追加で下記のRedux関連のパッケージをインストールします。  
 
 ```
 $ npm install -D babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux react-router-redux 
