@@ -95,8 +95,9 @@ ReactDOM.render(
 )
 ```
 
+webpack.config.jsにてbundle.jsを生成する設定を書きます。
 
-```
+```webpack.config.js
 module.exports = {
   devtool: 'inline-source-map', // ソースマップファイル追加 
   entry: './index.js', // エントリポイントのjsxファイル
