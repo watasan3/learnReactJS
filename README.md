@@ -153,7 +153,7 @@ import { load } from './user'
 
 // connectのdecorator
 @connect(
-  // reducerから受け取るstate
+  // propsに受け取るreducerのstate
   state => ({
     users: state.user.users
   }),
