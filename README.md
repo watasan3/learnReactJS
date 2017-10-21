@@ -112,3 +112,13 @@ bundle.js  835 kB       0  [emitted]  [big]  main
 index.htmlを開くと表示されるはずです。
 
 # ReactJSのデバッグ
+
+下記のコマンドでwebpackの監視モードにするとビルド対象のJSファイルの変更が保存されるとビルドされるようになります。（開発中は楽です。）
+
+```
+$ webpack --watch
+```
+
+[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ja)（ChromeのReact開発用ブラウザアドオン）
+を導入するとReactのコンポーネント単位でDOMツリーが把握できます。  
+
