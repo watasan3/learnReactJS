@@ -16,7 +16,7 @@ function test() {
 test()
 
 
-// async awaitで同期待ちをする例
+// async awaitで同期待ちをする例(ES7)
 function asyncFuncPromise(param) {
   return new Promise((resolve,reject) =>{
     setTimeout(() => {
@@ -25,7 +25,7 @@ function asyncFuncPromise(param) {
   })
 }
 
-// awaitを使う関数はasync関数にする
+// awaitを使う関数はasync関数にする(ES7)
 async function testAwait() {
   // 非同期処理をawaitで処理待ちする
   const ret1 = await asyncFuncPromise('a')

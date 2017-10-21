@@ -23,7 +23,9 @@ var a = 'グローバル変数'
 
 // 関数
 function test() {
+  // ES6
   let b = '局所変数'
+  // ES6
   const c = '定数'
 
   //c = '代入エラー'
@@ -34,6 +36,11 @@ function test() {
 }
 // 関数呼び出し
 test()
+
+// ES6だと変数を文字列に展開できる
+const param = {obj:'param'}
+const data = `${param.obj}を展開`
+console.log(data)
 ```
 
 NodeJSで実行
@@ -83,10 +90,17 @@ var testES5 = function (param) {
 testES5('ES5');
 
 // ES6はアロー関数でも記述できる
-let testES6 = (param) => {
+const testES6 = (param) => {
   console.log(param)
 }
 testES6('ES6')
+
+// ES6では関数にデフォルト引数を持たせられる
+const init = {obj:'obj'}
+const testES6Def = (arg = init) => {
+  console.log(arg)
+}
+testES6Def()
 ```
 
 クラス
@@ -168,7 +182,7 @@ function test() {
 test()
 
 
-// async awaitで同期待ちをする例
+// async awaitで同期待ちをする例(ES7)
 function asyncFuncPromise(param) {
   return new Promise((resolve,reject) =>{
     setTimeout(() => {
@@ -177,7 +191,7 @@ function asyncFuncPromise(param) {
   })
 }
 
-// awaitを使う関数はasync関数にする
+// awaitを使う関数はasync関数にする(ES7)
 async function testAwait() {
   // 非同期処理をawaitで処理待ちする
   const ret1 = await asyncFuncPromise('a')
