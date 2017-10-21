@@ -35,9 +35,19 @@ ReactJSでDOMをレンダリングするには
 `<h1>`タグ（DOM）が記述されている点です。  
 実際に実行される際にはBabelにて次のようなJSに変換されます。  
 上記のような一見DOMが混じったようなJSの記法をJSXと呼びます。  
-
-JSXはBebelによってJSのソースコードに変換(トランスパイル)されます。  
+JSXはBebelによってJSのソースコードに変換(トランスパイル)されます。
 実際にどのように変換されるか見てみましょう。  
+  
+ReactDOM.render部分のみのtest.jsxを作成します。  
+
+```test.jsx
+ReactDOM.render(
+  <h1>Hello, world!</h1>,
+  document.getElementById('root')
+)
+```
+
+BabelとJSXトランスパイラをインストールします。  
 
 ```
 # Babelコマンドをインストール
