@@ -14,7 +14,8 @@ Reduxは次の思想で設計されています。
 2. ストアの状態を更新するためには決められたアクション経由で行う
 3. Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
 
-ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですがconnectの記述方法がいくつもあり混乱します。  
+ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですが  
+connectの記述方法がいくつもあり混乱します。  
 [ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)  
   
 今回は可読性の良さを重視して、decoratorsを使って実装します。  
