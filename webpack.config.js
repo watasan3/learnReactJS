@@ -1,4 +1,5 @@
 module.exports = {
+  devtool: 'inline-source-map', // ソースマップファイル追加 
   entry: './index.js', // エントリポイントのjsxファイル
   output: {
     filename: 'bundle.js' // 出力するファイル

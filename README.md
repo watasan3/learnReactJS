@@ -6,7 +6,7 @@ webpackを使うことで複数のリソースファイルを１つにまとめ�
 webpackでビルドするためにパッケージを追加します。  
 
 ```
-$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
+$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom react-hot-loader
 ```
 
 package.jsonは次のようになります。
@@ -95,9 +95,30 @@ ReactDOM.render(
 )
 ```
 
-次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
 
 ```
+module.exports = {
+  devtool: 'inline-source-map', // ソースマップファイル追加 
+  entry: './index.js', // エントリポイントのjsxファイル
+  output: {
+    filename: 'bundle.js' // 出力するファイル
+  },
+  module: {
+    loaders: [{
+      test: /\.js?$/, // 拡張子がjsで
+      exclude: /node_modules/, // node_modulesフォルダ配下は除外
+      loader: 'babel-loader', // babel-loaderを使って変換する
+      query: {
+        plugins: ["transform-react-jsx"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+      }
+    }]
+  }
+}
+```
+
+次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
+
+```webpack.config.js
 $ node_modules/webpack/bin/webpack.js 
 Hash: e39e8c0585972e41caa9
 Version: webpack 3.8.1
@@ -113,12 +134,40 @@ index.htmlを開くと表示されるはずです。
 
 # ReactJSのデバッグ
 
+## ソースファイル変更を検知して再ビルド
+
 下記のコマンドでwebpackの監視モードにするとビルド対象のJSファイルの変更が保存されるとビルドされるようになります。（開発中は楽です。）
 
 ```
 $ webpack --watch
 ```
 
-[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ja)（ChromeのReact開発用ブラウザアドオン）
-を導入するとReactのコンポーネント単位でDOMツリーが把握できます。  
+## コンポーネント単位のDOM把握
 
+[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ja)（ChromeのReact開発用ブラウザアドオン）
+を導入すると  
+Reactのコンポーネント単位でDOMツリーが把握できます。  
+
+## ブレークポイントをかける
+  
+bableでトランスパイルするとJSファイルはすべて１つのbundle.jsにまとめられてしまいます。  
+ソースマップと呼ばれるファイルをブラウザに読み込ませることで  
+元のJSソースファイルの情報をブラウザに認識させることができます。  
+（これにより元のJSファイル単位でブレークポイントをかけられる）  
+webpackのソースマップファイルを有効にすることで元の各JSファイルを単位でブレークポイントをかけれます。
+
+```webpack.config.js
+module.exports = {
+  devtool: 'inline-source-map', // ソースマップファイル追加 
+}
+```
+
+また、ソースファイル中にdebugger文を挿入することで指定箇所にブレークポイントをかけれます。  
+（本番環境では処理が止まってしまうので挿入しないように注意）  
+
+```
+debugger;
+```
+
+
+もっと詳しく知りたい人はこちら：[Intro to debugging ReactJS applications](https://medium.com/@baphemot/intro-to-debugging-reactjs-applications-67cf7a50b3dd)
