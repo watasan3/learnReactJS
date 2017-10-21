@@ -56,8 +56,7 @@ node-dev:サーバソースコードを変更検出時に再起動してくれ�
 $ npm install -g node-dev
 ```
 
-デバッグ（ブレークポイント）を貼る
-下記コマンドでデバッグ＆開発モード起動
+下記コマンドでデバッグ＆開発モード起動が可能
 
 ```
 $ node-dev --inspect server.js
@@ -77,6 +76,8 @@ DBを使うことでデータを永続的に保存できます。
 $ npm install --save nedb
 $ npm install --save body-parser
 ```
+
+NeDBを使ったサーバプログラムです。
 
 ```serverWithDB.js
 // requireでサーバモジュールをインポート
@@ -146,11 +147,11 @@ app.listen(3000, () => {
 })
 ```
 
-次のようなテストデータをPOSTするとuser.dbにJSONが保存されます。
+サーバを起動して次のようなテストデータをPOSTするとuser.dbにJSONが保存されます。
 
 ```
 { name: 'test' }
 ```
 
 NeDBの命令セットはMongoDBに似ています。  
-もう少し本格的なDBに触れたい場合はMongoDBの方がおすすめです。  
+もう少し本格的なDBに触れたい場合はMongoDBの方がおすすめです。(今回は省略)  
