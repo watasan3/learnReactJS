@@ -1,77 +1,42 @@
 import React from 'react'
-// React Routerのコンポーネントを使う
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom'
+import { connect } from 'react-redux';
+import { load } from './user'
 
-/*
-class Home extends React.Component {
+// connectのdecorator
+@connect(
+  // reducerから受け取るstate
+  state => ({
+    users: state.user.users
+  }),
+  // propsに付与するactions
+  { load }
+)
+export default class App extends React.Component {
+
+  componentWillMount() {
+    // user取得APIコールのactionをキックする
+    this.props.load()
+  }
+
   render () {
-    // 返却するDOMが複数行になる場合は()で囲む
+    const { users } = this.props
+    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
+    console.log(users)
     return (
       <div>
-        <h2>ホーム</h2>
+          {/* 配列形式で返却されるためmapで展開する */}
+          {users && users.map((user) => {
+            return (
+                // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
+                <div key={user.email}>
+                  <img src={user.picture.thumbnail} />
+                  <p>名前:{user.name.first + ' ' + user.name.last}</p>
+                  <p>性別:{user.gender}</p>
+                  <p>email:{user.email}</p>
+                </div>
+            )
+          })}
       </div>
     )
   }
 }
-*/
-
-// 上記のReactコンポーネントの簡略記法
-const Home = () => (    
-<div>
-    <h2>ホーム</h2>
-</div>
-)
-
-const Topic = ({ match }) => (
-<div>
-    <h3>{match.params.topicId}</h3>
-</div>
-)
-
-const Topics = ({ match }) => (
-<div>
-    <h2>トピック</h2>
-    <ul>
-    <li>
-        <Link to={`${match.url}/apple`}>
-        Apple
-        </Link>
-    </li>
-    <li>
-        <Link to={`${match.url}/google`}>
-        Google
-        </Link>
-    </li>
-    </ul>
-
-    <Route path={`${match.path}/:topicId`} component={Topic}/>
-    <Route exact path={match.path} render={() => (
-         <h3>トピックを選択してください</h3>
-    )}/>
-</div>
-)
-
-const App = () => (
-<Router>
-    <div>
-    {/* ヘッダー部分 */}
-    <ul>
-        {/* Linkコンポーネントのtoにパスを記述、クリック時にRouteに対応するパスが呼ばれる */}
-        <li><Link to="/">ホーム</Link></li>
-        <li><Link to="/topics">トピック</Link></li>
-    </ul>
-
-    <hr/>
-
-    {/* パスに応じてコンポーネントを動的に差し替える */}
-    {/* exactは初期パス */}
-    <Route exact path="/" component={Home}/>
-    <Route path="/topics" component={Topics}/>
-    </div>
-</Router>
-)
-export default App

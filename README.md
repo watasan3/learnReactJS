@@ -1,122 +1,191 @@
-# React Routerによる画面遷移
+# Reduxによる状態制御
 
-ページ遷移（画面切り替え）するにはReact-Routerを使います。  
-React-Routerはバージョンで互換性がないので今回の説明では4系を使います。  
-React-Routerをインストールします。  
+Reduxを用いることでアプリケーション全体の状態を管理し、
+イベントコールバック→一元管理されたストアのパラメータ更新→描画反映
+といったことが楽になります。
+（類似のフレームワークにfluxがあります。）
+参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)
+参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)
+SPAなReactJSと特に相性が良いです。
+
+Reduxは次の思想で設計されています。
+
+1.ストアがいっぱいあると不整合が起きるのでビューに使うコンポーネントから分離して１つのストアに格納する
+2.ストアの状態を更新するためには決められたアクション経由で行う
+3.Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
+
+ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですがconnectの記述方法がいくつもあり混乱します。
+[ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)
+
+今回は可読性の良さを重視して、decoratorsを使って実装します。
+追加で下記のRedux関連のパッケージをインストールします。
+
+```
+$ npm install -D babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux react-router-redux 
+```
+
+react-reduxを実際に使う場面は通信や画面遷移周りだと思います。  
+redux-thunkを使うとaction部分の処理を非同期にできます。  
   
+通信用のライブラリ（axios）をインストールします  
+
 ```
-$npm install -D react-router-dom@4.2.2
+$ npm install -D axios
 ```
 
-App.jsを次のように修正してください。  
+decoratorの文法を使うので  
+babel-plugin-transform-decorators-legacyのプラグインを  
+webpack.config.jsに追加します。  
+
+```webpack.config.js
+module.exports = {
+    entry: './index.js', // エントリポイントのjsxファイル
+    output: {
+      filename: 'bundle.js' // 出力するファイル
+    },
+    module: {
+      loaders: [{
+        test: /\.js?$/, // 拡張子がjsで
+        exclude: /node_modules/, // node_modulesフォルダ配下でなければ
+        loader: 'babel-loader', // babel-loaderを使って変換する
+        query: {
+          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+        }
+      }]
+    }
+  }  
+```
+
+user.jsにuser情報を取得するactionとreducerを記述します。  
+Random User Generatorで生成した疑似ユーザ情報をAPIで取得するactionを作成します。  
+redux-thunkを使うとaction部分を非同期で記述できます。  
+
+```user.js
+// reducerで受け取るaction名を定義
+const LOAD = 'user/LOAD'
+
+// 初期化オブジェクト
+const initialState = {
+  users: null,
+}
+
+// reducerの定義（dispatch時にコールバックされる）
+export default function reducer(state = initialState, action = {}){
+  // actionの種別に応じてstateを更新する
+  switch (action.type) {
+    case LOAD:
+      return {
+        users:action.results,
+      }
+    default:
+      // 初期化時はここに来る（initialStateのオブジェクトが返却される）
+      return state
+  }
+}
+
+// actionの定義
+export function load() {
+  // clientはaxiosの付与したクライアントパラメータ（後述）
+  // 非同期処理をPromise形式で記述できる
+  return (dispatch, getState, client) => {
+    return client
+      .get('https://randomuser.me/api/')
+      .then(res => res.data)
+      .then(data => {
+        const results = data.results
+        // dispatchしてreducer呼び出し
+        dispatch({ type: LOAD, results })
+      })
+  }
+}
+```
+
+reducer.jsに読み込むreducerを記述します
+
+```reducer.js
+import { combineReducers } from 'redux'
+// 作成したuserのreducer
+import user from './user'
+
+// 作成したreducerをオブジェクトに追加していく
+// combineReducersで１つにまとめてくれる
+export default combineReducers({
+  user,
+})
+```
+
+index.jsにてReduxのstoreを作成し  
+storeにreducerを適応します。  
+redux-thunkミドルウェアを適応することで  
+actionにaxiosオブジェクトが引数として渡るようになります。  
+
+```index.js
+import React  from 'react'
+import ReactDOM from 'react-dom'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import client from 'axios'
+import thunk from 'redux-thunk'
+
+import App from './App'
+import reducer from './reducer'
+
+// axiosをthunkの追加引数に加える
+const thunkWithClient = thunk.withExtraArgument(client)
+// redux-thunkをミドルウェアに適用
+const store = createStore(reducer, applyMiddleware(thunkWithClient))
+
+ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root')
+)
+```
+
+App.jsでuser情報取得のactionをキック、reducer経由でのstate更新を行います。
 
 ```App.js
 import React from 'react'
-// React Routerのコンポーネントを使う
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom'
+import { connect } from 'react-redux';
+import { load } from './user'
 
-/*
-class Home extends React.Component {
+// connectのdecorator
+@connect(
+  // reducerから受け取るstate
+  state => ({
+    users: state.user.users
+  }),
+  // propsに付与するactions
+  { load }
+)
+export default class App extends React.Component {
+
+  componentWillMount() {
+    // user取得APIコールのactionをキックする
+    this.props.load()
+  }
+
   render () {
-    // 返却するDOMが複数行になる場合は()で囲む
+    const { users } = this.props
+    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
+    console.log(users)
     return (
       <div>
-        <h2>ホーム</h2>
+          {/* 配列形式で返却されるためmapで展開する */}
+          {users && users.map((user) => {
+            return (
+                // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
+                <div key={user.email}>
+                  <img src={user.picture.thumbnail} />
+                  <p>名前:{user.name.first + ' ' + user.name.last}</p>
+                  <p>性別:{user.gender}</p>
+                  <p>email:{user.email}</p>
+                </div>
+            )
+          })}
       </div>
     )
   }
 }
-*/
-
-// 上記のReactコンポーネントの簡略記法
-const Home = () => (    
-<div>
-    <h2>ホーム</h2>
-</div>
-)
-
-const Topic = ({ match }) => (
-<div>
-    <h3>{match.params.topicId}</h3>
-</div>
-)
-
-const Topics = ({ match }) => (
-<div>
-    <h2>トピック</h2>
-    <ul>
-    <li>
-        <Link to={`${match.url}/apple`}>
-        Apple
-        </Link>
-    </li>
-    <li>
-        <Link to={`${match.url}/google`}>
-        Google
-        </Link>
-    </li>
-    </ul>
-
-    <Route path={`${match.path}/:topicId`} component={Topic}/>
-    <Route exact path={match.path} render={() => (
-         <h3>トピックを選択してください</h3>
-    )}/>
-</div>
-)
-
-const App = () => (
-<Router>
-    <div>
-    {/* ヘッダー部分 */}
-    <ul>
-        {/* Linkコンポーネントのtoにパスを記述、クリック時にRouteに対応するパスが呼ばれる */}
-        <li><Link to="/">ホーム</Link></li>
-        <li><Link to="/topics">トピック</Link></li>
-    </ul>
-
-    <hr/>
-
-    {/* パスに応じてコンポーネントを動的に差し替える */}
-    {/* exactは初期パス */}
-    <Route exact path="/" component={Home}/>
-    <Route path="/topics" component={Topics}/>
-    </div>
-</Router>
-)
-export default App
 ```
-
-React Routerはサーバー上でないとCORSの制約にひっかかるので  
-簡易的なサーバ上で動かします。  
-npmのserveモジュールをインストールします。  
-
-```
-$npm install -g serve
-```
-
-次のserveコマンドを実行するとカレントディレクトリがサーバのpublicフォルダになります。
-
-```
-$ serve .
-
-   ┌──────────────────────────────────────────────────┐
-   │                                                  │
-   │   Serving!                                       │
-   │                                                  │
-   │   - Local:            http://localhost:5000      │
-   │   - On Your Network:  http://192.168.1.28:5000   │
-   │                                                  │
-   │   Copied local address to clipboard!             │
-   │                                                  │
-   └──────────────────────────────────────────────────┘
-```
-
-http://localhost:5000
-にアクセスしてみてください
-
-もう少し複雑なことをしたい場合は下記記事が参考になると思います。  
-react-router@v4を使ってみよう：シンプルなtutorial  
