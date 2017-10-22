@@ -17,7 +17,9 @@
     "url": "https://github.com/teradonburi/learnReactJS/issues"
   },
   "homepage": "https://github.com/teradonburi/learnReactJS#readme",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.16.2"
+  },
   "devDependencies": {
     "axios": "^0.16.2",
     "babel-core": "^6.26.0",
