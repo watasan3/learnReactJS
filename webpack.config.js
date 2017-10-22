@@ -1,17 +1,37 @@
+const webpack = require('webpack');
+
 module.exports = {
   devtool: 'inline-source-map', // ソースマップファイル追加 
-  entry: './index.js', // エントリポイントのjsxファイル
-  output: {
-    filename: 'bundle.js' // 出力するファイル
+  entry: [
+    'babel-polyfill',
+    'react-hot-loader/patch',
+    __dirname + '/src/index', // エントリポイントのjsxファイル
+  ],
+  devServer: {
+    contentBase: __dirname + '/src/static',
+    inline: true,
+    hot: true,
   },
+  output: {
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
+  plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js?$/, // 拡張子がjsで
       exclude: /node_modules/, // node_modulesフォルダ配下は除外
-      loader: 'babel-loader', // babel-loaderを使って変換する
-      query: {
-        plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+      include: __dirname + '/src',
+      use: {
+        loader: 'babel-loader',
+        options: {
+          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy","react-hot-loader/babel"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+        }
       }
     }]
   }
 }
+
