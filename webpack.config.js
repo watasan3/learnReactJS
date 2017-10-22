@@ -5,26 +5,26 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
-    __dirname + '/src/index', // エントリポイントのjsxファイル
+    __dirname + '/client/index', // エントリポイントのjsxファイル
   ],
   devServer: {
-    contentBase: __dirname + '/src/static',
-    inline: true,
-    hot: true,
+    contentBase: __dirname + '/client/static',
+    inline: true, // ソース変更時リロードモード
+    hot: true, // HMR(Hot Module Reload)モード
   },
   output: {
-    publicPath: '/',
+    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.NamedModulesPlugin(), // 名前変更無効プラグイン利用
+    new webpack.HotModuleReplacementPlugin() // HMR(Hot Module Reload)プラグイン利用 
   ],
   module: {
     rules: [{
       test: /\.js?$/, // 拡張子がjsで
       exclude: /node_modules/, // node_modulesフォルダ配下は除外
-      include: __dirname + '/src',
+      include: __dirname + '/client',// client配下のJSファイルが対象
       use: {
         loader: 'babel-loader',
         options: {
