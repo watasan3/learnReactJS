@@ -1,194 +1,131 @@
-# Reduxによる状態制御
+Material-UIでモダンな画面を作る
+マテリアルデザインはGoogleが提唱するデザインフォーマットです。
+フラットデザインに現実の物理要素（影やフィードバック）を持たせたようなデザインです。
+Androidアプリでの全面的な利用など最近のアプリケーションのデザインは大体マテリアルデザインでできています。
+[Material Design](https://material.io/guidelines/)
 
-Reduxを用いることでアプリケーション全体の状態を管理し、  
-イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
-といったことが楽になります。  
-（類似のフレームワークにfluxがあります。）  
-参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)  
-参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)  
-SPAなReactJSと特に相性が良いです。  
-  
-Reduxは次の思想で設計されています。  
-
-1. ストアがいっぱいあると不整合が起きるのでビューに使うコンポーネントから分離して１つのストアに格納する
-2. ストアの状態を更新するためには決められたアクション経由で行う
-3. Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
-
-ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですが  
-connectの記述方法がいくつもあり混乱します。  
-[ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)  
-  
-今回は可読性の良さを重視して、decoratorsを使って実装します。  
-追加で下記のRedux関連のパッケージをインストールします。  
+Material-UIのパッケージをインストールします。
 
 ```
-$ npm install -D babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux react-router-redux 
+$ npm install -D material-ui@next material-ui-icons
 ```
 
-react-reduxを実際に使う場面は通信や画面遷移周りだと思います。  
-redux-thunkを使うとaction部分の処理を非同期にできます。  
-  
-通信用のライブラリ（axios）をインストールします  
+package.jsonは次のようになります。
 
-```
-$ npm install -D axios
-```
-
-decoratorの文法を使うので  
-babel-plugin-transform-decorators-legacyのプラグインを  
-webpack.config.jsに追加します。  
-
-```webpack.config.js
-module.exports = {
-    entry: './index.js', // エントリポイントのjsxファイル
-    output: {
-      filename: 'bundle.js' // 出力するファイル
-    },
-    module: {
-      loaders: [{
-        test: /\.js?$/, // 拡張子がjsで
-        exclude: /node_modules/, // node_modulesフォルダ配下でなければ
-        loader: 'babel-loader', // babel-loaderを使って変換する
-        query: {
-          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
-        }
-      }]
-    }
-  }  
-```
-
-user.jsにuser情報を取得するactionとreducerを記述します。  
-Random User Generatorで生成した疑似ユーザ情報をAPIで取得するactionを作成します。  
-redux-thunkを使うとaction部分を非同期で記述できます。  
-
-```user.js
-// reducerで受け取るaction名を定義
-const LOAD = 'user/LOAD'
-
-// 初期化オブジェクト
-const initialState = {
-  users: null,
-}
-
-// reducerの定義（dispatch時にコールバックされる）
-export default function reducer(state = initialState, action = {}){
-  // actionの種別に応じてstateを更新する
-  switch (action.type) {
-    case LOAD:
-      return {
-        users:action.results,
-      }
-    default:
-      // 初期化時はここに来る（initialStateのオブジェクトが返却される）
-      return state
-  }
-}
-
-// actionの定義
-export function load() {
-  // clientはaxiosの付与したクライアントパラメータ（後述）
-  // 非同期処理をPromise形式で記述できる
-  return (dispatch, getState, client) => {
-    return client
-      .get('https://randomuser.me/api/')
-      .then(res => res.data)
-      .then(data => {
-        const results = data.results
-        // dispatchしてreducer呼び出し
-        dispatch({ type: LOAD, results })
-      })
-  }
+```package.json
+{
+  "name": "meetdep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^0.16.2",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "material-ui": "^1.0.0-beta.16",
+    "material-ui-icons": "^1.0.0-beta.15",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "redux": "^3.7.2",
+    "redux-devtools": "^3.4.0",
+    "redux-thunk": "^2.2.0",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {}
 }
 ```
 
-reducer.jsに読み込むreducerを記述します
-
-```reducer.js
-import { combineReducers } from 'redux'
-// 作成したuserのreducer
-import user from './user'
-
-// 作成したreducerをオブジェクトに追加していく
-// combineReducersで１つにまとめてくれる
-export default combineReducers({
-  user,
-})
-```
-
-index.jsにてReduxのstoreを作成し  
-storeにreducerを適応します。  
-redux-thunkミドルウェアを適応することで  
-actionにaxiosオブジェクトが引数として渡るようになります。  
-
-```index.js
-import React  from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import client from 'axios'
-import thunk from 'redux-thunk'
-
-import App from './App'
-import reducer from './reducer'
-
-// axiosをthunkの追加引数に加える
-const thunkWithClient = thunk.withExtraArgument(client)
-// redux-thunkをミドルウェアに適用
-const store = createStore(reducer, applyMiddleware(thunkWithClient))
-
-ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-)
-```
-
-App.jsでuser情報取得のactionをキック、reducer経由でのstate更新を行います。
+ユーザを取得したApp.jsをmaterial-uiで書き直します。
 
 ```App.js
 import React from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { load } from './user'
 
-// connectのdecorator
+import { withStyles } from 'material-ui/styles'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
+import Typography from 'material-ui/Typography'
+import { Email } from 'material-ui-icons'
+
 @connect(
-  // propsに受け取るreducerのstate
   state => ({
     users: state.user.users
   }),
-  // propsに付与するactions
   { load }
 )
 export default class App extends React.Component {
 
-  componentWillMount() {
-    // user取得APIコールのactionをキックする
+  constructor (props) {
+    super(props)
+    this.state = {
+      open:false,
+      user:null,
+    }
+  }
+
+  componentWillMount () {
     this.props.load()
   }
 
+  handleClickOpen (user) {
+    this.setState({
+      open: true,
+      user: user,
+    })
+  }
+
+  handleRequestClose () {
+    this.setState({ open: false })
+  };
+
   render () {
     const { users } = this.props
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    console.log(users)
     return (
       <div>
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography type="title" color="inherit">
+              タイトル
+            </Typography>
+          </Toolbar>
+        </AppBar>
           {/* 配列形式で返却されるためmapで展開する */}
           {users && users.map((user) => {
             return (
                 // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
-                <div key={user.email}>
-                  <img src={user.picture.thumbnail} />
-                  <p>名前:{user.name.first + ' ' + user.name.last}</p>
-                  <p>性別:{user.gender}</p>
-                  <p>email:{user.email}</p>
-                </div>
+                <Card key={user.email} style={{marginTop:'10px'}}>
+                  <CardContent style={{color:'#408040'}}>
+                    <Avatar src={user.picture.thumbnail} />
+                    <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
+                    <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
+                    <div style={{textAlign: 'right'}} >
+                      <Button onClick={() => this.handleClickOpen(user)}><Email/>メールする</Button>                    
+                    </div>
+                  </CardContent>
+                </Card>                
             )
-          })}
+          })}        
+          {
+            this.state.open &&
+            <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+              <DialogTitle>メールアドレス</DialogTitle>
+              <DialogContent>{this.state.user.email}</DialogContent>
+            </Dialog>
+          }  
       </div>
     )
   }
 }
 ```
-
-このようにコンポーネントで管理したくないビジネスロジックデータはReduxで管理します。
