@@ -1,10 +1,10 @@
-Material-UIでモダンな画面を作る
-マテリアルデザインはGoogleが提唱するデザインフォーマットです。
-フラットデザインに現実の物理要素（影やフィードバック）を持たせたようなデザインです。
-Androidアプリでの全面的な利用など最近のアプリケーションのデザインは大体マテリアルデザインでできています。
-[Material Design](https://material.io/guidelines/)
-
-Material-UIのパッケージをインストールします。
+# Material-UIでモダンな画面を作る
+マテリアルデザインはGoogleが提唱するデザインフォーマットです。  
+フラットデザインに現実の物理要素（影やフィードバック）を持たせたようなデザインです。  
+Androidアプリでの全面的な利用など最近のアプリケーションのデザインは大体マテリアルデザインでできています。  
+[Material Design](https://material.io/guidelines/)  
+  
+Material-UIのパッケージをインストールします。  
 
 ```
 $ npm install -D material-ui@next material-ui-icons
@@ -128,4 +128,18 @@ export default class App extends React.Component {
     )
   }
 }
+```
+
+Material-UIの各コンポーネントに関しては  
+公式：Material-UIのComponents Demoに各種コンポーネントのデモを見たほうが理解できると思います。  
+  
+Material UIのアイコンに関しては下記アイコンが使えます。  
+[Material icons](material.io/icons/)
+  
+今回はメールのアイコンを使っています。  
+emailというアイコン名になっているので、  
+次のように先頭大文字でメールアイコンを読み込みできます。  
+
+```App.js
+import { Email } from 'material-ui-icons'
 ```
