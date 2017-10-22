@@ -4,6 +4,7 @@
 Androidアプリでの全面的な利用など最近のアプリケーションのデザインは大体マテリアルデザインでできています。  
 [Material Design](https://material.io/guidelines/)  
   
+ReactJSではマテリアルデザインを踏襲したMaterial-UIというライブラリがあります。    
 Material-UIのパッケージをインストールします。  
 
 ```
