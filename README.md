@@ -23,7 +23,7 @@ serverフォルダにはexpressの実装をします。
 下記パッケージを追加でインストールします。  
 
 ```
-$npm install --save-dev react-hot-loader npm-run-all node-dev express nedb
+$npm install --save-dev npm-run-all webpack-dev-server react-hot-loader node-dev express nedb
 ```
 
 scriptsに下記のスクリプトを追記します。 
@@ -96,7 +96,7 @@ node-all-runコマンドで
 ソースコード変更時のwebpackビルドを  
 `webpack --watch`により行っていましたが  
 React hot Loaderの設定を行うことで  
-webpackビルド完了後にブラウザを自動リロードしてくれます。  
+ソースコード変更時にwebpackビルドしてくれる上にビルド完了後にブラウザを自動リロードしてくれます。  
 webpack.config.jsにreact-hot-loaderの設定を追加します。  
 
 ```webpack.config.js
@@ -174,6 +174,12 @@ render(App)
 if (module.hot) {
   module.hot.accept('./App', () => { render(App) })
 }
+```
+
+下記コマンドでサーバとクライアントを一括で起動します。  
+
+```
+$npm run dev
 ```
 
 ## サーバプログラム

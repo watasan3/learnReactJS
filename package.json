@@ -43,6 +43,6 @@
     "redux-devtools": "^3.4.0",
     "redux-thunk": "^2.2.0",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.4"
   }
 }
