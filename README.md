@@ -1,69 +1,275 @@
-# Reduxによる状態制御
+# サーバとクライアントを統合する
+クライアント側をReactJSで
+APIはexpressサーバで１つにまとめて開発できる環境を構築します。
+下記のような構成にします。  
+clientフォルダにはReactのモジュールを実装します。  
+serverフォルダにはexpressの実装をします。
 
-Reduxを用いることでアプリケーション全体の状態を管理し、  
-イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
-といったことが楽になります。  
-（類似のフレームワークにfluxがあります。）  
-参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)  
-参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)  
-SPAなReactJSと特に相性が良いです。  
+```
+├── README.md
+├── client
+│   ├── App.js
+│   ├── index.js
+│   ├── reducer.js
+│   ├── static
+│   │   └── index.html
+│   └── user.js
+├── package.json
+├── server
+│   └── server.js
+└── webpack.config.js
+```
   
-Reduxは次の思想で設計されています。  
-
-1. ストアがいっぱいあると不整合が起きるのでビューに使うコンポーネントから分離して１つのストアに格納する
-2. ストアの状態を更新するためには決められたアクション経由で行う
-3. Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
-
-ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですが  
-connectの記述方法がいくつもあり混乱します。  
-[ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)  
-  
-今回は可読性の良さを重視して、decoratorsを使って実装します。  
-追加で下記のRedux関連のパッケージをインストールします。  
+下記パッケージを追加でインストールします。  
 
 ```
-$ npm install -D babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux react-router-redux 
+$npm install --save-dev react-hot-loader npm-run-all node-dev express nedb
 ```
 
-react-reduxを実際に使う場面は通信や画面遷移周りだと思います。  
-redux-thunkを使うとaction部分の処理を非同期にできます。  
-  
-通信用のライブラリ（axios）をインストールします  
+scriptsに下記のスクリプトを追記します。 
+node-all-runコマンドで  
+並列でスクリプトを実行することができます。  
 
 ```
-$ npm install -D axios
+"scripts": {
+  "dev:client": "webpack-dev-server",
+  "dev:server": "node-dev --inspect ./server/server.js",
+  "dev": "run-p dev:client dev:server"
+},
+``` 
+
+追加後のpackage.jsonは次のようになります。  
+
+```package.json
+{
+  "name": "learnReactJS",
+  "version": "1.0.0",
+  "description": "ReactJSでDOMをレンダリングするには",
+  "main": "index.js",
+  "scripts": {
+    "dev:client": "webpack-dev-server",
+    "dev:server": "node-dev --inspect ./server/server.js",
+    "dev": "run-p dev:client dev:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teradonburi/learnReactJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teradonburi/learnReactJS/issues"
+  },
+  "homepage": "https://github.com/teradonburi/learnReactJS#readme",
+  "devDependencies": {
+    "axios": "^0.16.2",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "express": "^4.16.2",
+    "material-ui": "^1.0.0-beta.17",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "nedb": "^1.8.0",
+    "node-dev": "^3.1.3",
+    "npm-run-all": "^4.1.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-hot-loader": "^3.1.1",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "redux": "^3.7.2",
+    "redux-devtools": "^3.4.0",
+    "redux-thunk": "^2.2.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3"
+  }
+}
 ```
 
-decoratorの文法を使うので  
-babel-plugin-transform-decorators-legacyのプラグインを  
-webpack.config.jsに追加します。  
+
+## React Hot Loaderによる自動リロード
+ソースコード変更時のwebpackビルドを  
+`webpack --watch`により行っていましたが  
+React hot Loaderの設定を行うことで  
+webpackビルド完了後にブラウザを自動リロードしてくれます。  
+webpack.config.jsにreact-hot-loaderの設定を追加します。  
 
 ```webpack.config.js
+const webpack = require('webpack');
+
 module.exports = {
-    entry: './index.js', // エントリポイントのjsxファイル
-    output: {
-      filename: 'bundle.js' // 出力するファイル
-    },
-    module: {
-      loaders: [{
-        test: /\.js?$/, // 拡張子がjsで
-        exclude: /node_modules/, // node_modulesフォルダ配下でなければ
-        loader: 'babel-loader', // babel-loaderを使って変換する
-        query: {
-          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+  devtool: 'inline-source-map', // ソースマップファイル追加 
+  entry: [
+    'babel-polyfill',
+    'react-hot-loader/patch',
+    __dirname + '/client/index', // エントリポイントのjsxファイル
+  ],
+  devServer: {
+    contentBase: __dirname + '/client/static',
+    inline: true, // ソース変更時リロードモード
+    hot: true, // HMR(Hot Module Reload)モード
+  },
+  output: {
+    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
+    filename: 'bundle.js'
+  },
+  plugins: [
+    new webpack.NamedModulesPlugin(), // 名前変更無効プラグイン利用
+    new webpack.HotModuleReplacementPlugin() // HMR(Hot Module Reload)プラグイン利用 
+  ],
+  module: {
+    rules: [{
+      test: /\.js?$/, // 拡張子がjsで
+      exclude: /node_modules/, // node_modulesフォルダ配下は除外
+      include: __dirname + '/client',// client配下のJSファイルが対象
+      use: {
+        loader: 'babel-loader',
+        options: {
+          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy","react-hot-loader/babel"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
         }
-      }]
-    }
-  }  
+      }
+    }]
+  }
+}
 ```
 
-user.jsにuser情報を取得するactionとreducerを記述します。  
-Random User Generatorで生成した疑似ユーザ情報をAPIで取得するactionを作成します。  
-redux-thunkを使うとaction部分を非同期で記述できます。  
+client/index.jsにReact Hot Loaderの設定を追加します。  
+
+```index.js
+import React  from 'react'
+import ReactDOM from 'react-dom'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import client from 'axios'
+import thunk from 'redux-thunk'
+import { AppContainer } from 'react-hot-loader'
+
+import App from './App'
+import reducer from './reducer'
+
+// axiosをthunkの追加引数に加える
+const thunkWithClient = thunk.withExtraArgument(client)
+// redux-thunkをミドルウェアに適用
+const store = createStore(reducer, applyMiddleware(thunkWithClient))
+
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer warnings={false}>
+      <Provider store={store}>
+        <Component />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root'),
+  )
+}
+
+render(App)
+
+// Webpack Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./App', () => { render(App) })
+}
+```
+
+## サーバプログラム
+サーバ側でユーザを追加、ユーザ取得できるようにプログラムを修正します。
+
+```server.js
+// requireでサーバモジュールをインポート
+const axios = require('axios')
+const express = require('express')
+const app = express()
+// DB
+const Datastore = require('nedb')
+const db = new Datastore({ filename: 'user.db', autoload: true })
+
+// 例外ハンドリング
+process.on('uncaughtException', (err) => console.log('uncaughtException => ' + err))
+
+// Postのbodyパラメータ取得
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+// CORSを許可する
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+})
+
+// Getメソッド
+app.get('/user', (req, res) => {
+  // DBの全データ検索
+  get({})
+  .then(docs => {
+    res.json(docs)
+  })
+})
+
+// Postメソッド
+app.post('/user', (req, res) => {
+  // Random Userよりユーザ取得してDBに追加
+  axios
+    .get('https://randomuser.me/api/')
+    .then(res => res.data)
+    .then(data => {
+      post(data)
+        .then( data => res.json(data))
+        .catch( e => res.json({'error':e.toString()}))  
+    })
+})
+
+function find (param) {
+  return new Promise((resolve,reject) => {
+    db.find(param,(err,docs)=>{
+      if (err) {
+        reject(err)
+      } else {
+        resolve(docs)
+      }
+    })    
+  })
+}
+
+function insert (param) {
+  return new Promise((resolve,reject) => {
+    db.insert(param,(err, newDoc) => {
+      if (err) {
+        throw err
+      } else {
+        resolve(newDoc)
+      }  
+    })
+  })  
+}
+
+async function get (param) {
+  return await find(param)
+}
+
+async function post (param) {
+  return await insert(param)
+}
+
+// サーバ待受け（3000ポート）
+app.listen(3000, () => {
+  console.log('Access to http://localhost:3000')
+})
+```
+
+## クライアント側の修正
+user.jsを修正します。
 
 ```user.js
 // reducerで受け取るaction名を定義
 const LOAD = 'user/LOAD'
+const ADD = 'user/ADD'
 
 // 初期化オブジェクト
 const initialState = {
@@ -75,8 +281,14 @@ export default function reducer(state = initialState, action = {}){
   // actionの種別に応じてstateを更新する
   switch (action.type) {
     case LOAD:
+      // ユーザ一覧取得
       return {
         users:action.results,
+      }
+    case ADD:
+      // ユーザ一覧末尾にユーザを追加する
+      return {
+        users: [...state.users, action.results]
       }
     default:
       // 初期化時はここに来る（initialStateのオブジェクトが返却される）
@@ -86,70 +298,46 @@ export default function reducer(state = initialState, action = {}){
 
 // actionの定義
 export function load() {
-  // clientはaxiosの付与したクライアントパラメータ（後述）
-  // 非同期処理をPromise形式で記述できる
+  // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('https://randomuser.me/api/')
+      .get('http://localhost:3000/user')
       .then(res => res.data)
       .then(data => {
-        const results = data.results
+        const results = data
         // dispatchしてreducer呼び出し
         dispatch({ type: LOAD, results })
       })
   }
 }
+
+export function add() {
+  // ユーザを追加
+  return (dispatch, getState, client) => {
+    return client
+      .post('http://localhost:3000/user')
+      .then(res => res.data)
+      .then(data => {
+        const results = data
+        // dispatchしてreducer呼び出し
+        dispatch({ type: ADD, results })
+      })
+  }
+}
 ```
 
-reducer.jsに読み込むreducerを記述します
-
-```reducer.js
-import { combineReducers } from 'redux'
-// 作成したuserのreducer
-import user from './user'
-
-// 作成したreducerをオブジェクトに追加していく
-// combineReducersで１つにまとめてくれる
-export default combineReducers({
-  user,
-})
-```
-
-index.jsにてReduxのstoreを作成し  
-storeにreducerを適応します。  
-redux-thunkミドルウェアを適応することで  
-actionにaxiosオブジェクトが引数として渡るようになります。  
-
-```index.js
-import React  from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import client from 'axios'
-import thunk from 'redux-thunk'
-
-import App from './App'
-import reducer from './reducer'
-
-// axiosをthunkの追加引数に加える
-const thunkWithClient = thunk.withExtraArgument(client)
-// redux-thunkをミドルウェアに適用
-const store = createStore(reducer, applyMiddleware(thunkWithClient))
-
-ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-)
-```
-
-App.jsでuser情報取得のactionをキック、reducer経由でのstate更新を行います。
+App.jsを修正してユーザ追加ボタンを作成し、ユーザ追加APIを呼ぶようにします。
 
 ```App.js
 import React from 'react'
 import { connect } from 'react-redux';
-import { load } from './user'
+import { load, add } from './user'
+
+import { withStyles } from 'material-ui/styles'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
+import Typography from 'material-ui/Typography'
+import { Email } from 'material-ui-icons'
+
 
 // connectのdecorator
 @connect(
@@ -158,37 +346,79 @@ import { load } from './user'
     users: state.user.users
   }),
   // propsに付与するactions
-  { load }
+  { load, add }
 )
 export default class App extends React.Component {
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      open:false,
+      user:null,
+    }
+  }
 
   componentWillMount() {
     // user取得APIコールのactionをキックする
     this.props.load()
   }
 
+  handleClickOpen (user) {
+    this.setState({
+      open: true,
+      user: user,
+    })
+  }
+
+  handleRequestClose () {
+    this.setState({ open: false })
+  }
+
+  handleAdd() {
+    // user追加APIコールのactionをキックする
+    this.props.add()
+  }
+
   render () {
     const { users } = this.props
     // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    console.log(users)
+    // console.log(users)
     return (
       <div>
+          <AppBar position="static" color="primary">
+            <Toolbar>
+              <Typography type="title" color="inherit">
+                タイトル
+              </Typography>
+            </Toolbar>
+          </AppBar>
           {/* 配列形式で返却されるためmapで展開する */}
-          {users && users.map((user) => {
+          {users && users.map((obj) => {
+            const user = obj.results[0]
             return (
                 // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
-                <div key={user.email}>
-                  <img src={user.picture.thumbnail} />
-                  <p>名前:{user.name.first + ' ' + user.name.last}</p>
-                  <p>性別:{user.gender}</p>
-                  <p>email:{user.email}</p>
-                </div>
+                <Card key={user.email} style={{marginTop:'10px'}}>
+                  <CardContent style={{color:'#408040'}}>
+                    <Avatar src={user.picture.thumbnail} />
+                    <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
+                    <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
+                    <div style={{textAlign: 'right'}} >
+                      <Button onClick={() => this.handleClickOpen(user)}><Email/>メールする</Button>                    
+                    </div>
+                  </CardContent>
+                </Card>    
             )
           })}
+          {
+            this.state.open &&
+            <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+              <DialogTitle>メールアドレス</DialogTitle>
+              <DialogContent>{this.state.user.email}</DialogContent>
+            </Dialog>
+          }  
+          <Button style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
       </div>
     )
   }
 }
 ```
-
-このようにコンポーネントで管理したくないビジネスロジックデータはReduxで管理します。
