@@ -233,7 +233,7 @@ export default class UserPage extends React.Component {
 ```
 
 historyオブジェクトにて画面遷移ができるようになります。  
-これによってLinkタグなどでprops指定することなく  
+これによってLinkコンポーネントでprops指定することなく  
 historyオブジェクト経由で遷移させることが可能になります。  
 また、遷移履歴もhistoryオブジェクトで一元管理されているため、ブラウザバックなども有効に働きます。  
 
