@@ -14,20 +14,22 @@ serverフォルダにはexpressの実装をします。
 │   ├── static
 │   │   └── index.html
 │   └── user.js
+├── config
+│   └── default.js
 ├── package.json
 ├── server
 │   └── server.js
-└── webpack.config.js
+├── webpack.config.js
 ```
   
 下記パッケージを追加でインストールします。  
 
 ```
-$npm install --save-dev npm-run-all webpack-dev-server react-hot-loader node-dev express nedb
+$npm install --save-dev npm-run-all webpack-dev-server react-hot-loader node-dev express nedb body-parser config
 ```
 
 scriptsに下記のスクリプトを追記します。 
-node-all-runコマンドで  
+node-all-runのrun-pコマンドで  
 並列でスクリプトを実行することができます。  
 
 ```
@@ -37,6 +39,13 @@ node-all-runコマンドで
   "dev": "run-p dev:client dev:server"
 },
 ``` 
+
+下記コマンドでサーバとクライアントを一括で起動できるようになります。  
+web-dev-serverの設定に関しては後述  
+
+```
+$npm run dev
+```
 
 追加後のpackage.jsonは次のようになります。  
 
@@ -48,7 +57,7 @@ node-all-runコマンドで
   "main": "index.js",
   "scripts": {
     "dev:client": "webpack-dev-server",
-    "dev:server": "node-dev --inspect ./server/server.js",
+    "dev:server": "node-dev --inspect server/server.js",
     "dev": "run-p dev:client dev:server"
   },
   "repository": {
@@ -70,6 +79,8 @@ node-all-runコマンドで
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "config": "^1.27.0",
     "express": "^4.16.2",
     "material-ui": "^1.0.0-beta.17",
     "material-ui-icons": "^1.0.0-beta.17",
@@ -86,21 +97,30 @@ node-all-runコマンドで
     "redux-devtools": "^3.4.0",
     "redux-thunk": "^2.2.0",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.4"
   }
 }
 ```
 
+config/default.jsにてアプリケーション全体の設定を記述しています。
+expressサーバ起動時のポート指定、webpack-dev-serverの起動ポート指定をしています（後述）
+
+```default.js
+module.exports = {
+  port: 8080
+}
+```
 
 ## React Hot Loaderによる自動リロード
 ソースコード変更時のwebpackビルドを  
 `webpack --watch`により行っていましたが  
-React hot Loaderの設定を行うことで  
+React Hot Loaderの設定を行うことで  
 ソースコード変更時にwebpackビルドしてくれる上にビルド完了後にブラウザを自動リロードしてくれます。  
 webpack.config.jsにreact-hot-loaderの設定を追加します。  
 
 ```webpack.config.js
-const webpack = require('webpack');
+const config = require('config')
+const webpack = require('webpack')
 
 module.exports = {
   devtool: 'inline-source-map', // ソースマップファイル追加 
@@ -109,10 +129,21 @@ module.exports = {
     'react-hot-loader/patch',
     __dirname + '/client/index', // エントリポイントのjsxファイル
   ],
+  // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
-    contentBase: __dirname + '/client/static',
+    contentBase: __dirname + '/client/static', // index.htmlの格納場所
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
+    port: config.port + 1, // 起動ポート
+    // CORSの対策（debugホストが違うため)
+    proxy: {
+      // CORSを許可するパスとサーバ
+      '/api/**': {
+        target: 'http://localhost:' + config.port,
+        secure: false,
+        changeOrigin: true
+      }
+    }
   },
   output: {
     publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
@@ -176,17 +207,12 @@ if (module.hot) {
 }
 ```
 
-下記コマンドでサーバとクライアントを一括で起動します。  
-
-```
-$npm run dev
-```
-
 ## サーバプログラム
 サーバ側でユーザを追加、ユーザ取得できるようにプログラムを修正します。
 
 ```server.js
 // requireでサーバモジュールをインポート
+const config = require('config')
 const axios = require('axios')
 const express = require('express')
 const app = express()
@@ -202,16 +228,8 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-// CORSを許可する
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-})
-
 // Getメソッド
-app.get('/user', (req, res) => {
-  // DBの全データ検索
+app.get('/api/user', (req, res) => {
   get({})
   .then(docs => {
     res.json(docs)
@@ -219,8 +237,7 @@ app.get('/user', (req, res) => {
 })
 
 // Postメソッド
-app.post('/user', (req, res) => {
-  // Random Userよりユーザ取得してDBに追加
+app.post('/api/user', (req, res) => {
   axios
     .get('https://randomuser.me/api/')
     .then(res => res.data)
@@ -264,8 +281,8 @@ async function post (param) {
 }
 
 // サーバ待受け（3000ポート）
-app.listen(3000, () => {
-  console.log('Access to http://localhost:3000')
+app.listen(config.port, () => {
+  console.log('Access to http://localhost:' + config.port)
 })
 ```
 
@@ -307,7 +324,7 @@ export function load() {
   // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('http://localhost:3000/user')
+      .get('/api/user')
       .then(res => res.data)
       .then(data => {
         const results = data
@@ -321,7 +338,7 @@ export function add() {
   // ユーザを追加
   return (dispatch, getState, client) => {
     return client
-      .post('http://localhost:3000/user')
+      .post('/api/user')
       .then(res => res.data)
       .then(data => {
         const results = data

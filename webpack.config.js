@@ -1,4 +1,5 @@
-const webpack = require('webpack');
+const config = require('config')
+const webpack = require('webpack')
 
 module.exports = {
   devtool: 'inline-source-map', // ソースマップファイル追加 
@@ -7,10 +8,21 @@ module.exports = {
     'react-hot-loader/patch',
     __dirname + '/client/index', // エントリポイントのjsxファイル
   ],
+  // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
-    contentBase: __dirname + '/client/static',
+    contentBase: __dirname + '/client/static', // index.htmlの格納場所
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
+    port: config.port + 1, // 起動ポート
+    // CORSの対策（debugホストが違うため)
+    proxy: {
+      // CORSを許可するパスとサーバ
+      '/api/**': {
+        target: 'http://localhost:' + config.port,
+        secure: false,
+        changeOrigin: true
+      }
+    }
   },
   output: {
     publicPath: '/', // デフォルトルートにしないとHMRは有効にならない

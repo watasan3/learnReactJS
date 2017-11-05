@@ -12,10 +12,12 @@ export default function reducer(state = initialState, action = {}){
   // actionの種別に応じてstateを更新する
   switch (action.type) {
     case LOAD:
+      // ユーザ一覧取得
       return {
         users:action.results,
       }
     case ADD:
+      // ユーザ一覧末尾にユーザを追加する
       return {
         users: [...state.users, action.results]
       }
@@ -27,11 +29,10 @@ export default function reducer(state = initialState, action = {}){
 
 // actionの定義
 export function load() {
-  // clientはaxiosの付与したクライアントパラメータ
-  // 非同期処理をPromise形式で記述できる
+  // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('http://localhost:3000/user')
+      .get('/api/user')
       .then(res => res.data)
       .then(data => {
         const results = data
@@ -42,11 +43,10 @@ export function load() {
 }
 
 export function add() {
-  // clientはaxiosの付与したクライアントパラメータ
-  // 非同期処理をPromise形式で記述できる
+  // ユーザを追加
   return (dispatch, getState, client) => {
     return client
-      .post('http://localhost:3000/user')
+      .post('/api/user')
       .then(res => res.data)
       .then(data => {
         const results = data
