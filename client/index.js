@@ -22,7 +22,7 @@ const render = Component => {
   ReactDOM.render(
     <AppContainer warnings={false}>
       <Provider store={store}>
-        <Component history={history} client={client} />
+        <Component history={history} />
       </Provider>
     </AppContainer>,
     document.getElementById('root'),
