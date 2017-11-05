@@ -9,7 +9,7 @@ module.exports = {
     'react-hot-loader/patch',
     __dirname + '/client/index', // エントリポイントのjsxファイル
   ],
-  // importの相対パスを絶対パスに変換する
+  // importの相対パスを絶対パスで読み込みできるようにする
   resolve: {
     modules: ['client', 'node_modules'], // 対象のフォルダ
     extensions: ['.js', '.json'] // 対象のファイル
