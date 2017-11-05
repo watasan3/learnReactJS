@@ -1,5 +1,6 @@
 const config = require('config')
 const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   devtool: 'inline-source-map', // ソースマップファイル追加 
@@ -8,6 +9,11 @@ module.exports = {
     'react-hot-loader/patch',
     __dirname + '/client/index', // エントリポイントのjsxファイル
   ],
+  // importの相対パスを絶対パスに変換する
+  resolve: {
+    modules: ['client', 'node_modules'], // 対象のフォルダ
+    extensions: ['.js', '.json'] // 対象のファイル
+  },
   // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
     contentBase: __dirname + '/client/static', // index.htmlの格納場所
