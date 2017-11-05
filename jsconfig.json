@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "experimentalDecorators": true
+    },
+    "exclude": [
+      "node_modules",
+      "**/node_modules/*",
+      "yarn.lock",
+      "package-lock.json"
+    ]
+}
