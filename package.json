@@ -44,6 +44,7 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "redux": "^3.7.2",
     "redux-devtools": "^3.4.0",
+    "redux-form": "^7.1.2",
     "redux-thunk": "^2.2.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
