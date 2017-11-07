@@ -6,8 +6,10 @@ import NotFound from 'components/NotFound'
 import UserPage from 'components/UserPage'
 import TodoPage from 'components/TodoPage'
 
+
 export default class App extends React.Component {
-  render() {
+
+  render() {    
     const { history } = this.props
     return (
       <Router history={history}>
@@ -19,9 +21,9 @@ export default class App extends React.Component {
 
 const AppRoute = (props) => (
   <Switch>
-      <Route exact path="/" component={UserPage} />
-      <Route path="/todo" component={TodoPage} /> 
-      {/* それ以外のパス */}
-      <Route component={NotFound} />　
+    <Route exact path="/" component={UserPage} />
+    <Route path="/todo" component={TodoPage} /> 
+    {/* それ以外のパス */}
+    <Route component={NotFound} />　
   </Switch>
 )

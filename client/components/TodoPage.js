@@ -8,6 +8,23 @@ import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
 
+import Intro from 'Intro'
+@Intro([
+  {
+    title: 'タイトル1',
+    text: '本文1',
+    selector: '#item1',
+    position: 'top',
+    type: 'hover'
+  },
+  {
+    title: 'タイトル2',
+    text: '本文2',
+    selector: '#item2',
+    position: 'top',
+    type: 'hover'
+  }
+])
 @reduxForm({
   form: 'syncValidation',
   validate: values => {
@@ -56,6 +73,7 @@ export default class TodoPage extends React.Component {
     const { handleSubmit, submitting } = this.props
 
     const renderField = ({
+      id,
       input,
       label,
       type,
@@ -65,7 +83,7 @@ export default class TodoPage extends React.Component {
       return (
         <div>
           <div>
-            <TextField style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
+            <TextField id={id} style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
           </div>
         </div>
       )
@@ -85,8 +103,8 @@ export default class TodoPage extends React.Component {
         </AppBar>
         <Card style={{padding:10}}>
           <form onSubmit={handleSubmit(this.submit)}>
-            <Field name="username" type="text" component={renderField} label="ユーザ名" />
-            <Field name="email" type="email" component={renderField} label="メールアドレス" />
+            <Field id='item1' name="username" type="text" component={renderField} label="ユーザ名" />
+            <Field id='item2' name="email" type="email" component={renderField} label="メールアドレス" />
             <Field name="age" type="number" component={renderField} label="年齢" />
             <Button style={{marginTop:10}} raised type="submit" disabled={submitting}>送信</Button>
           </form>

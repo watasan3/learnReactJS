@@ -7,7 +7,23 @@ import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle,
 import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
 
-
+import Intro from 'Intro'
+@Intro([
+  {
+    title: 'タイトル1',
+    text: '本文1',
+    selector: '#item1',
+    position: 'top',
+    type: 'hover'
+  },
+  {
+    title: 'タイトル2',
+    text: '本文2',
+    selector: '#item2',
+    position: 'top',
+    type: 'hover'
+  }
+])
 // connectのdecorator
 @connect(
   // propsに受け取るreducerのstate
@@ -63,7 +79,7 @@ export default class UserPage extends React.Component {
               <Typography type="title" color="inherit">
                 ユーザページ
               </Typography>
-              <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/todo')}>TODOページへ</Button>
+              <Button id='item2' style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/todo')}>TODOページへ</Button>
             </Toolbar>
           </AppBar>
           {/* 配列形式で返却されるためmapで展開する */}
@@ -90,7 +106,7 @@ export default class UserPage extends React.Component {
               <DialogContent>{this.state.user.email}</DialogContent>
             </Dialog>
           }  
-          <Button style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
+          <Button id='item1' style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
       </div>
     )
   }
