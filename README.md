@@ -24,7 +24,7 @@ reduxのstoreに紐付け、Componentのpropsにhistoryオブジェクトを渡�
 ```index.js
 import React  from 'react'
 import ReactDOM from 'react-dom'
-import createHistory from 'history/createHashHistory'
+import createHistory from 'history/createBrowserHistory'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import client from 'axios'
