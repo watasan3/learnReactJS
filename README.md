@@ -9,6 +9,7 @@ $npm install --save-dev history react-router-redux@next
 
 importのパスを相対パスから絶対パスで読込できるようにするため  
 webpack.config.jsonにresolveの指定をします。（やっておいたほうが後々楽です）  
+また、historyApiFallbackをtrueにします。後で使うhistory APIのブラウザリロード時に対応します。
 
 ```webpack.config.js
   // importの相対パスを絶対パスで読み込みできるようにする
@@ -16,6 +17,9 @@ webpack.config.jsonにresolveの指定をします。（やっておいたほう
     modules: ['client', 'node_modules'], // 対象のフォルダ
     extensions: ['.js', '.json'] // 対象のファイル
   },
+  // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
+  devServer: {
+    historyApiFallback: true, // history APIが404エラーを返す時、index.htmlに遷移(ブラウザリロード時など) 
 ```
 
 index.jsにてhistoryオブジェクトの作成、  
