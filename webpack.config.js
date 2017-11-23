@@ -17,6 +17,7 @@ module.exports = {
   // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
     contentBase: __dirname + '/client/static', // index.htmlの格納場所
+    historyApiFallback: true, // history APIが404エラーを返す時、index.htmlに遷移（ブラウザリロード時など）
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
     port: config.port + 1, // 起動ポート
