@@ -91,8 +91,6 @@ $npm run dev
     "react-dom": "^16.0.0",
     "react-hot-loader": "^3.1.1",
     "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
-    "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
     "redux-devtools": "^3.4.0",
     "redux-thunk": "^2.2.0",
@@ -208,7 +206,9 @@ if (module.hot) {
 ```
 
 ## サーバプログラム
-サーバ側でユーザを追加、ユーザ取得できるようにプログラムを修正します。
+サーバ側でユーザを追加、ユーザ取得できるようにします。
+`https://randomuser.me/api/`をサーバからaxiosでコールして
+ランダムなユーザを作成します。
 
 ```server.js
 // requireでサーバモジュールをインポート
