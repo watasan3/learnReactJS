@@ -1,7 +1,7 @@
 {
-  "name": "meetdep",
+  "name": "learnReactJS",
   "version": "1.0.0",
-  "description": "エンジニアに会いに行こう",
+  "description": "learnReactJS",
   "main": "index.js",
   "scripts": {
     "dev:client": "cd client && npm run dev",

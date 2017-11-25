@@ -1,6 +1,7 @@
 // reducerで受け取るaction名を定義
 const LOAD = 'user/LOAD'
 const ADD = 'user/ADD'
+const CUSTOMADD = 'user/CUSTOMADD'
 
 // 初期化オブジェクト
 const initialState = {
@@ -20,6 +21,11 @@ export default function reducer(state = initialState, action = {}){
       // ユーザ一覧末尾にユーザを追加する
       return {
         users: [...state.users, action.results]
+      }
+    case CUSTOMADD:
+      // ユーザ一覧末尾にユーザを追加する
+      return {
+        users: state.users ? [...state.users, action.results] : [action.results]
       }
     default:
       // 初期化時はここに来る（initialStateのオブジェクトが返却される）
@@ -52,6 +58,20 @@ export function add() {
         const results = data
         // dispatchしてreducer呼び出し
         dispatch({ type: ADD, results })
+      })
+  }
+}
+
+export function customadd(data) {
+  // 入力ユーザを追加
+  return (dispatch, getState, client) => {
+    return client
+      .post('/api/user/input',{user:data})
+      .then(res => res.data)
+      .then(data => {
+        const results = data
+        // dispatchしてreducer呼び出し
+        dispatch({ type: CUSTOMADD, results })
       })
   }
 }
