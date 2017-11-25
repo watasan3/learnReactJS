@@ -23,7 +23,7 @@ module.exports = {
     historyApiFallback: true, // history APIが404エラーを返す場合にindex.htmlに飛ばす
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
-    port: 3000, // 起動ポート,
+    port: config.port + 1, // 起動ポート,
     host: '0.0.0.0',
     // CORSの対策（debugホストが違うため)
     proxy: {
