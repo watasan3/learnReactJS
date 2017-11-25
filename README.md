@@ -1,10 +1,11 @@
 # ReactRouterReduxで画面遷移状態をストア管理
 
-React Router Reduxを使うと画面遷移状態をhistoryオブジェクトで管理することができます。 
-下記コマンドでreact-router-reduxとhistoryをインストールします。 
+React RouterとReact Router Reduxを使うと画面遷移状態をhistoryオブジェクトで管理することができます。 
+下記コマンドでreact-router-domとreact-router-reduxとhistoryをインストールします。
+React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。 
 
 ```
-$npm install --save-dev history react-router-redux@next
+$npm install --save-dev react-router-dom@4.2.2 history react-router-redux@next
 ```
 
 importのパスを相対パスから絶対パスで読込できるようにするため  
@@ -121,7 +122,9 @@ const AppRoute = (props) => (
 )
 ```
 
-`/`や`/todo`以外のときはNotFound.jsが呼ばれます。
+Switchコンポーネントで対象のパスをグルーピングします。
+exactはパスの完全一致指定です。この指定がないと/todoでもUserPageのコンポネントがレンダリングされてしまいます。
+`/`や`/todo`以外のときはパス未指定のNotFound.jsが呼ばれます。
 
 ```NotFound.js
 import React from 'react'
@@ -237,8 +240,6 @@ export default class UserPage extends React.Component {
 ```
 
 historyオブジェクトにて画面遷移ができるようになります。  
-これによってLinkコンポーネントでprops指定することなく  
-historyオブジェクト経由で遷移させることが可能になります。  
 また、遷移履歴もhistoryオブジェクトで一元管理されているため、ブラウザバックなども有効に働きます。  
 
 ```
