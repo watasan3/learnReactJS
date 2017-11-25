@@ -20,7 +20,7 @@ const store = createStore(reducer, applyMiddleware(routerMiddleware(history),thu
 
 const render = Component => {
   ReactDOM.render(
-    <AppContainer>
+    <AppContainer warnings={false}>
       <Provider store={store}>
         <Component history={history} />
       </Provider>

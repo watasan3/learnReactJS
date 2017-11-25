@@ -18,10 +18,12 @@ export default class App extends React.Component {
 }
 
 const AppRoute = (props) => (
-  <Switch>
+  <div>
+    <Switch>
       <Route exact path="/" component={UserPage} />
       <Route path="/todo" component={TodoPage} /> 
       {/* それ以外のパス */}
       <Route component={NotFound} />　
-  </Switch>
+    </Switch>
+  </div>
 )

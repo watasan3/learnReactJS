@@ -35,15 +35,6 @@ app.post('/api/user', (req, res) => {
     })
 })
 
-app.post('/api/user/input', (req, res) => {
-  const user = req.body.user
-  const data = {"results":[{"gender":user.gender,"name":{"first":user.firstname,"last":user.lastname},"email":user.email,"picture":{"thumbnail":"https://avatars1.githubusercontent.com/u/771218?s=460&v=4"}}]}
-  post(data)
-    .then( data => res.json(data))
-    .catch( e => res.json({'error':e.toString()}))  
-})
-
-
 function find (param) {
   return new Promise((resolve,reject) => {
     db.find(param,(err,docs)=>{

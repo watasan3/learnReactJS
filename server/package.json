@@ -1,0 +1,22 @@
+{
+  "name": "meetdep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
+    "prod": "NODE_ENV=production NODE_CONFIG_DIR=../config pm2 start src/server.js --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "config": "^1.28.1",
+    "express": "^4.16.2",
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "node-dev": "^3.1.3"
+  }
+}

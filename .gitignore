@@ -1,5 +1,5 @@
-node_modules
-bundle.js
+**/node_modules
+client/dist
 *.db
 package-lock.json
-yarn.lock
+**/yarn.lock
