@@ -86,7 +86,7 @@ export default class TodoPage extends React.Component {
 
   constructor(props) {
     super(props)
-    this.sendItems = this.sendItems.bind(this)
+    this.sendItems = this.sendItems.bind(this) // sendItemsメソッド内でthisを使えるようにbindする
   }
 
   handlePageMove(path) {
@@ -100,7 +100,7 @@ export default class TodoPage extends React.Component {
       gender: values.gender || 'male',
       email: values.email
     }
-    this.props.customadd(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
+    this.props.customadd(user).then( () => alert('送信完了'))
   }
 
   render () {
