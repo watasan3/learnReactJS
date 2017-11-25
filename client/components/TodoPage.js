@@ -1,78 +1,78 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { load, add } from 'reducer/user'
+import { customadd } from 'reducer/user'
 
 import { withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
 import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
+import { error } from 'util';
 
+const FormTextField = ({
+  input,
+  label,
+  type,
+  meta: { touched, error, warning }
+}) => {
+  const isError = !!(touched && error)
+  return (
+    <TextField style={{margin:5}} error={isError} label={label} helperText={isError ? error : null} {...input} type={type} />
+  )
+}
+
+// connectのdecorator
+@connect(
+  // propsに受け取るreducerのstate
+  state => ({}),
+  // propsに付与するactions
+  { customadd }
+)
 @reduxForm({
   form: 'syncValidation',
   validate: values => {
     
+    // handleSubmit時にvaluesにパラメータが渡ってくる
     const errors = {}
-    if (!values.username) {
-      errors.username = '必須項目です'
+    if (!values.firstname) {
+      errors.firstname = '必須項目です'
+    } 
+    if (!values.lastname) {
+      errors.lastname = '必須項目です'
     } 
     if (!values.email) {
       errors.email = '必須項目です'
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
       errors.email = 'メールアドレスとして認識できません'
     }
-    if (!values.age) {
-      errors.age = '必須項目です'
-    } else if (isNaN(Number(values.age))) {
-      errors.age = '数字でありません'
-    } else if (Number(values.age) < 18) {
-      errors.age = '１８歳以上限定です'
-    }
+    
     return errors
   }
 })
 export default class TodoPage extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = {
-    }
-  }
-
-  componentWillMount() {
+    this.sendItems = this.sendItems.bind(this)
   }
 
   handlePageMove(path) {
     this.props.history.push(path)
   }
-  
 
-  submit(values) {
-    // print the form values to the console
-    console.log(values)
+  sendItems(values) {
+    const user = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      gender: values.gender || 'male',
+      email: values.email
+    }
+    this.props.customadd(user).then( () => alert('送信完了'))
   }
 
   render () {
     const { handleSubmit, submitting } = this.props
 
-    const renderField = ({
-      input,
-      label,
-      type,
-      meta: { touched, error, warning }
-    }) => {
-      const isError = !!(touched && error)
-      return (
-        <div>
-          <div>
-            <TextField style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
-          </div>
-        </div>
-      )
-    }
-    
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    // console.log(users)
     return (
       <div>
         <AppBar position="static" color="primary">
@@ -84,10 +84,20 @@ export default class TodoPage extends React.Component {
           </Toolbar>
         </AppBar>
         <Card style={{padding:10}}>
-          <form onSubmit={handleSubmit(this.submit)}>
-            <Field name="username" type="text" component={renderField} label="ユーザ名" />
-            <Field name="email" type="email" component={renderField} label="メールアドレス" />
-            <Field name="age" type="number" component={renderField} label="年齢" />
+          <form onSubmit={handleSubmit(this.sendItems)}>
+            <Field name="firstname" type="text" component={FormTextField} label="姓" />
+            <Field name="lastname" type="text" component={FormTextField} label="名" />
+            <div style={{margin:5}}>
+              <label style={{marginRight: 5}}>性別：</label>
+              <span>
+                <Field name="gender" component="select">
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                </Field>
+              </span>
+            </div>
+            <Field name="email" type="email" component={FormTextField} label="メールアドレス" />
+            <br/>
             <Button style={{marginTop:10}} raised type="submit" disabled={submitting}>送信</Button>
           </form>
         </Card>
