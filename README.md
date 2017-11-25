@@ -124,6 +124,8 @@ JSX内で{}した箇所にはJSを書くことができます。
    <div style={ this.rectStyle } >
 ```
 
+# コンポーネントのstateについて
+
 コンポーネント内部で状態を保持したい場合は  
 stateオブジェクトという特殊なオブジェクトを定義します。  
 中身のパラメータに関しては自由に入れて構いません。  
@@ -151,6 +153,7 @@ renderメソッドを呼び出します（再描画される）。
 
   render () {
      return (
+      {/* クリックイベントバインディング */}
       <div onClick={(e)=> this.countUp(this.state.number)}>
      )
   }
@@ -159,13 +162,6 @@ renderメソッドを呼び出します（再描画される）。
 renderメソッド内でsetStateメソッドを直接呼び出してはいけません。  
 render→setState→renderと無限ループになるからです。  
 
-# メソッドバインディング
-
-クリック時にクラス内のメソッドを呼び出します。
-
-```
-  <div style={ this.rectStyle } onClick={(e)=> this.countUp(this.state.number)}>
-```
-
-クラスメソッドのバインディングには何種類か方法があります。
+クラスメソッドのイベントバインディングには何種類か方法があります。
 詳しくは[Reactをes6で使う場合のbindの問題](https://qiita.com/cubdesign/items/ee8bff7073ebe1979936)を参照
+
