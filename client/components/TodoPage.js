@@ -32,7 +32,7 @@ const FormTextField = ({
   form: 'syncValidation',
   validate: values => {
     
-    // handleSubmit時にvaluesにパラメータが渡ってくる
+    // 入力変更時にパラメータが渡ってくる
     const errors = {}
     if (!values.firstname) {
       errors.firstname = '必須項目です'
@@ -67,7 +67,7 @@ export default class TodoPage extends React.Component {
       gender: values.gender || 'male',
       email: values.email
     }
-    this.props.customadd(user).then( () => alert('送信完了'))
+    this.props.customadd(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
   }
 
   render () {
