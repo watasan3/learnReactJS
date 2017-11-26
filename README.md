@@ -92,20 +92,20 @@ configフォルダのproduction.jsonを参照します。
 }
 ```
 
-configフォルダのdefault.jsonです。  
+configフォルダのdefault.jsです。  
 サーバの起動ポート番号を指定してあります。  
 
-```config/default.json
+```config/default.js
 module.exports = {
   port: 8080
 }
 ```
 
-production.jsonです。  
-default.jsonのパラメータをオーバライドします。
+production.jsです。  
+default.jsのパラメータをオーバライドします。
 今回はポート番号の指定を商用サーバでも変えないので中身は空で問題ありません。
 
-```config/production.json
+```config/production.js
 module.exports = {
 }
 ```
@@ -166,7 +166,7 @@ NODE_CONFIG_DIRはconfigフォルダのパスを指定しています。
 }
 ```
 
-```webpack.config.json
+```webpack.config.js
 const config = require('config')
 const webpack = require('webpack')
 const precss = require('precss')
@@ -254,7 +254,7 @@ module.exports = {
 ```
 
 
-```webpack.build.json
+```webpack.build.js
 const webpack = require('webpack')
 const webpackConfig = require('./webpack.config.js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
