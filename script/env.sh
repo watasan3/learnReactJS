@@ -1,4 +1,4 @@
 #!/bin/sh
 
-ip='ip'
-domain='domain'
+ip='{xx.xx.xx.xx}'
+domain='{domain}'

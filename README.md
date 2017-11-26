@@ -267,6 +267,23 @@ module.exports = {
 }
 ```
 
+index.htmlからはbundle.jsの埋め込みを削除します。  
+(HtmlWebpackPluginが動的に埋め込みを行ってくれます)  
+
+```index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>learnReactJS</title>
+</head>
+<body>
+  <div id="root"></div>
+  <!-- <script src='bundle.js'></script>-->
+</body>
+</html>
+```
+
 webpack.build.jsです。  
 リリースビルド時はwebpack.config.jsの設定を上書きしてビルドします。  
 プラグインでソースコードの圧縮、環境変数の埋め込みを行います。  
@@ -350,4 +367,60 @@ configs[0].plugins.push(
 )
 
 module.exports = configs
+```
+
+次のコマンドでリリースビルドを行います。  
+
+```
+$ npm run build-webpack
+```
+
+成功するとdistフォルダにリリースビルド完了後のソースファイルが出力されるのでこのフォルダをデプロイします。  
+
+# デプロイ
+
+deploy.shです。  
+env.shで設定したEC2ターゲットにデプロイを行います。  
+
+```deploy.sh
+#!/bin/sh
+
+dir=`echo $(cd $(dirname $0) && pwd)`
+
+source $dir/env.sh
+
+set -eu
+
+# deploy 
+rsync -av config/ ec2-user@$domain:/var/www/learnReactJS/config
+rsync --exclude-from $dir/.rsyncignore -av client/dist/* ec2-user@$domain:/var/www/learnReactJS/public
+rsync -av server/ ec2-user@$domain:/var/www/learnReactJS/server
+```
+
+deploy先のフォルダ構成は以下の想定です。  
+
+```
+└── var
+    └── www
+        └── learnReactJS
+            ├── config
+            ├── public
+            └── server
+```
+
+env.shにはEC2のデプロイ対象のpublic IP  
+Route53のAレコードに設定したデプロイターゲットのドメイン名を指定します。
+
+```env.sh
+#!/bin/sh
+
+ip='{xx.xx.xx.xx}'
+domain='{domain}'
+```
+
+.rsyncignoreには転送時に除外ファイルを指定します。  
+本番環境なのでソースマップファイルは対象から外します。  
+
+```.rsyncignore
+*.map
 ```
