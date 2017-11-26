@@ -1,0 +1,15 @@
+{
+  "apps":[
+    {
+      "name": "learnReactJS",
+      "watch":["/var/www/learnReactJS/server/src/**/*"],
+      "ignore_watch":["/var/www/learnReactJS/server/user.db"],
+      "script": "/var/www/learnReactJS/server/src/server.js",
+      "env": {
+        "NODE_ENV":"production",
+        "NODE_CONFIG_STRICT_MODE": 0,
+        "NODE_CONFIG_DIR":"../config"
+      }
+    }
+  ]
+}
