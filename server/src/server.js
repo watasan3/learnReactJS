@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 // DB
 const Datastore = require('nedb')
-const db = new Datastore({ filename: 'user.db', autoload: true })
+const db = new Datastore({ filename: '../user.db', autoload: true })
 
 // 例外ハンドリング
 process.on('uncaughtException', (err) => console.log('uncaughtException => ' + err))
