@@ -28,6 +28,7 @@ configフォルダにはサーバ、クライアント共通の設定ファイ�
 │   └── webpack.config.js
 ├── config
 │   ├── default.js
+│   ├── default-0.js
 │   └── production.js
 ├── package.json
 ├── script
@@ -36,6 +37,7 @@ configフォルダにはサーバ、クライアント共通の設定ファイ�
 │   └── env.sh
 └── server
     ├── package.json
+    ├── pm2_prod.json
     └── src
         └── server.js
 ```
@@ -64,8 +66,6 @@ deploy用のコマンド`deploy`を作成してあります。
 サーバ側のpackage.jsonです。  
 NodeJSサーバ専用のパッケージを分離しました。  
 公開サーバはpm2上で永続化している想定です。  
-NODE_ENV=productionを指定するとconfigライブラリは  
-configフォルダのproduction.jsonを参照します。  
 
 ```server/package.json
 {
@@ -75,7 +75,7 @@ configフォルダのproduction.jsonを参照します。
   "main": "server.js",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
-    "prod": "export NODE_ENV=production;export NODE_CONFIG_DIR=/var/www/learnReactJS/config;pm2 restart /var/www/learnReactJS/server/src/server.js --watch"
+    "prod": "pm2 delete learnReactJS;pm2 start pm2_prod.json"
   },
   "author": "",
   "license": "ISC",
@@ -101,9 +101,19 @@ module.exports = {
 }
 ```
 
+default-0.jsです。  
+リリースビルドの都合上入れています。  
+空で構いません。  
+
+```config/default-0.js
+module.exports = {
+}
+```
+
 production.jsです。  
 default.jsのパラメータをオーバライドします。  
 今回はポート番号の指定を公開サーバでも変えないので中身は空で問題ありません。  
+default.js > default-0.js > production.jsの順番で読み込まれます。  
 
 ```config/production.js
 module.exports = {
@@ -392,9 +402,9 @@ source $dir/env.sh
 set -eu
 
 # deploy 
-rsync -av config/ ec2-user@$domain:/var/www/learnReactJS/config
-rsync --exclude-from $dir/.rsyncignore -av client/dist/* ec2-user@$domain:/var/www/learnReactJS/public
-rsync -av server/ ec2-user@$domain:/var/www/learnReactJS/server
+rsync -av $dir/../config/ ec2-user@$domain:/var/www/learnReactJS/config
+rsync --exclude-from $dir/.rsyncignore -av $dir/../client/dist/* ec2-user@$domain:/var/www/learnReactJS/public
+rsync -av $dir/../server/ ec2-user@$domain:/var/www/learnReactJS/server
 ```
 
 deploy先のフォルダ構成は以下の想定です。  
@@ -424,4 +434,52 @@ domain='{domain}'
 
 ```.rsyncignore
 *.map
+*.db
+```
+
+EC2側ではpm2をインストールしておきます。  
+pm2はnodeJSのプロセスを永続化してくれます。  
+
+```
+$npm install -g pm2
+```
+
+デプロイ後、  
+serverプロセスをpm2で起動します。  
+
+```
+$cd /var/www/learnReactJS/server
+$npm run prod
+```
+
+npm run prodは以下のコマンドです。  
+pm2のlearnReactJSプロセスを削除し、pm2_prod.jsonを参照してプロセスを起動します。  
+
+```
+$pm2 delete learnReactJS;pm2 start pm2_prod.json
+```
+
+pm2_prod.jsonです。  
+nameには起動プロセス名を指定します。  
+watchはファイル変更時にプロセスを再起動するフォルダ、ファイルを指定します。  
+ignore_watchは対象のファイルに変更があっても再起動しません。  
+scriptはプロセス起動対象のファイルパスです。  
+envには環境変数の指定をします。  
+
+```pm2_prod.json
+{
+  "apps":[
+    {
+      "name": "learnReactJS",
+      "watch":["/var/www/learnReactJS/server/src/**/*"],
+      "ignore_watch":["/var/www/learnReactJS/server/user.db"],
+      "script": "/var/www/learnReactJS/server/src/server.js",
+      "env": {
+        "NODE_ENV":"production",
+        "NODE_CONFIG_STRICT_MODE": 0,
+        "NODE_CONFIG_DIR":"../config"
+      }
+    }
+  ]
+}
 ```
