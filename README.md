@@ -75,7 +75,7 @@ configフォルダのproduction.jsonを参照します。
   "main": "server.js",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
-    "prod": "NODE_ENV=production NODE_CONFIG_DIR=../config pm2 start src/server.js --watch"
+    "prod": "export NODE_ENV=production;export NODE_CONFIG_DIR=/var/www/learnReactJS/config;pm2 restart /var/www/learnReactJS/server/src/server.js --watch"
   },
   "author": "",
   "license": "ISC",
@@ -407,6 +407,7 @@ deploy先のフォルダ構成は以下の想定です。
             ├── public
             └── server
 ```
+
 
 env.shにはEC2のデプロイ対象のpublic IP  
 Route53のAレコードに設定したデプロイターゲットのドメイン名を指定します。

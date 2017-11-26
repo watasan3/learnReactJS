@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
-    "prod": "export NODE_ENV=production;export NODE_CONFIG_DIR=/var/www/learnReactJS/config;pm2 restart /var/www/learnReactJS/server/src/server.js"
+    "prod": "export NODE_ENV=production;export NODE_CONFIG_DIR=/var/www/learnReactJS/config;pm2 restart /var/www/learnReactJS/server/src/server.js --watch"
   },
   "author": "",
   "license": "ISC",
