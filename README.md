@@ -102,7 +102,7 @@ module.exports = {
 ```
 
 default-0.jsです。  
-リリースビルドの都合上入れています。  
+本番サーバの起動の都合上入れています。  
 空で構いません。  
 
 ```config/default-0.js
