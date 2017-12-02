@@ -34,5 +34,14 @@ async function testAwait() {
   console.log(ret2)
   const ret3 = await asyncFuncPromise('c')
   console.log(ret3)
+
+  // 並列実行待ち
+  const rets = await Promise.all([
+    asyncFuncPromise('d'),
+    asyncFuncPromise('e'),
+    asyncFuncPromise('f')
+  ])
+  console.log(rets)
+
 }
 testAwait()
