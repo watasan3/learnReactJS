@@ -1,10 +1,10 @@
 # ReduxFormでのバリデーションチェックとフォーム投稿
 
 [ReduxForm](https://redux-form.com/7.1.2/)を使うとReactでのバリデーションチェックとフォーム投稿が構造化できます。  
-次のnpmコマンドでReduxFormをダウンロードします。
+次のyarnコマンドでReduxFormをダウンロードします。
 
 ```
-$ npm install redux-form
+$ yarn add --dev redux-form
 ```
 
 reducer.jsにReduxFormのreducerを追加します。
