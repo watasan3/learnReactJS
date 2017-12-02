@@ -1,14 +1,14 @@
 {
   "name": "learnReactJS",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "main": "index.js",
+  "repository": "https://github.com/teradonburi/learnReactJS.git",
+  "author": "teradonburi <daikiterai@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
     "prod": "pm2 delete learnReactJS;pm2 start pm2_prod.json"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
@@ -20,3 +20,4 @@
     "node-dev": "^3.1.3"
   }
 }
+

@@ -5,7 +5,12 @@
   "repository": "https://github.com/teradonburi/learnReactJS.git",
   "author": "teradonburi <daikiterai@gmail.com>",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "NODE_CONFIG_DIR=../config webpack-dev-server",
+    "rm": "rm -rf dist/*",
+    "build-webpack": "NODE_CONFIG_DIR=../config parallel-webpack -p --config webpack.build.js",
+    "build": "run-s rm build-webpack"
+  },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
