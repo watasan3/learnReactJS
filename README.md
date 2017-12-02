@@ -76,9 +76,15 @@ export default class App extends React.Component {
 
 全体図は良い図があったのでそちらを参考にしてください。  
 [React component ライフサイクル図](https://qiita.com/kawachi/items/092bfc281f88e3a6e456)
+各種メソッドの説明はこちら  
+[React Componentのライフサイクルのまとめと利用用途](https://qiita.com/yukika/items/1859743921a10d7e3e6b)
   
 初期化時と属性値変更時に呼ばれるcomponentWillMountメソッドと  
 描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
+通信処理後のpropsの変更をみて、さらに何か処理したい場合には  
+componentWillReceivePropsメソッドを使ったり、  
+どうしても直接DOM操作をしたいときにcomponentDidMountメソッドにDOMのイベントを追加して  
+componentWillUnmountメソッドでDOMイベントを削除したりします。  
 
 # 属性値について
 
@@ -162,6 +168,6 @@ renderメソッドを呼び出します（再描画される）。
 renderメソッド内でsetStateメソッドを直接呼び出してはいけません。  
 render→setState→renderと無限ループになるからです。  
 
-クラスメソッドのイベントバインディングには何種類か方法があります。
+クラスメソッドのイベントバインディングには何種類か方法があります。  
 詳しくは[Reactをes6で使う場合のbindの問題](https://qiita.com/cubdesign/items/ee8bff7073ebe1979936)を参照
 
