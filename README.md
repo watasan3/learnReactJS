@@ -125,7 +125,7 @@ module.exports = {
 リリースビルド用に下記のパッケージを追加でインストールしてあります。
 
 ```
-$npm install --save-dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env parallel-webpack
+$npm install --save-dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-stage-0 parallel-webpack 
 ```
 
 buildコマンドにてリリースビルドを行います。  
