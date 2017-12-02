@@ -4,6 +4,7 @@ Reduxを用いることでアプリケーション全体の状態を管理し、
 イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
 といったことが楽になります。  
 （類似のフレームワークにfluxがあります。）  
+参考：[ToDoアプリで学ぶReact/Redux入門/vtecx2_lt2](https://speakerdeck.com/nishina555/vtecx2-lt2)  
 参考：[Redux入門【ダイジェスト版】10分で理解するReduxの基礎](https://qiita.com/kiita312/items/49a1f03445b19cf407b7)  
 参考：[React+Redux入門](https://qiita.com/erukiti/items/e16aa13ad81d5938374e)  
 SPAなReactJSと特に相性が良いです。  
