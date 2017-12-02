@@ -8,7 +8,7 @@ ReactJSではマテリアルデザインを踏襲したMaterial-UIというラ�
 Material-UIのパッケージをインストールします。  
 
 ```
-$ npm install -D material-ui@next material-ui-icons
+$ yarn add --dev material-ui@next material-ui-icons
 ```
 
 package.jsonは次のようになります。
