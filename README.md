@@ -6,7 +6,7 @@ webpackを使うことで複数のリソースファイルを１つにまとめ�
 webpackでビルドするためにパッケージを追加します。  
 
 ```
-$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom react-hot-loader
+$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
 ```
 
 package.jsonは次のようになります。
@@ -37,9 +37,9 @@ package.jsonは次のようになります。
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "webpack": "^3.8.1"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.9.1"
   }
 }
 ```
@@ -120,15 +120,15 @@ module.exports = {
 次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
 
 ```webpack.config.js
-$ node_modules/webpack/bin/webpack.js 
-Hash: e39e8c0585972e41caa9
-Version: webpack 3.8.1
-Time: 3502ms
-    Asset    Size  Chunks                    Chunk Names
-bundle.js  835 kB       0  [emitted]  [big]  main
-  [15] ./index.js 168 bytes {0} [built]
-  [32] ./App.js 214 bytes {0} [built]
-    + 31 hidden modules
+$ webpack
+Hash: 4abc329581564efc9932
+Version: webpack 3.9.1
+Time: 1408ms
+Asset     Size        Chunks                Chunk Names
+bundle.js  1.87 MB       0  [emitted]  [big]  main
+  [14] ./index.js 168 bytes {0} [built]
+  [27] ./App.js 214 bytes {0} [built]
+    + 26 hidden modules
 ```
 
 index.htmlを開くと表示されるはずです。
