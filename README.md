@@ -72,7 +72,7 @@ React DOMによって作成したReactコンポーネントは新しいDOMとし
 最終的なレンダリングはReactコンポーネントのrenderメソッドにて返却されるDOMが描画されます。  
 
 ```index.js
-import React  from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 
