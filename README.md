@@ -6,7 +6,7 @@ webpackを使うことで複数のリソースファイルを１つにまとめ�
 webpackでビルドするためにパッケージを追加します。  
 
 ```
-$ npm install -D webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
+$ yarn add --dev webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
 ```
 
 package.jsonは次のようになります。
@@ -15,23 +15,10 @@ package.jsonは次のようになります。
 {
   "name": "learnReactJS",
   "version": "1.0.0",
-  "description": "ReactJSでDOMをレンダリングするには",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/teradonburi/learnReactJS.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/teradonburi/learnReactJS/issues"
-  },
-  "homepage": "https://github.com/teradonburi/learnReactJS#readme",
-  "dependencies": {},
+  "repository": "https://github.com/teradonburi/learnReactJS.git",
+  "author": "teradonburi <daikiterai@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
