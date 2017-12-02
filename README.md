@@ -69,16 +69,10 @@ NodeJSサーバ専用のパッケージを分離しました。
 
 ```server/package.json
 {
-  "name": "learnReactJS",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config node-dev --inspect src/server.js",
     "prod": "pm2 delete learnReactJS;pm2 start pm2_prod.json"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
@@ -125,7 +119,7 @@ module.exports = {
 リリースビルド用に下記のパッケージを追加でインストールしてあります。
 
 ```
-$npm install --save-dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-stage-0 parallel-webpack 
+$ yarn add --dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-stage-0 parallel-webpack 
 ```
 
 buildコマンドにてリリースビルドを行います。  
@@ -133,18 +127,12 @@ NODE_CONFIG_DIRはconfigフォルダのパスを指定しています。
 
 ```client/package.json
 {
-  "name": "learnReactJS",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "NODE_CONFIG_DIR=../config webpack-dev-server",
     "rm": "rm -rf dist/*",
     "build-webpack": "NODE_CONFIG_DIR=../config parallel-webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
@@ -157,28 +145,27 @@ NODE_CONFIG_DIRはconfigフォルダのパスを指定しています。
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "config": "^1.28.1",
-    "copy-webpack-plugin": "^4.2.1",
+    "copy-webpack-plugin": "^4.2.3",
     "history": "^4.7.2",
     "html-webpack-plugin": "^2.30.1",
-    "material-ui": "^1.0.0-beta.21",
+    "material-ui": "^1.0.0-beta.22",
     "material-ui-icons": "^1.0.0-beta.17",
     "npm-run-all": "^4.1.2",
     "parallel-webpack": "^2.2.0",
     "precss": "^2.0.0",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-hot-loader": "^3.1.3",
     "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
+    "react-router-dom": "4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
     "redux": "^3.7.2",
     "redux-devtools": "^3.4.1",
-    "redux-form": "7.1.2",
+    "redux-form": "^7.2.0",
     "redux-thunk": "^2.2.0",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
-  },
-  "dependencies": {}
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.5"
+  }
 }
 ```
 
@@ -382,7 +369,7 @@ module.exports = configs
 次のコマンドでリリースビルドを行います。  
 
 ```
-$ npm run build-webpack
+$ yarn run build-webpack
 ```
 
 成功するとdistフォルダにリリースビルド完了後のソースファイルが出力されるのでこのフォルダをデプロイします。  
@@ -443,22 +430,22 @@ EC2側ではpm2をインストールしておきます。
 pm2はnodeJSのプロセスを永続化してくれます。  
 
 ```
-$npm install -g pm2
+$ npm install -g pm2
 ```
 
 デプロイ後、  
 serverプロセスをpm2で起動します。  
 
 ```
-$cd /var/www/learnReactJS/server
-$npm run prod
+$ cd /var/www/learnReactJS/server
+$ npm run prod
 ```
 
 npm run prodは以下のコマンドです。  
 pm2のlearnReactJSプロセスを削除し、pm2_prod.jsonを参照してプロセスを起動します。  
 
 ```
-$pm2 delete learnReactJS;pm2 start pm2_prod.json
+$ pm2 delete learnReactJS;pm2 start pm2_prod.json
 ```
 
 pm2_prod.jsonです。  
