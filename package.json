@@ -1,8 +1,10 @@
 {
   "name": "learnReactJS",
   "version": "1.0.0",
-  "description": "learnReactJS",
   "main": "index.js",
+  "repository": "https://github.com/teradonburi/learnReactJS.git",
+  "author": "teradonburi <daikiterai@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
@@ -11,18 +13,7 @@
     "rsync": "./script/deploy.sh",
     "deploy": "NODE_ENV=production run-s build:* rsync"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/teradonburi/learnReactJS.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/teradonburi/learnReactJS/issues"
-  },
-  "homepage": "https://github.com/teradonburi/learnReactJS#readme",
   "devDependencies": {
-    "npm-run-all": "^4.1.1"
+    "npm-run-all": "^4.1.2"
   }
 }
