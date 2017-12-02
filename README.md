@@ -51,11 +51,11 @@ BabelとJSXトランスパイラをインストールします。
 
 ```
 # Babelコマンドをインストール
-yarn global add babel-cli
+$ yarn global add babel-cli
 # package.json作成
-yarn init -y
+$ yarn init -y
 # BabelのJSXトランスパイラプラグインをダウンロード
-yarn add babel-plugin-transform-react-jsx
+$ yarn add babel-plugin-transform-react-jsx
 ```
 
 次のコマンドでtest.jsxに対して直接Babelのトランスパイルを行うとcompile.jsが出力されます。
