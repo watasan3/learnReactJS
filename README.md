@@ -10,6 +10,9 @@ $ npm init --force
 
 ```
 $ npm install --save (パッケージ名)
+
+# 開発用としてインストールする(Babelなどでトランスパイルするパッケージはこちら)
+$ npm install --save-dev (パッケージ名)
 ```
 
 package.jsonに記述された依存パッケージを  
@@ -21,6 +24,20 @@ $ npm install
 ```
 
 もしくは後発の[Yarn](https://yarnpkg.com/lang/en/)というパッケージ管理ツールでもインストールできます。
+
+```
+# yarn インストール
+$ npm install -g yarn
+
+# npm installと等価
+$ yarn
+
+# npm install --save (パッケージ名)と等価
+$ yarn add (パッケージ名)
+
+# npm install --save-dev (パッケージ名)と等価
+# yarn add --dev (パッケージ名)
+```
 
 # サーバ作成
 
