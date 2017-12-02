@@ -1,8 +1,8 @@
 # ReactRouterReduxで画面遷移状態をストア管理
 
-React RouterとReact Router Reduxを使うと画面遷移状態をhistoryオブジェクトで管理することができます。 
-下記コマンドでreact-router-domとreact-router-reduxとhistoryをインストールします。
-React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。 
+React RouterとReact Router Reduxを使うと画面遷移状態をhistoryオブジェクトで管理することができます。  
+下記コマンドでreact-router-domとreact-router-reduxとhistoryをインストールします。  
+React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。  
 
 ```
 $npm install --save-dev react-router-dom@4.2.2 history react-router-redux@next
