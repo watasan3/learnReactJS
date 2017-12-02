@@ -25,7 +25,7 @@ serverフォルダにはexpressの実装をします。
 下記パッケージを追加でインストールします。  
 
 ```
-$npm install --save-dev npm-run-all webpack-dev-server react-hot-loader node-dev express nedb body-parser config
+$ yarn add --dev npm-run-all webpack-dev-server react-hot-loader node-dev express nedb body-parser config
 ```
 
 scriptsに下記のスクリプトを追記します。 
@@ -44,7 +44,7 @@ node-all-runのrun-pコマンドで
 web-dev-serverの設定に関しては後述  
 
 ```
-$npm run dev
+$ yarn run dev
 ```
 
 追加後のpackage.jsonは次のようになります。  
@@ -53,26 +53,17 @@ $npm run dev
 {
   "name": "learnReactJS",
   "version": "1.0.0",
-  "description": "ReactJSでDOMをレンダリングするには",
   "main": "index.js",
+  "repository": "https://github.com/teradonburi/learnReactJS.git",
+  "author": "teradonburi <daikiterai@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev:client": "webpack-dev-server",
     "dev:server": "node-dev --inspect server/server.js",
     "dev": "run-p dev:client dev:server"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/teradonburi/learnReactJS.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/teradonburi/learnReactJS/issues"
-  },
-  "homepage": "https://github.com/teradonburi/learnReactJS#readme",
   "devDependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -80,25 +71,26 @@ $npm run dev
     "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.2",
-    "config": "^1.27.0",
+    "config": "^1.28.1",
     "express": "^4.16.2",
-    "material-ui": "^1.0.0-beta.17",
+    "material-ui": "^1.0.0-beta.22",
     "material-ui-icons": "^1.0.0-beta.17",
     "nedb": "^1.8.0",
     "node-dev": "^3.1.3",
-    "npm-run-all": "^4.1.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-hot-loader": "^3.1.1",
+    "npm-run-all": "^4.1.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-hot-loader": "^3.1.3",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "redux-devtools": "^3.4.0",
+    "redux-devtools": "^3.4.1",
     "redux-thunk": "^2.2.0",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.5"
   }
 }
 ```
+
 
 config/default.jsにてアプリケーション全体の設定を記述しています。
 expressサーバ起動時のポート指定、webpack-dev-serverの起動ポート指定をしています（後述）
