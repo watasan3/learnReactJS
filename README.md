@@ -1,20 +1,4 @@
-# JavaScript Standard Style 
-
-[JavaScript Standard Style ](https://standardjs.com/)
-
-* インデント2つのスペース 
-* ストリングはシングルクォーテーションで囲む – エスケープを避けるため
-* 使わない変数は消す – バグの温床となる
-* セミコロンは書かない
-* if(condition){...}内の単語の後ろにはスペースを入れる
-* function name (arg){...}でfunctionの名前の後ろにはスペースを入れる
-* 常に==ではなく===を使う – ただしobj ==nullはnull||undefinedをチェックするために使っても良い
-
-...etc
-
-ESLintというツールでコーディングをチェックしてくれます。
-
-# ES6のおさらい
+# ES6/7のおさらい
 
 変数
 
