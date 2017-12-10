@@ -1,5 +1,4 @@
-// クラスデコレーター
-// @isTestable
+// 対象のクラス
 @isTestable(true)
 class MyClass { 
   

@@ -14,8 +14,7 @@ $ yarn add --dev babel-plugin-transform-decorators-legacy
 decoratorsのサンプルは以下となります。
 
 ```decorators.js
-// クラスデコレーター
-// @isTestable
+// 対象のクラス
 @isTestable(true)
 class MyClass { 
   
