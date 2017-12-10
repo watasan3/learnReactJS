@@ -1,10 +1,10 @@
 # decoratorsについて
-decoratorsを使うことでクラスやクラスのメソッドを外部から上書きすることができます。
-decoratorsを使うことでクラスの内部実装を変更することなく、decoratorsのパラメータを流し込んだり、クラスメソッドをフックしたりできます。
-これはJavaなどでいうDI(Dependency Injection)に該当します。
-[babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)を使うことでdecoratorsを変換してくれます。
+decoratorsを使うことでクラスやクラスのメソッドを外部から上書きすることができます。  
+decoratorsを使うことでクラスの内部実装を変更することなく、decoratorsのパラメータを流し込んだり、クラスメソッドをフックしたりできます。  
+これはJavaなどでいうDI(Dependency Injection)に該当します。  
+[babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)を使うことでdecoratorsを変換してくれます。  
 
-下記コマンドでbabel-plugin-transform-decorators-legacyをインストールします。
+下記コマンドでbabel-plugin-transform-decorators-legacyをインストールします。  
 
 ```
 $ yarn init -y
@@ -83,9 +83,9 @@ myclass.test2('a','b')
 babel --plugins transform-decorators-legacy decorator.js > compile.js
 ```
 
-トランスパイル後のコードを実行すると、
-MyClassのほうの実装を変更することなく、
-decoratorsにより、クラスの拡張およびメソッドのフックがされていることが確認できます。
+トランスパイル後のコードを実行すると、  
+MyClassのほうの実装を変更することなく、  
+decoratorsにより、クラスの拡張およびメソッドのフックがされていることが確認できます。  
 
 ```
 $ node compile.js 
