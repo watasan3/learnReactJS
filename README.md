@@ -167,8 +167,11 @@ console.log(numbers.map((val) => {return val * 2}))
 console.log(numbers.map((val) => val * 2))
 // 配列の合計値
 console.log(numbers.reduce((sum, current) => sum + current, 0))
+// 配列の結合
+console.log(arr.concat(numbers))
 
-const obj = {a: 'o', b: 'b', c: 'j'}
+
+const obj = {o: 'o', b: 'b', j: 'j'}
 
 // 配列のキーでループ
 for (let key in arr) {
@@ -186,6 +189,15 @@ for (let key in obj) {
   const val = obj[key]
   console.log(val)
 }
+
+
+// 配列展開
+const arr2 = ['d', 'e', 'f']
+console.log([...arr, ...arr2])
+
+// オブジェクト展開
+const ect = {e: 'e', c: 'c', t: 't'}
+console.log({...obj, ...ect})
 ```
 
 非同期処理
