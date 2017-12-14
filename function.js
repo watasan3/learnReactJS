@@ -16,3 +16,9 @@ const testES6Def = (arg = init) => {
   console.log(arg)
 }
 testES6Def()
+
+// オブジェクト引数を展開済みで渡す
+const testES6Obj = ({a,b}) => {
+  console.log(a,b)
+}
+testES6Obj({a:'a',b:'b'})

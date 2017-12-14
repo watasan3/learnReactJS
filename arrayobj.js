@@ -36,7 +36,6 @@ for (let key in obj) {
   console.log(val)
 }
 
-
 // 配列展開
 const arr2 = ['d', 'e', 'f']
 console.log([...arr, ...arr2])
@@ -44,3 +43,12 @@ console.log([...arr, ...arr2])
 // オブジェクト展開
 const ect = {e: 'e', c: 'c', t: 't'}
 console.log({...obj, ...ect})
+
+// オブジェクト変数代入で変数名がキーとなる
+const object = 'val'
+console.log({object})
+
+// オブジェクトの一部重複キーがある場合は後勝ちで値上書き
+const obj1 = {a: 'a', b: 'b'}
+const obj2 = {b: 'bb', c: 'c'}
+console.log({...obj1, ...obj2})

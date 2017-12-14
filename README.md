@@ -21,7 +21,18 @@ function test() {
 // 関数呼び出し
 test()
 
-// ES6だと変数を文字列に展開できる
+const def = { test: 'default' }
+const obj = {}
+
+// ３項演算子
+console.log(def.test === 'default' ? 'default' : 'defaultじゃない')
+// && 演算子(undefined, nullチェック)
+obj.test && console.log('obj.testはundefinedなので実行されない')
+// || 演算子(初期値代入)
+obj.test = test || def.test
+console.log(obj.test) // testがundefinedなのでdef.testが代入
+
+// ES6だと変数をバッククォートで文字列に展開できる
 const param = {obj:'param'}
 const data = `${param.obj}を展開`
 console.log(data)
@@ -33,7 +44,8 @@ NodeJSで実行
 $ node variable.js
 ```
 
-HTML上での実行
+HTML上での実行  
+scriptタグ内での実行  
 
 ```variable.html
 <!DOCTYPE html>
@@ -58,7 +70,7 @@ function test() {
   console.log(c)
 }
 // 関数呼び出し
-test()      
+test()
     </script>
   </body>
 </html>
@@ -85,6 +97,12 @@ const testES6Def = (arg = init) => {
   console.log(arg)
 }
 testES6Def()
+
+// オブジェクト引数を展開済みで渡す
+const testES6Obj = ({a,b}) => {
+  console.log(a,b)
+}
+testES6Obj({a:'a',b:'b'})
 ```
 
 クラス
@@ -174,7 +192,6 @@ for (let key in obj) {
   console.log(val)
 }
 
-
 // 配列展開
 const arr2 = ['d', 'e', 'f']
 console.log([...arr, ...arr2])
@@ -182,6 +199,15 @@ console.log([...arr, ...arr2])
 // オブジェクト展開
 const ect = {e: 'e', c: 'c', t: 't'}
 console.log({...obj, ...ect})
+
+// オブジェクト変数代入で変数名がキーとなる
+const object = 'val'
+console.log({object})
+
+// オブジェクトの一部重複キーがある場合は後勝ちで値上書き
+const obj1 = {a: 'a', b: 'b'}
+const obj2 = {b: 'bb', c: 'c'}
+console.log({...obj1, ...obj2})
 ```
 
 非同期処理
