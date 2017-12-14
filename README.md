@@ -29,8 +29,9 @@ console.log(def.test === 'default' ? 'default' : 'defaultじゃない')
 // && 演算子(undefined, nullチェック)
 obj.test && console.log('obj.testはundefinedなので実行されない')
 // || 演算子(初期値代入)
-obj.test = test || def.test
-console.log(obj.test) // testがundefinedなのでdef.testが代入
+const hoge = null
+obj.test = hoge || def.test
+console.log(obj.test) // hogeがnullなのでdef.testが代入（hogeがundefinedだとエラー）
 
 // ES6だと変数をバッククォートで文字列に展開できる
 const param = {obj:'param'}
