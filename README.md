@@ -300,8 +300,8 @@ const theme = createMuiTheme({
 
 利用側では、  
 withThemeデコレータを使うとprops.themeが使えるようになります。  
-カラーパレットから`common`,`primary`,`secondary`,`grey`,`error`などが使えます。  
-color属性を持っている[Button](https://material-ui-next.com/demos/buttons/)等のコンポーネントは`primary`、`accent`、`contrast`などで色指定することもできます（※この場合、accentはsecondary色に相当するので注意）
+カラーパレットからcommon,primary,secondary,grey,errorなどが使えます。  
+color属性を持っている[Button](https://material-ui-next.com/demos/buttons/)等のコンポーネントは'primary'、'accent'、'contrast'などで色指定することもできます（※この場合、accentはsecondary色に相当するので注意）
 
 ```App.js
 import { withTheme } from 'material-ui/styles'
