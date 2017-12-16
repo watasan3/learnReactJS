@@ -16,7 +16,7 @@ import reducer from './reducer/reducer'
 const history = createHistory()
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
-// redux-thunkをミドルウェアに適用
+// redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
 const store = createStore(reducer, applyMiddleware(routerMiddleware(history),thunkWithClient))
 
 
@@ -95,7 +95,7 @@ const render = Component => {
     <AppContainer warnings={false}>
       <MuiThemeProvider theme={theme}>
         <Provider store={store}>
-          <Component history={history} />
+          <Component history={history} /> {/* propsにhistoryを渡す */}
         </Provider>
       </MuiThemeProvider>
     </AppContainer>,

@@ -23,15 +23,17 @@ webpack.config.jsonにresolveの指定をします。（やっておいたほう
     historyApiFallback: true, // history APIが404エラーを返す時、index.htmlに遷移(ブラウザリロード時など) 
 ```
 
-index.jsにてhistoryオブジェクトの作成、  
-reduxのstoreに紐付け、Componentのpropsにhistoryオブジェクトを渡します。  
+index.jsにてcreateHistoryメソッドにてhistoryオブジェクトの作成、  
+historyオブジェクトをミドルウェア追加でreduxのstoreに格納します。  
+Appコンポーネントのpropsにhistoryオブジェクトを渡します。  
 
 ```index.js
 import React  from 'react'
 import ReactDOM from 'react-dom'
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory' // 追加
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
 import { AppContainer } from 'react-hot-loader'
@@ -44,15 +46,21 @@ import reducer from './reducer/reducer'
 const history = createHistory()
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
-// routerMiddlewareとredux-thunkをミドルウェアに適用
+// redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
 const store = createStore(reducer, applyMiddleware(routerMiddleware(history),thunkWithClient))
+
+
+// Material-UIテーマを上書きする
+const theme = createMuiTheme({})
 
 const render = Component => {
   ReactDOM.render(
     <AppContainer warnings={false}>
-      <Provider store={store}>
-        <Component history={history} />
-      </Provider>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <Component history={history} />
+        </Provider>
+      </MuiThemeProvider>
     </AppContainer>,
     document.getElementById('root'),
   )
