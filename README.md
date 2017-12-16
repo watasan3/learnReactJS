@@ -130,7 +130,7 @@ const AppRoute = (props) => (
 
 Switchコンポーネントで対象のパスをグルーピングします。
 exactはパスの完全一致指定です。この指定がないと/todoでもUserPageのコンポネントがレンダリングされてしまいます。
-`/`や`/todo`以外のときはパス未指定のNotFound.jsが呼ばれます。
+`/`や`/todo`以外のときはパス未指定のNotFoundコンポーネントが呼ばれます。
 
 ```NotFound.js
 import React from 'react'
@@ -257,7 +257,7 @@ export default class UserPage extends React.Component {
 Router直下のコンポーネントはprops.match、props.location、props.historyが使えるようになります。  
 historyオブジェクトにて画面遷移ができるようになります。  
 また、遷移履歴もhistoryオブジェクトで一元管理されているため、ブラウザバックなども有効に働きます。  
-パラメータ部分を取得したい場合はprops.matchを使います。  
+URL部分を取得したい場合はprops.matchを使います。  
 
 ```
 handlePageMove(path) {

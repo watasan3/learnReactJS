@@ -95,7 +95,7 @@ const render = Component => {
     <AppContainer warnings={false}>
       <MuiThemeProvider theme={theme}>
         <Provider store={store}>
-          <Component history={history} /> {/* propsにhistoryを渡す */}
+          <Component history={history} />
         </Provider>
       </MuiThemeProvider>
     </AppContainer>,
