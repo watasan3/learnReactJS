@@ -93,10 +93,8 @@ App.jsにてルーティングの指定をします。
 ```App.js
 import React from 'react'
 import { ConnectedRouter as Router } from 'react-router-redux'
-import { Route, Redirect, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
-// client/componentsフォルダ以下に格納
-// webpack.config.jsにてresolveしているので絶対パス指定で読み込みできる
 import NotFound from 'components/NotFound'
 import UserPage from 'components/UserPage'
 import TodoPage from 'components/TodoPage'
@@ -137,18 +135,18 @@ export default class NotFound extends React.Component {
 ```
 
 UserPage.jsです。  
-前回とほぼ変わりませんがヘッダー部分にTodoリストページに遷移するためのメソッドを追加しています。  
+前回とほぼ変わりませんがヘッダー部分にTodoリストページに遷移するためのhandlePageMoveメソッドを追加しています。  
 
 ```UserPage.js
 import React from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { load, add } from 'reducer/user'
 
-import { withStyles } from 'material-ui/styles'
+import { withTheme, withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
-import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
-
+import withWidth from 'material-ui/utils/withWidth'
+import { orange } from 'material-ui/colors'
 
 // connectのdecorator
 @connect(
@@ -159,6 +157,15 @@ import { Email } from 'material-ui-icons'
   // propsに付与するactions
   { load, add }
 )
+@withWidth()
+@withTheme()
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
+  }
+})
 export default class UserPage extends React.Component {
 
   constructor (props) {
@@ -195,52 +202,54 @@ export default class UserPage extends React.Component {
   }
   
   render () {
-    const { users } = this.props
+    const { users, theme, classes, width } = this.props
+    const { primary, secondary } = theme.palette
+
     // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
     // console.log(users)
     return (
       <div>
-          <AppBar position="static" color="primary">
-            <Toolbar>
-              <Typography type="title" color="inherit">
-                ユーザページ
-              </Typography>
-              <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/todo')}>TODOページへ</Button>
-            </Toolbar>
-          </AppBar>
-          {/* 配列形式で返却されるためmapで展開する */}
-          {users && users.map((obj) => {
-            const user = obj.results[0]
-            return (
-                // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
-                <Card key={user.email} style={{marginTop:'10px'}}>
-                  <CardContent style={{color:'#408040'}}>
-                    <Avatar src={user.picture.thumbnail} />
-                    <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
-                    <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
-                    <div style={{textAlign: 'right'}} >
-                      <Button onClick={() => this.handleClickOpen(user)}><Email/>メールする</Button>                    
-                    </div>
-                  </CardContent>
-                </Card>    
-            )
-          })}
-          {
-            this.state.open &&
-            <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
-              <DialogTitle>メールアドレス</DialogTitle>
-              <DialogContent>{this.state.user.email}</DialogContent>
-            </Dialog>
-          }  
-          <Button style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
+        <AppBar position="static" color="primary">
+          <Toolbar classes={{root: classes.root}}>
+            ユーザページ({ width === 'xs' ? 'スマホ' : 'PC'})
+            <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/todo')}>TODOページへ</Button>
+          </Toolbar>
+        </AppBar>
+        {/* 配列形式で返却されるためmapで展開する */}
+        {users && users.map((obj) => {
+          const user = obj.results[0]
+          return (
+            // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
+            <Card key={user.email} style={{marginTop:'10px'}}>
+              <CardContent style={{color:'#408040'}}>
+                <Avatar src={user.picture.thumbnail} />
+                <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
+                <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
+                <div style={{textAlign: 'right'}} >
+                  <Button raised color='accent' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+        {
+          this.state.open &&
+          <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+            <DialogTitle>メールアドレス</DialogTitle>
+            <DialogContent>{this.state.user.email}</DialogContent>
+          </Dialog>
+        }
+        <Button style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
       </div>
     )
   }
 }
 ```
 
+Router直下のコンポーネントはprops.match、props.location、props.historyが使えるようになります。  
 historyオブジェクトにて画面遷移ができるようになります。  
 また、遷移履歴もhistoryオブジェクトで一元管理されているため、ブラウザバックなども有効に働きます。  
+パラメータ部分を取得したい場合はprops.matchを使います。  
 
 ```
 handlePageMove(path) {
@@ -252,44 +261,35 @@ handlePageMove(path) {
 
 ```TodoPage.js
 import React from 'react'
-import { connect } from 'react-redux';
-import { load, add } from 'reducer/user'
-
+import { AppBar, Toolbar, Button } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
-import Typography from 'material-ui/Typography'
-import { Email } from 'material-ui-icons'
 
-
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
+  }
+})
 export default class TodoPage extends React.Component {
-
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
-  }
-
-  componentWillMount() {
-  }
 
   handlePageMove(path) {
     this.props.history.push(path)
   }
 
   render () {
-    const { todos } = this.props
+    const { classes } = this.props
+    
     // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
     // console.log(users)
     return (
       <div>
-          <AppBar position="static" color="primary">
-            <Toolbar>
-              <Typography type="title" color="inherit">
-                TODOページ
-              </Typography>
-              <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
-            </Toolbar>
-          </AppBar>
+        <AppBar position="static" color="primary">
+          <Toolbar classes={{root: classes.root}}>
+              TODOページ
+            <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
+          </Toolbar>
+        </AppBar>
       </div>
     )
   }
