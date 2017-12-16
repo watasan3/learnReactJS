@@ -23,7 +23,7 @@ connectの記述方法がいくつもあり混乱します。
 追加で下記のRedux関連のパッケージをインストールします。  
 
 ```
-$ yarn add --dev babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux react-router-redux 
+$ yarn add --dev babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux
 ```
 
 react-reduxを実際に使う場面は通信や画面遷移周りだと思います。  
