@@ -52,7 +52,7 @@ export default class Rect extends React.Component {
 }
 ```
 
-App.jsではRectコンポーネントを読み込んで表示します。
+App.jsではRectコンポーネントを読み込んで表示します。   
 
 ```
 import React from 'react'
@@ -171,3 +171,63 @@ render→setState→renderと無限ループになるからです。
 クラスメソッドのイベントバインディングには何種類か方法があります。  
 詳しくは[Reactをes6で使う場合のbindの問題](https://qiita.com/cubdesign/items/ee8bff7073ebe1979936)を参照
 
+# コンポーネント(DOM)のループ(map)
+liタグなどのような同じコンポーネント(DOM)が並んでいて  
+属性値が違う場合はユニークなkey指定でmapを回すことで連続描画できます。  
+
+```App.js
+render () {
+
+  const rects = [
+    {key: 'rect_1', num: 1, bgcolor: '#e02020'},
+    {key: 'rect_2', num: 2, bgcolor: '#20e020'},
+    {key: 'rect_3', num: 3, bgcolor: '#2020e0'},
+  ]
+
+  return (
+    <div>
+      { rects.map((r) => <Rect key={r.key} num={r.num} bgcolor={r.bgcolor} />) }
+    </div>
+  )
+}
+```
+
+keyを1,2,3のような単純なindexにしてはいけないのは、  
+動的なDOM操作をする時、Reactの挙動がおかしくなるからです。  
+下記のサンプルの挙動がわかりやすいです  
+
+参考：[Index as a key is an anti-pattern](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318)
+
+
+# 配列でのDOM返し(ReactJS v16)
+ReactJS v16から配列形式のrender DOM返却ができるようになりました。  
+参考：[Arrays in React 16 and the necessity of keys](https://medium.com/reactnative/arrays-in-react-16-and-the-necessity-of-keys-c62e7adb4206)
+  
+これにより、renderの最上位DOMが必ず１つであるという制約がなくなります。  
+ただし、この場合、keyが必須です。  
+
+```App.js
+render () {
+
+  return [
+    <Rect key='rect_1' num={1} bgcolor='#e02020' />,
+    <Rect key='rect_2' num={2} bgcolor='#20e020' />,
+    <Rect key='rect_3' num={3} bgcolor='#2020e0' />,
+  ]
+}
+```
+
+さらに短く書く場合は次のように書けます。
+
+```App.js
+render () {
+
+  const rects = [
+    {key: 'rect_1', num: 1, bgcolor: '#e02020'},
+    {key: 'rect_2', num: 2, bgcolor: '#20e020'},
+    {key: 'rect_3', num: 3, bgcolor: '#2020e0'},
+  ]
+
+  return rects.map((r) => <Rect key={r.key} num={r.num} bgcolor={r.bgcolor} />)
+}
+```
