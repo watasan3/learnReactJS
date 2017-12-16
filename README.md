@@ -161,6 +161,7 @@ module.exports = {
 
 client/index.jsにReact Hot Loaderの設定を追加します。  
 AppContainerコンポーネントで全体を囲います。  
+module.hotがあるときはwebpack-dev-serverで起動しています。  
 
 ```index.js
 import React  from 'react'
@@ -180,7 +181,7 @@ const thunkWithClient = thunk.withExtraArgument(client)
 // redux-thunkをミドルウェアに適用
 const store = createStore(reducer, applyMiddleware(thunkWithClient))
 
-...略
+const theme = createMuiTheme({})
 
 const render = Component => {
   ReactDOM.render(
