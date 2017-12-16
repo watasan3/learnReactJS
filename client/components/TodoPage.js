@@ -4,10 +4,9 @@ import { customadd } from 'reducer/user'
 
 import { withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
-import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
-import { error } from 'util';
+import { error } from 'util'
 
 const FormTextField = ({
   input,
@@ -49,6 +48,13 @@ const FormTextField = ({
     return errors
   }
 })
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
+  }
+})
 export default class TodoPage extends React.Component {
 
   constructor(props) {
@@ -71,15 +77,13 @@ export default class TodoPage extends React.Component {
   }
 
   render () {
-    const { handleSubmit, submitting } = this.props
+    const { classes, handleSubmit, submitting } = this.props
 
     return (
       <div>
         <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography type="title" color="inherit">
+          <Toolbar classes={{root: classes.root}}>
               TODOページ
-            </Typography>
             <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>
