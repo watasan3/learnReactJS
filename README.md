@@ -4,7 +4,7 @@ ReactJSでDOMをレンダリングするには
 
 * ReactJS  
 * React DOM  
-* Babel
+* Babel Core
 
 が必要です。  
 簡易のため、上記JSファイルをCDN経由で読み込みます  
@@ -14,9 +14,9 @@ ReactJSでDOMをレンダリングするには
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
-  <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.38/browser.min.js"></script>
+  <script src="./react.min.js"></script>
+  <script src="./react-dom.min.js"></script>
+  <script src="./babel-core.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
