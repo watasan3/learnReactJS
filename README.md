@@ -222,7 +222,7 @@ export function customadd(data) {
 }
 ```
 
-入力登録用のAPIをserver.jsに追加します。
+サーバ側は入力登録用のAPIをserver.jsに追加します。
 
 ```server.js
 app.post('/api/user/input', (req, res) => {
