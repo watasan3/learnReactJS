@@ -231,8 +231,8 @@ export default class UserPage extends React.Component {
             <Card key={user.email} style={{marginTop:'10px'}}>
               <CardContent style={{color:'#408040'}}>
                 <Avatar src={user.picture.thumbnail} />
-                <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
-                <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
+                <p style={{margin:10, color:primary[500]}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
+                <p style={{margin:10, color:seconary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                 <div style={{textAlign: 'right'}} >
                   <Button raised color='accent' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</Button>
                 </div>
