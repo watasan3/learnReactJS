@@ -220,7 +220,7 @@ export default class App extends React.Component {
                 <CardContent style={{color:'#408040'}}>
                   <Avatar src={user.picture.thumbnail} />
                   <p style={{margin:10, color:primary[500]}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
-                  <p style={{margin:10, color:primary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
+                  <p style={{margin:10, color:secondary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                   <div style={{textAlign: 'right'}} >
                     <Button raised color='accent' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>Email</Button>
                   </div>
