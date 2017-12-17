@@ -315,12 +315,14 @@ export default class App extends React.Component {
     return (
       <div>
         <p style={{margin:10, color:primary[500]}}>名前</p>
+        <p style={{margin:10, color:seconary[500]}}>性別</p>
         <Button raised color='accent'>Email</Button>
       </div>
     )
   }
 }
 ```
+
 
 # Material UIコンポーネントstyleのオーバライド
 Material UIのコンポーネントのスタイルも基本的にはstyle属性で記述できるのですが、稀にstyleが効かない場合があります。  
