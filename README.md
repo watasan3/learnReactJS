@@ -1,18 +1,41 @@
+# 追加プラグインインストール
+
+後述のdefaultPropsを使うためにtransform-class-propertiesプラグインをダウンロードします。
+
+```
+$ yarn add --dev babel-plugin-transform-class-properties
+```
+
+webpack.config.jsにてpluginsを追加します。
+
+```
+  query: {
+    plugins: ['transform-react-jsx', 'transform-class-properties'] // babelのtransform-react-jsxプラグインを使ってjsxを変換、transform-class-propertiesでクラスプロパティの変換
+  }
+```
+
 # サンプル
 
 Reactの基本的なルールを覚えつつ簡単なアプリケーションを作ってみましょう。  
 クリックしたらカウントアップするボックスのコンポーネントを作ってみます。  
-まずボックスのコンポーネントを作ります。(Rect.js)
+まずボックスのコンポーネントを作ります。(Rect.js)  
 
 ```Rect.js
 import React from 'react'
+import NumberPlate from './NumberPlate'
 
 export default class Rect extends React.Component {
+
+  // デフォルト属性値
+  static defaultProps = {
+    num: 0,
+    bgcolor: '#808080',
+  }
 
   constructor (props) {
     super(props)
     // ステートオブジェクト
-    this.state = { number : this.props.num }    
+    this.state = { num : this.props.num }
   }
 
   componentWillMount () {
@@ -30,13 +53,12 @@ export default class Rect extends React.Component {
       textAlign: 'center',
       verticalAlign: 'center',
     }
-
   }
 
   // カウントアップ
-  countUp (num) {
-    // ステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
-    this.setState({ number : num + 1 })
+  countUp () {
+    // setStateメソッドでステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
+    this.setState({ num : this.state.num + 1 })
   }
 
   render () {
@@ -44,12 +66,24 @@ export default class Rect extends React.Component {
     // 複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
     return (
-      <div style={ this.rectStyle } onClick={(e)=> this.countUp(this.state.number)}>
-        <span style={{ color : '#eeeeee' }}>{this.state.number}</span>
+      <div style={ this.rectStyle } onClick={() => this.countUp()}>
+        <NumberPlate>{this.state.num}</NumberPlate>
       </div>
     )
   }
 }
+```
+
+ボックスの数字を表示するNumberPlateコンポーネントを作成します。
+
+```NumberPlate
+import React from 'react'
+
+const NumberPlate = (props) => {
+  return <span style={{ color: '#eeeeee' }}>{props.children}</span>
+}
+
+export default NumberPlate
 ```
 
 App.jsではRectコンポーネントを読み込んで表示します。   
@@ -63,6 +97,7 @@ export default class App extends React.Component {
   render () {
     return (
       <div>
+        <Rect />
         <Rect num={1} bgcolor='#e02020' />
         <Rect num={2} bgcolor='#20e020' />
         <Rect num={3} bgcolor='#2020e0' />
@@ -86,6 +121,22 @@ componentWillReceivePropsメソッドを使ったり、
 どうしても直接DOM操作をしたいときにcomponentDidMountメソッドにDOMのイベントを追加して  
 componentWillUnmountメソッドでDOMイベントを削除したりします。  
 
+# Stateless Functional Componentについて
+reactをimportするだけで関数もReactのコンポーネントになります。  
+この場合、renderメソッドのみ実装されたコンポーネントになります。  
+後述のstateがない場合はStateless Functional Componentにしたほうがライフサイクルの負荷がないため、  
+こちらを積極的に使っていきましょう。
+
+```
+import React from 'react'
+
+const NumberPlate = (props) => {
+  return <span style={{ color: '#eeeeee' }}>{props.children}</span>
+}
+
+export default NumberPlate
+```
+
 # 属性値について
 
 新規に作成したRectコンポーネントには通常のDOMと
@@ -99,8 +150,24 @@ componentWillUnmountメソッドでDOMイベントを削除したりします。
 
 ```Rect.js
 componentWillMount () {
-    // propsに属性値が渡ってくる
-    const { num, bgcolor } = this.props
+  // propsに属性値が渡ってくる
+  const { num, bgcolor } = this.props
+```
+
+defaultPropsを使うことで属性値がない場合のデフォルトの属性値を指定することができます。  
+
+```
+  // デフォルト属性値
+  static defaultProps = {
+    num: 0,
+    bgcolor: '#808080',
+  }
+```
+
+子要素に関しては、
+
+```
+  <NumberPlate>{this.state.num}</NumberPlate>
 ```
 
 # CSS Styleについて
@@ -110,24 +177,24 @@ babelでCSSに変換してもらいます。
 例えば、font-sizeを適応したい場合はfontSizeと記述する必要があります。  
 
 ```Rect.js
-    // CSS スタイルはキャメルケースでプロパティを書く
-    this.rectStyle = {
-      background: bgcolor,
-      display: 'table-cell',
-      border: '1px #000 solid',
-      fontSize: 20,
-      width: 30,
-      height: 30,
-      textAlign: 'center',
-      verticalAlign: 'center',
-    }
+  // CSS スタイルはキャメルケースでプロパティを書く
+  this.rectStyle = {
+    background: bgcolor,
+    display: 'table-cell',
+    border: '1px #000 solid',
+    fontSize: 20,
+    width: 30,
+    height: 30,
+    textAlign: 'center',
+    verticalAlign: 'center',
+  }
 ```
 
 JSX内で{}した箇所にはJSを書くことができます。  
 今回はJSのスタイルオブジェクトを渡しています。  
 
 ```Rect.js
-   <div style={ this.rectStyle } >
+  <div style={ this.rectStyle } />
 ```
 
 # コンポーネントのstateについて
@@ -171,6 +238,39 @@ render→setState→renderと無限ループになるからです。
 クラスメソッドのイベントバインディングには何種類か方法があります。  
 詳しくは[Reactをes6で使う場合のbindの問題](https://qiita.com/cubdesign/items/ee8bff7073ebe1979936)を参照
 
+例えば、次のようにメソッドをクラスにbindする方法もあります。  
+
+```
+import React from 'react'
+
+export default class Rect extends React.Component {
+
+  constructor (props) {
+    super(props)
+    // ステートオブジェクト
+    this.state = { num : this.props.num }
+    this.countUp = this.countUp.bind(this) // bind
+  }
+
+  // カウントアップ
+  countUp () {
+    // ステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
+    this.setState({ num : this.state.num + 1 })
+  }
+
+  render () {
+
+    return (
+      {/* クリックイベントバインディング */}
+      <div onClick={this.countUp}>
+        <span>{this.state.num}</span>
+      </div>
+    )
+  }
+}
+```
+
+
 # コンポーネント(DOM)のループ(map)
 liタグなどのような同じコンポーネント(DOM)が並んでいて  
 属性値が違う場合はユニークなkey指定でmapを回すことで連続描画できます。  
@@ -193,8 +293,9 @@ render () {
 ```
 
 keyを1,2,3のような単純なindexにしてはいけないのは、  
-動的なDOM操作をする時、Reactの挙動がおかしくなるからです。  
+動的なDOM操作をする時、ユニークなキーでない場合、Reactの挙動がおかしくなるからです。  
 下記のサンプルの挙動がわかりやすいです  
+実践ではDBのユニークキーなどを割り当てると良いでしょう。  
 
 参考：[Index as a key is an anti-pattern](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318)
 
@@ -231,3 +332,4 @@ render () {
   return rects.map((r) => <Rect key={r.key} num={r.num} bgcolor={r.bgcolor} />)
 }
 ```
+

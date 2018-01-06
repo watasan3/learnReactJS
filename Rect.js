@@ -1,11 +1,18 @@
 import React from 'react'
+import NumberPlate from './NumberPlate'
 
 export default class Rect extends React.Component {
+
+  // デフォルト属性値
+  static defaultProps = {
+    num: 0,
+    bgcolor: '#808080',
+  }
 
   constructor (props) {
     super(props)
     // ステートオブジェクト
-    this.state = { number : this.props.num }    
+    this.state = { num : this.props.num }
   }
 
   componentWillMount () {
@@ -23,13 +30,12 @@ export default class Rect extends React.Component {
       textAlign: 'center',
       verticalAlign: 'center',
     }
-
   }
 
   // カウントアップ
-  countUp (num) {
-    // ステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
-    this.setState({ number : num + 1 })
+  countUp () {
+    // setStateメソッドでステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
+    this.setState({ num : this.state.num + 1 })
   }
 
   render () {
@@ -37,8 +43,8 @@ export default class Rect extends React.Component {
     // 複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
     return (
-      <div style={ this.rectStyle } onClick={(e)=> this.countUp(this.state.number)}>
-        <span style={{ color : '#eeeeee' }}>{this.state.number}</span>
+      <div style={ this.rectStyle } onClick={() => this.countUp()}>
+        <NumberPlate>{this.state.num}</NumberPlate>
       </div>
     )
   }
