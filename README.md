@@ -6,17 +6,8 @@ NodeJSインストール
 後々NodeJSがアップグレードした場合でも切り替えが楽です。  
 今回は8.6.0のNodeJSをインストールします。  
 
-* Windows:![Nodist](https://github.com/marcelklehr/nodist)
 
-[インストーラ](https://github.com/marcelklehr/nodist/releases)でNodistをインストール後
-
-```
-$ nodist dist
-$ nodist 8.6.0
-$ node -v
-```
-
-* Mac OSX:![Nodebrew](https://github.com/hokaccha/nodebrew)
+* Mac OSX: [Nodebrew](https://github.com/hokaccha/nodebrew)
 
 Nodebrewダウンロード
 
