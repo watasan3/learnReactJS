@@ -1,6 +1,7 @@
 # ReactJS勉強会
 
-ReactJS勉強会用資料を各ブランチにまとめてます
+ReactJS勉強会用資料を各ブランチにまとめてます。  
+上から順番に説明します。  
 
 - [start](https://github.com/teradonburi/learnReactJS/tree/start):開発環境導入
 - [ES6](https://github.com/teradonburi/learnReactJS/tree/ES6): ES6,ES7のよく使うJavaScript文法のおさらい
@@ -16,3 +17,12 @@ ReactJS勉強会用資料を各ブランチにまとめてます
 - [ReduxForm](https://github.com/teradonburi/learnReactJS/tree/ReduxForm):ReduxFormでのフォーム送信
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
 - [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintの導入
+
+次のコマンドでブランチを切り替えて進めていきます。  
+
+```sh
+# gitトラッキングしていないファイルを消す
+$ git clean -dfx
+# checkout
+$ git checkout (ブランチ名)
+```
