@@ -7,11 +7,18 @@ function test() {
   // ES6
   const c = '定数'
 
+  // 定数は途中代入不可
   //c = '代入エラー'
 
-  console.log(a)
-  console.log(b)
-  console.log(c)
+  // グローバル変数と局所変数はスコープが違う
+  for (var i = 0;i < 1; ++i) {
+    // なんか処理
+  }
+  for (let j = 0;j < 1; ++j) {
+    // なんか処理
+  }
+  console.log(i) // varはforのブロックの範囲外でも参照できてしまう（Non Good）
+  //console.log(j) // letはforのブロックの範囲外は参照不可
 }
 // 関数呼び出し
 test()
@@ -20,7 +27,7 @@ const def = { test: 'default' }
 const obj = {}
 
 // ３項演算子
-console.log(def.test === 'default' ? 'default' : 'defaultじゃない')
+console.log(def.test === 'default' ? 'defaultです' : 'defaultじゃない')
 // && 演算子(undefined, nullチェック)
 obj.test && console.log('obj.testはundefinedなので実行されない')
 // || 演算子(初期値代入)

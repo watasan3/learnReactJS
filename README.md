@@ -1,6 +1,7 @@
 # ES6/7のおさらい
 
-変数
+## 変数、３項演算子、論理演算子、変数文字列展開
+let, constを使いましょう
 
 ```variable.js
 var a = 'グローバル変数'
@@ -12,11 +13,18 @@ function test() {
   // ES6
   const c = '定数'
 
+  // 定数は途中代入不可
   //c = '代入エラー'
 
-  console.log(a)
-  console.log(b)
-  console.log(c)
+  // グローバル変数と局所変数はスコープが違う
+  for (var i = 0;i < 1; ++i) {
+    // なんか処理
+  }
+  for (let j = 0;j < 1; ++j) {
+    // なんか処理
+  }
+  console.log(i) // varはforのブロックの範囲外でも参照できてしまう（Non Good）
+  //console.log(j) // letはforのブロックの範囲外は参照不可
 }
 // 関数呼び出し
 test()
@@ -25,7 +33,7 @@ const def = { test: 'default' }
 const obj = {}
 
 // ３項演算子
-console.log(def.test === 'default' ? 'default' : 'defaultじゃない')
+console.log(def.test === 'default' ? 'defaultです' : 'defaultじゃない')
 // && 演算子(undefined, nullチェック)
 obj.test && console.log('obj.testはundefinedなので実行されない')
 // || 演算子(初期値代入)
@@ -39,14 +47,14 @@ const data = `${param.obj}を展開`
 console.log(data)
 ```
 
-NodeJSで実行
+NodeJSでランナー実行（ファイル指定）
 
 ```
 $ node variable.js
 ```
 
-HTML上での実行  
-scriptタグ内での実行  
+## HTML上での実行  
+scriptタグ内でJavaScriptは実行できます。  
 
 ```variable.html
 <!DOCTYPE html>
@@ -57,27 +65,21 @@ scriptタグ内での実行
   </head>
   <body>
     <script type="text/javascript">
-var a = 'グローバル変数'
-
-// 関数
-function test() {
-  let b = '局所変数'
-  const c = '定数'
-
-  //c = '代入エラー'
-
-  console.log(a)
-  console.log(b)
-  console.log(c)
-}
-// 関数呼び出し
-test()
+console.log('hoge')
     </script>
   </body>
 </html>
 ```
 
-関数
+ブラウザを開く
+
+```
+$ open variable.html
+```
+
+
+## 関数
+アロー関数を使うと無名関数をより短くかけます。
 
 ```function.js
 // ES5
@@ -106,7 +108,14 @@ const testES6Obj = ({a,b}) => {
 testES6Obj({a:'a',b:'b'})
 ```
 
-クラス
+NodeJSでランナー実行（ファイル指定）
+
+```
+$ node function.js
+```
+
+## クラス
+class構文が使えるのでprototypeは覚える必要はありません。
 
 ```class.js
 // ES5のクラス（prototype）
@@ -152,7 +161,14 @@ clsES6 = new childClass()
 clsES6.method()
 ```
 
-配列、オブジェクト列挙処理
+NodeJSでランナー実行（ファイル指定）
+
+```
+$ node class.js
+```
+
+## 配列、オブジェクト列挙処理
+この辺覚えておくと短く書ける上に処理がわかりやすいです。
 
 ```arrayobj.js
 // よく使う配列操作
@@ -211,7 +227,15 @@ const obj2 = {b: 'bb', c: 'c'}
 console.log({...obj1, ...obj2})
 ```
 
-非同期処理
+NodeJSでランナー実行（ファイル指定）
+
+```
+$ node arrayobj.js
+```
+
+## 非同期処理
+ES6でPromise、ES7でasync, awaitが使えます。  
+これらを組み合わせると厄介なコールバック地獄がなくなり、スマートにかけます。  
 
 ```asyncawait.js
 // 非同期処理だと実行順番が前後する
@@ -263,3 +287,100 @@ async function testAwait() {
 testAwait()
 ```
 
+NodeJSでランナー実行（ファイル指定）
+
+```
+$ node asyncawait.js
+```
+
+## this
+アロー関数は宣言時にbindしてしまう。  
+
+```
+/////////// 通常関数のthis ///////////
+
+function test1() {
+  function printParam () {
+    console.log(this.param) // このthisは呼び出され元のオブジェクト
+  }
+
+  let object1 = {
+    param: 'object1',
+    func: printParam
+  }
+  let object2 = {
+    param: 'object2',
+    func: printParam
+  }
+
+  object1.func()
+  object2.func()
+}
+test1()
+
+/////////// アロー関数のthis ///////////
+
+function test2() {
+  this.param = 'global'
+
+  // アロー関数式で宣言された関数は、宣言された時点で、thisを確定（＝束縛）してしまう
+  let printParamArrow = () => {
+    console.log(this.param) // test2のthis
+  }
+
+  let object3 = {
+    param: 'object3',
+    func: printParamArrow // object3のthisではない
+  }
+  let object4 = {
+    param: 'object4',
+    func: printParamArrow // object4のthisではない
+  }
+
+  object3.func()
+  object4.func()
+}
+test2()
+
+//////////// bindとアロー関数 ////////////////
+
+class Component {
+
+  constructor() {
+    this.param = 'param'
+    this.method2 = this.method2.bind(this) // method2をthis（クラス）にbindする
+  }
+
+  method1() {
+    console.log(this) // 呼び出され元に影響してしまう
+  }
+
+  method2() {
+    console.log(this) // method2はクラスのthisにbindされている
+  }
+
+  method3() {
+    console.log(this)
+  }
+
+  render() {
+
+    let call1 = this.method1
+    call1()
+    // Reactのイベントコールバックに使うパターン１(bind済み関数)
+    let call2 = this.method2
+    call2()
+    // Reactのイベントコールバックに使うパターン２(アロー関数)
+    let call3 = () => { this.method3() } // この場合アロー関数内のthisは宣言時にクラスにbindされる
+    call3()
+  }
+}
+let component = new Component
+component.render()
+```
+
+NodeJSでランナー実行（ファイル指定）
+
+```
+$ node this.js
+```
