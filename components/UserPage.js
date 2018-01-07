@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
 import { Email } from 'material-ui-icons'
 import withWidth from 'material-ui/utils/withWidth'
 import { orange } from 'material-ui/colors'
@@ -88,7 +88,7 @@ export default class UserPage extends React.Component {
         })}
         {
           this.state.open &&
-          <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+          <Dialog open={this.state.open} onClose={() => this.handleRequestClose()}>
             <DialogTitle>メールアドレス</DialogTitle>
             <DialogContent>{this.state.user.email}</DialogContent>
           </Dialog>

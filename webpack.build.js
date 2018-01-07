@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const path = require('path')
 const webpackConfig = require('./webpack.config.js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -58,8 +59,8 @@ function createConfig() {
     }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
-      template: `static/index.html`,
       filename: 'index.html',
+      template: `static/index.html`,
     }),
   ]
 
