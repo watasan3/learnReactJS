@@ -101,7 +101,7 @@ const render = Component => {
 
 render(App)
 
-// Webpack Hot Module Replacement API
+// webpack-dev-server起動時はWebpack Hot Module Replacement APIでWrapする
 if (module.hot) {
   module.hot.accept('./App', () => { render(App) })
 }
