@@ -254,7 +254,7 @@ $ yarn run build
 serveパッケージを使うと簡単にサーバをローカル上に立てれます。  
 
 ```
-$ yarn add --global serve
+$ yarn global add serve
 $ cd dist
 $ serve .
    ┌───────────────────────────────────────────────────┐
