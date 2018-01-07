@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { load, add } from '../reducer/user'
+import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
@@ -15,7 +15,7 @@ import { orange } from 'material-ui/colors'
     users: state.user.users
   }),
   // propsに付与するactions
-  { load, add }
+  { load }
 )
 @withWidth()
 @withTheme()
@@ -50,11 +50,6 @@ export default class UserPage extends React.Component {
 
   handleRequestClose () {
     this.setState({ open: false })
-  }
-
-  handleAdd() {
-    // user追加APIコールのactionをキックする
-    this.props.add()
   }
 
   handlePageMove(path) {
