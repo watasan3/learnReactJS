@@ -1,6 +1,5 @@
 // reducerで受け取るaction名を定義
 const LOAD = 'user/LOAD'
-const ADD = 'user/ADD'
 
 // 初期化オブジェクト
 const initialState = {
@@ -16,11 +15,6 @@ export default function reducer(state = initialState, action = {}){
       return {
         users:action.results,
       }
-    case ADD:
-      // ユーザ一覧末尾にユーザを追加する
-      return {
-        users: [...state.users, action.results]
-      }
     default:
       // 初期化時はここに来る（initialStateのオブジェクトが返却される）
       return state
@@ -32,26 +26,12 @@ export function load() {
   // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('/api/user')
+      .get('https://randomuser.me/api')
       .then(res => res.data)
       .then(data => {
-        const results = data
+        const results = data.results
         // dispatchしてreducer呼び出し
         dispatch({ type: LOAD, results })
-      })
-  }
-}
-
-export function add() {
-  // ユーザを追加
-  return (dispatch, getState, client) => {
-    return client
-      .post('/api/user')
-      .then(res => res.data)
-      .then(data => {
-        const results = data
-        // dispatchしてreducer呼び出し
-        dispatch({ type: ADD, results })
       })
   }
 }
