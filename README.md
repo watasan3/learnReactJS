@@ -1,6 +1,12 @@
 # Reduxによる状態制御
+props経由にデータを渡したり、親コンポーネントのイベントメソッドを指定することで  
+子コンポーネントへのデータ伝達や親コンポーネントのコールバック呼び出しが可能です。  
+ただし、アプリケーション全体のデータ（DBのデータ）をpropsでバケツリレーのように受け渡したりするのは非効率な上に、  
+親コンポーネントのstateに子コンポーネントが影響する構造はstateが把握できなくなるのは不具合の原因になります。  
 
-Reduxを用いることでアプリケーション全体の状態を管理し、  
+[Reactのデータフロー](https://github.com/teradonburi/learnReactJS/tree/ReactRedux/dataflow.png)
+
+そこでReduxを用いることでアプリケーション全体の状態を管理し、  
 イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
 といったことが楽になります。  
 （類似のフレームワークにfluxがあります。）  
@@ -15,47 +21,24 @@ Reduxは次の思想で設計されています。
 2. ストアの状態を更新するためには決められたアクション経由で行う
 3. Stateの変更を行うReducerはシンプルな関数(Pure関数)にする
 
-ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使うのですが  
-connectの記述方法がいくつもあり混乱します。  
+ReactとReduxを連動させるためにはreact-reduxのnpmパッケージを使います。
+action呼び出し→reducer→コンポーネント再描画の一方通行のフロー制御に関しては  
+react-reduxのconnectを使うことで実現できます。  
 [ReactとReduxを結ぶパッケージ「react-redux」についてconnectの実装パターンを試す](https://qiita.com/MegaBlackLabel/items/df868e734d199071b883)  
-  
-今回は可読性の良さを重視して、decoratorsを使って実装します。  
+
 追加で下記のRedux関連のパッケージをインストールします。  
 
 ```
-$ yarn add --dev babel-plugin-transform-decorators-legacy redux redux-devtools redux-thunk react-redux
+$ yarn add --dev redux redux-devtools redux-thunk react-redux
 ```
 
-react-reduxを実際に使う場面は通信や画面遷移周りだと思います。  
+react-reduxを実際に使う場面は通信（アプリケーションデータ）や画面遷移周りだと思います。  
 redux-thunkを使うとaction部分の処理を非同期にできます。  
   
 通信用のライブラリ（axios）をインストールします  
 
 ```
 $ yarn add --dev axios
-```
-
-decoratorの文法を使うので  
-babel-plugin-transform-decorators-legacyのプラグインを  
-webpack.config.jsに追加します。  
-
-```webpack.config.js
-module.exports = {
-    entry: './index.js', // エントリポイントのjsxファイル
-    output: {
-      filename: 'bundle.js' // 出力するファイル
-    },
-    module: {
-      loaders: [{
-        test: /\.js?$/, // 拡張子がjsで
-        exclude: /node_modules/, // node_modulesフォルダ配下でなければ
-        loader: 'babel-loader', // babel-loaderを使って変換する
-        query: {
-          plugins: ["transform-react-jsx","babel-plugin-transform-decorators-legacy"] // babelのtransform-react-jsxプラグインを使ってjsxを変換
-        }
-      }]
-    }
-  }  
 ```
 
 user.jsにuser情報を取得するactionとreducerを記述します。  
@@ -201,33 +184,7 @@ import { connect } from 'react-redux';
 import { load } from './user'
 
 class App extends React.Component {
-
-  componentWillMount() {
-    // user取得APIコールのactionをキックする
-    this.props.load()
-  }
-
-  render () {
-    const { users } = this.props
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    console.log(users)
-    return (
-      <div>
-          {/* 配列形式で返却されるためmapで展開する */}
-          {users && users.map((user) => {
-            return (
-                // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
-                <div key={user.email}>
-                  <img src={user.picture.thumbnail} />
-                  <p>名前:{user.name.first + ' ' + user.name.last}</p>
-                  <p>性別:{user.gender}</p>
-                  <p>email:{user.email}</p>
-                </div>
-            )
-          })}
-      </div>
-    )
-  }
+  // 略
 }
 
 export default connect(
