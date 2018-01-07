@@ -95,7 +95,7 @@ const render = Component => {
     <AppContainer>
       <MuiThemeProvider theme={theme}>
         <Provider store={store}>
-          <Component history={history} /> 
+          <Component history={history} />
         </Provider>
       </MuiThemeProvider>
     </AppContainer>,

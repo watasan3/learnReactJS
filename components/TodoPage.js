@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { customadd } from 'reducer/user'
+import { add } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
@@ -25,7 +25,7 @@ const FormTextField = ({
   // propsに受け取るreducerのstate
   state => ({}),
   // propsに付与するactions
-  { customadd }
+  { add }
 )
 @reduxForm({
   form: 'syncValidation',
@@ -73,7 +73,7 @@ export default class TodoPage extends React.Component {
       gender: values.gender || 'male',
       email: values.email
     }
-    this.props.customadd(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
+    this.props.add(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
   }
 
   render () {
@@ -83,7 +83,7 @@ export default class TodoPage extends React.Component {
       <div>
         <AppBar position="static" color="primary">
           <Toolbar classes={{root: classes.root}}>
-              TODOページ
+            TODOページ
             <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>

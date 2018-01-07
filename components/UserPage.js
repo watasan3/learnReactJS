@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { load, add } from 'reducer/user'
+import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
+import { AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
 import { Email } from 'material-ui-icons'
 import withWidth from 'material-ui/utils/withWidth'
 import { orange } from 'material-ui/colors'
@@ -15,7 +15,7 @@ import { orange } from 'material-ui/colors'
     users: state.user.users
   }),
   // propsに付与するactions
-  { load, add }
+  { load }
 )
 @withWidth()
 @withTheme()
@@ -52,11 +52,6 @@ export default class UserPage extends React.Component {
     this.setState({ open: false })
   }
 
-  handleAdd() {
-    // user追加APIコールのactionをキックする
-    this.props.add()
-  }
-
   handlePageMove(path) {
     this.props.history.push(path)
   }
@@ -76,8 +71,7 @@ export default class UserPage extends React.Component {
           </Toolbar>
         </AppBar>
         {/* 配列形式で返却されるためmapで展開する */}
-        {users && users.map((obj) => {
-          const user = obj.results[0]
+        {users && users.map((user) => {
           return (
             // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
             <Card key={user.email} style={{marginTop:'10px'}}>
@@ -99,7 +93,6 @@ export default class UserPage extends React.Component {
             <DialogContent>{this.state.user.email}</DialogContent>
           </Dialog>
         }
-        <Button style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
       </div>
     )
   }

@@ -6,26 +6,25 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const revision = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
 
-const entries = [
-  {path: 'src', out: ''},
-]
-
-const configs = entries.map(entry => {
-
+function createConfig() {
+  
   const config = Object.assign({}, webpackConfig)
 
-  delete config.devtool
+  // ソースマップファイルをファイル出力
+  config.devtool = 'source-map'
+  // React Hot loaderは外す
   config.entry = {
     'bundle': [
       'babel-polyfill',
-      `${__dirname}/${entry.path}/index`,
+      path.join(__dirname, '/index'), // エントリポイントのjsxファイル
     ]
   }
+  // 出力ファイル
   config.output = {
-    path: `${__dirname}/dist/${entry.out}`,
+    path: `${__dirname}/dist`,
     filename: 'js-[hash:8]/[name].js',
     chunkFilename: 'js-[hash:8]/[name].js',
-    publicPath: `/${entry.out}`,
+    publicPath: '/',
   }
 
   config.plugins = [
@@ -59,17 +58,21 @@ const configs = entries.map(entry => {
     }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
-      template: `src/static/${entry.out}index.html`,
+      template: `static/index.html`,
       filename: 'index.html',
     }),
   ]
 
-  return config
-})
+  // staticフォルダのリソースをコピーする（CSS、画像ファイルなど）
+  config.plugins.push(
+    new CopyWebpackPlugin([{ from: 'static', ignore: 'index.html' }]),
+  )
 
-configs[0].devtool = 'source-map'
-configs[0].plugins.push(
-  new CopyWebpackPlugin([{ from: 'src/static', ignore: 'index.html' }]),
-)
+  return config
+}
+
+const configs = [
+  createConfig()
+]
 
 module.exports = configs
