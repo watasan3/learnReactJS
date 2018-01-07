@@ -8,13 +8,14 @@ import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
 import { error } from 'util'
 
+// テキストフォームフィールド
 const FormTextField = ({
   input,
   label,
   type,
   meta: { touched, error, warning }
 }) => {
-  const isError = !!(touched && error)
+  const isError = !!(touched && error) // 一度でもフォーカスしたらtouchedがtrue
   return (
     <TextField style={{margin:5}} error={isError} label={label} helperText={isError ? error : null} {...input} type={type} />
   )
@@ -31,7 +32,7 @@ const FormTextField = ({
   form: 'syncValidation',
   validate: values => {
     
-    // 入力変更時にパラメータが渡ってくる
+    // 初回レンダリング時＆入力変更時にパラメータが渡ってくる
     const errors = {}
     if (!values.firstname) {
       errors.firstname = '必須項目です'

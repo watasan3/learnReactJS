@@ -14,7 +14,7 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form' // as は名前がかぶらないようにインポート時に別名にできる
 
-import user from 'reducer/user'
+import user from './user'
 
 export default combineReducers({
   routing: routerReducer,
@@ -28,27 +28,28 @@ TodoPage.jsにReduxFormにてフォームを作成します。
 送信対象の項目はFieldコンポーネントで定義します。  
 `component`には対象のDOMを指定します。  
 今回はMaterial-uiのTextFieldコンポーネントとselectタグを指定します。  
+Fieldコンポーネントにname指定するとそのパラメータがReduxFormのvaluesやinputに保存されます。  
 submit時はhandleSubmitにsendItemsメソッドを指定して送信処理をキックします。  
 
 ```TodoPage.js
 import React from 'react'
 import { connect } from 'react-redux';
-import { customadd } from 'reducer/user'
+import { add } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
-import Typography from 'material-ui/Typography'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
-import { error } from 'util';
+import { error } from 'util'
 
+// テキストフォームフィールド
 const FormTextField = ({
   input,
   label,
   type,
   meta: { touched, error, warning }
 }) => {
-  const isError = !!(touched && error)
+  const isError = !!(touched && error) // 一度でもフォーカスしたらtouchedがtrue
   return (
     <TextField style={{margin:5}} error={isError} label={label} helperText={isError ? error : null} {...input} type={type} />
   )
@@ -59,13 +60,13 @@ const FormTextField = ({
   // propsに受け取るreducerのstate
   state => ({}),
   // propsに付与するactions
-  { customadd }
+  { add }
 )
 @reduxForm({
   form: 'syncValidation',
   validate: values => {
     
-    // 入力変更時にパラメータが渡ってくる
+    // 初回レンダリング時＆入力変更時にパラメータが渡ってくる
     const errors = {}
     if (!values.firstname) {
       errors.firstname = '必須項目です'
@@ -82,11 +83,18 @@ const FormTextField = ({
     return errors
   }
 })
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
+  }
+})
 export default class TodoPage extends React.Component {
 
   constructor(props) {
     super(props)
-    this.sendItems = this.sendItems.bind(this) // sendItemsメソッド内でthisを使えるようにbindする
+    this.sendItems = this.sendItems.bind(this)
   }
 
   handlePageMove(path) {
@@ -100,19 +108,17 @@ export default class TodoPage extends React.Component {
       gender: values.gender || 'male',
       email: values.email
     }
-    this.props.customadd(user).then( () => alert('送信完了'))
+    this.props.add(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
   }
 
   render () {
-    const { handleSubmit, submitting } = this.props
+    const { classes, handleSubmit, submitting } = this.props
 
     return (
       <div>
         <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography type="title" color="inherit">
+          <Toolbar classes={{root: classes.root}}>
               TODOページ
-            </Typography>
             <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>
@@ -140,13 +146,14 @@ export default class TodoPage extends React.Component {
 }
 ```
 
-reducer/user.jsに入力データ送信用のactionを追加します。（CUSTOMADD）
+reducer/user.jsに入力データ追加用のactionを追加します。（ADD）  
+本来はサーバ送信＆DB保存ですが、今回はReduxのstoreに追加しているだけです。  
 
 ```user.js
 // reducerで受け取るaction名を定義
 const LOAD = 'user/LOAD'
 const ADD = 'user/ADD'
-const CUSTOMADD = 'user/CUSTOMADD'
+
 
 // 初期化オブジェクト
 const initialState = {
@@ -160,14 +167,9 @@ export default function reducer(state = initialState, action = {}){
     case LOAD:
       // ユーザ一覧取得
       return {
-        users:action.results,
+        users: state.users ? state.users : action.results
       }
     case ADD:
-      // ユーザ一覧末尾にユーザを追加する
-      return {
-        users: [...state.users, action.results]
-      }
-    case CUSTOMADD:
       // ユーザ一覧末尾にユーザを追加する
       return {
         users: state.users ? [...state.users, action.results] : [action.results]
@@ -183,53 +185,24 @@ export function load() {
   // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('/api/user')
+      .get('https://randomuser.me/api')
       .then(res => res.data)
       .then(data => {
-        const results = data
+        const results = data.results
         // dispatchしてreducer呼び出し
         dispatch({ type: LOAD, results })
       })
   }
 }
 
-export function add() {
+export function add(user) {
   // ユーザを追加
   return (dispatch, getState, client) => {
-    return client
-      .post('/api/user')
-      .then(res => res.data)
-      .then(data => {
-        const results = data
-        // dispatchしてreducer呼び出し
-        dispatch({ type: ADD, results })
-      })
+    // 疑似ユーザ作成（本来はサーバ送信＆DB保存）
+    const data = {"results":[{"gender":user.gender,"name":{"first":user.firstname,"last":user.lastname},"email":user.email,"picture":{"thumbnail":"https://avatars1.githubusercontent.com/u/771218?s=460&v=4"}}]}
+    const results = data.results[0]
+    dispatch({ type: ADD, results })
+    return Promise.resolve()
   }
 }
-
-export function customadd(data) {
-  // 入力ユーザを追加
-  return (dispatch, getState, client) => {
-    return client
-      .post('/api/user/input',{user:data})
-      .then(res => res.data)
-      .then(data => {
-        const results = data
-        // dispatchしてreducer呼び出し
-        dispatch({ type: CUSTOMADD, results })
-      })
-  }
-}
-```
-
-サーバ側は入力登録用のAPIをserver.jsに追加します。
-
-```server.js
-app.post('/api/user/input', (req, res) => {
-  const user = req.body.user
-  const data = {"results":[{"gender":user.gender,"name":{"first":user.firstname,"last":user.lastname},"email":user.email,"picture":{"thumbnail":"https://avatars1.githubusercontent.com/u/771218?s=460&v=4"}}]}
-  post(data)
-    .then( data => res.json(data))
-    .catch( e => res.json({'error':e.toString()}))  
-})
 ```
