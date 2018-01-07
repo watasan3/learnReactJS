@@ -84,7 +84,7 @@ export default class TodoPage extends React.Component {
       <div>
         <AppBar position="static" color="primary">
           <Toolbar classes={{root: classes.root}}>
-              TODOページ
+            TODOページ
             <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>
