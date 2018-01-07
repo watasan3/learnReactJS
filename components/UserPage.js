@@ -88,7 +88,7 @@ export default class UserPage extends React.Component {
         })}
         {
           this.state.open &&
-          <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+          <Dialog open={this.state.open} onClose={() => this.handleRequestClose()}>
             <DialogTitle>メールアドレス</DialogTitle>
             <DialogContent>{this.state.user.email}</DialogContent>
           </Dialog>
