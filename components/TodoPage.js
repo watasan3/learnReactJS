@@ -1,25 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { add } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Card, Button, TextField } from 'material-ui'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
+import { error } from 'util'
 
-const renderField = ({
-  id,
+// テキストフォームフィールド
+const FormTextField = ({
   input,
   label,
   type,
   meta: { touched, error, warning }
 }) => {
-  const isError = !!(touched && error)
+  const isError = !!(touched && error) // 一度でもフォーカスしたらtouchedがtrue
   return (
-    <div>
-      <div>
-        <TextField id={id} style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
-      </div>
-    </div>
+    <TextField style={{margin:5}} error={isError} label={label} helperText={isError ? error : null} {...input} type={type} />
   )
 }
 
@@ -40,57 +38,88 @@ import Intro from '../Intro'
     type: 'hover'
   }
 ])
+// connectのdecorator
+@connect(
+  // propsに受け取るreducerのstate
+  state => ({}),
+  // propsに付与するactions
+  { add }
+)
 @reduxForm({
   form: 'syncValidation',
   validate: values => {
     
+    // 初回レンダリング時＆入力変更時にパラメータが渡ってくる
     const errors = {}
-    if (!values.username) {
-      errors.username = '必須項目です'
+    if (!values.firstname) {
+      errors.firstname = '必須項目です'
+    } 
+    if (!values.lastname) {
+      errors.lastname = '必須項目です'
     } 
     if (!values.email) {
       errors.email = '必須項目です'
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
       errors.email = 'メールアドレスとして認識できません'
     }
-    if (!values.age) {
-      errors.age = '必須項目です'
-    } else if (isNaN(Number(values.age))) {
-      errors.age = '数字でありません'
-    } else if (Number(values.age) < 18) {
-      errors.age = '１８歳以上限定です'
-    }
+    
     return errors
+  }
+})
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
   }
 })
 export default class TodoPage extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.sendItems = this.sendItems.bind(this)
+  }
+
   handlePageMove(path) {
     this.props.history.push(path)
-  }  
+  }
 
-  submit(values) {
-    // print the form values to the console
-    console.log(values)
+  sendItems(values) {
+    const user = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      gender: values.gender || 'male',
+      email: values.email
+    }
+    this.props.add(user).then( () => alert('送信完了')) // sendItemsメソッド内でthisを使えるようにbindする
   }
 
   render () {
-    const { handleSubmit, submitting } = this.props
+    const { classes, handleSubmit, submitting } = this.props
 
-    
     return (
       <div>
         <AppBar position="static" color="primary">
-          <Toolbar>
+          <Toolbar classes={{root: classes.root}}>
             TODOページ
-            <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
+            <Button id='item1' style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>
-        <Card style={{padding:10}}>
-          <form onSubmit={handleSubmit(this.submit)}>
-            <Field id='item1' name="username" type="text" component={renderField} label="ユーザ名" />
-            <Field id='item2' name="email" type="email" component={renderField} label="メールアドレス" />
-            <Field name="age" type="number" component={renderField} label="年齢" />
+        <Card id='item2' style={{padding:10}}>
+          <form onSubmit={handleSubmit(this.sendItems)}>
+            <Field name="firstname" type="text" component={FormTextField} label="姓" />
+            <Field name="lastname" type="text" component={FormTextField} label="名" />
+            <div style={{margin:5}}>
+              <label style={{marginRight: 5}}>性別：</label>
+              <span>
+                <Field name="gender" component="select">
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                </Field>
+              </span>
+            </div>
+            <Field name="email" type="email" component={FormTextField} label="メールアドレス" />
+            <br/>
             <Button style={{marginTop:10}} raised type="submit" disabled={submitting}>送信</Button>
           </form>
         </Card>
