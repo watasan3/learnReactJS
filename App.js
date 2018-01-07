@@ -2,9 +2,9 @@ import React from 'react'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import { Route, Redirect, Switch } from 'react-router-dom'
 
-import NotFound from 'components/NotFound'
-import UserPage from 'components/UserPage'
-import TodoPage from 'components/TodoPage'
+import NotFound from './components/NotFound'
+import UserPage from './components/UserPage'
+import TodoPage from './components/TodoPage'
 
 
 export default class App extends React.Component {

@@ -4,9 +4,7 @@
   "description": "ReactJSでDOMをレンダリングするには",
   "main": "index.js",
   "scripts": {
-    "dev:client": "webpack-dev-server",
-    "dev:server": "node-dev --inspect server/server.js",
-    "dev": "run-p dev:client dev:server"
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",

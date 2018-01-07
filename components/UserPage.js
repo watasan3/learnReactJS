@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { load, add } from 'reducer/user'
+import { load } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
-import Typography from 'material-ui/Typography'
+import { AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
 import { Email } from 'material-ui-icons'
 
-import Intro from 'Intro'
+import Intro from '../Intro'
 @Intro([
   {
     title: 'タイトル1',
@@ -31,7 +30,7 @@ import Intro from 'Intro'
     users: state.user.users
   }),
   // propsに付与するactions
-  { load, add }
+  { load }
 )
 export default class UserPage extends React.Component {
 
@@ -59,11 +58,6 @@ export default class UserPage extends React.Component {
     this.setState({ open: false })
   }
 
-  handleAdd() {
-    // user追加APIコールのactionをキックする
-    this.props.add()
-  }
-
   handlePageMove(path) {
     this.props.history.push(path)
   }
@@ -76,15 +70,12 @@ export default class UserPage extends React.Component {
       <div>
           <AppBar position="static" color="primary">
             <Toolbar>
-              <Typography type="title" color="inherit">
-                ユーザページ
-              </Typography>
+              ユーザページ
               <Button id='item2' style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/todo')}>TODOページへ</Button>
             </Toolbar>
           </AppBar>
           {/* 配列形式で返却されるためmapで展開する */}
-          {users && users.map((obj) => {
-            const user = obj.results[0]
+          {users && users.map((user) => {
             return (
                 // ループで展開する要素には一意なkeyをつける（ReactJSの決まり事）
                 <Card key={user.email} style={{marginTop:'10px'}}>
@@ -93,10 +84,10 @@ export default class UserPage extends React.Component {
                     <p style={{margin:10}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
                     <p style={{margin:10}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                     <div style={{textAlign: 'right'}} >
-                      <Button onClick={() => this.handleClickOpen(user)}><Email/>メールする</Button>                    
+                      <Button id='item1' onClick={() => this.handleClickOpen(user)}><Email/>メールする</Button>                    
                     </div>
                   </CardContent>
-                </Card>    
+                </Card>
             )
           })}
           {
@@ -106,7 +97,6 @@ export default class UserPage extends React.Component {
               <DialogContent>{this.state.user.email}</DialogContent>
             </Dialog>
           }  
-          <Button id='item1' style={{marginTop:10}} raised onClick={() => this.handleAdd()}>ユーザ追加</Button>
       </div>
     )
   }

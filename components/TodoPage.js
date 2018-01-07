@@ -1,14 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { load, add } from 'reducer/user'
 
 import { withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
-import Typography from 'material-ui/Typography'
+import { AppBar, Toolbar, Card, Button, TextField } from 'material-ui'
 import { Email } from 'material-ui-icons'
 import { Field, reduxForm } from 'redux-form'
 
-import Intro from 'Intro'
+const renderField = ({
+  id,
+  input,
+  label,
+  type,
+  meta: { touched, error, warning }
+}) => {
+  const isError = !!(touched && error)
+  return (
+    <div>
+      <div>
+        <TextField id={id} style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
+      </div>
+    </div>
+  )
+}
+
+import Intro from '../Intro'
 @Intro([
   {
     title: 'タイトル1',
@@ -50,19 +65,9 @@ import Intro from 'Intro'
 })
 export default class TodoPage extends React.Component {
 
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
-  }
-
-  componentWillMount() {
-  }
-
   handlePageMove(path) {
     this.props.history.push(path)
-  }
-  
+  }  
 
   submit(values) {
     // print the form values to the console
@@ -72,32 +77,12 @@ export default class TodoPage extends React.Component {
   render () {
     const { handleSubmit, submitting } = this.props
 
-    const renderField = ({
-      id,
-      input,
-      label,
-      type,
-      meta: { touched, error, warning }
-    }) => {
-      const isError = !!(touched && error)
-      return (
-        <div>
-          <div>
-            <TextField id={id} style={{marginTop:5,marginBottom:5}} error={isError} label={label} helperText={isError ? error : ''} {...input} type={type} />
-          </div>
-        </div>
-      )
-    }
     
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    // console.log(users)
     return (
       <div>
         <AppBar position="static" color="primary">
           <Toolbar>
-            <Typography type="title" color="inherit">
-              TODOページ
-            </Typography>
+            TODOページ
             <Button style={{color:'#fff',position:'absolute',top:15,right:0}} onClick={()=> this.handlePageMove('/')}>ユーザページへ</Button>
           </Toolbar>
         </AppBar>
