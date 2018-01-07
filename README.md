@@ -1,10 +1,10 @@
 # HOC(High Order Component)について
-Higher Order Componentとは、他のコンポーネントをWrapするReactコンポーネントのことです。
-Wrapすることで外部からパラメータを付与したりします。
-[ReactのHigher Order Components詳解 : 実装の2つのパターンと、親Componentとの比較](http://postd.cc/react-higher-order-components-in-depth/)
+Higher Order Componentとは、他のコンポーネントをWrapするReactコンポーネントのことです。  
+Wrapすることで外部からパラメータを付与したりします。  
+[ReactのHigher Order Components詳解 : 実装の2つのパターンと、親Componentとの比較](http://postd.cc/react-higher-order-components-in-depth/)  
 
-今回は可読性の良さを重視して、decoratorsを使って実装します。
-webpackにdecoratorsプラグインを追加します。
+今回は可読性の良さを重視して、decoratorsを使って実装します。  
+webpackにdecoratorsプラグインを追加します。  
 
 ```
 $ yarn add --dev babel-plugin-transform-decorators-legacy
@@ -85,7 +85,7 @@ $ webpack --watch
 Logger経由でpropsに追加されています。  
 このように、HOCを使うことで元のコンポーネントに手を加えることなく、propsを追加したり、処理を追加したりできます。  
 
-# 補足①(decoratrosを使わない場合)
+# 補足１(decoratrosを使わない場合)
 decoratorsを使わない場合はApp.jsは次のようにもかけます。  
 ただし、見づらいのでdecoratorsを使ったほうがすっきりかけます。  
 
@@ -106,7 +106,7 @@ class App extends React.Component {
 export default Logger('Hello World!', 'render log')(App)
 ```
 
-# 補足②(Stateless Functional ComponentのHOC)
+# 補足２(Stateless Functional ComponentのHOC)
 今回のようにrender部分しかHOCしていない場合はStateless Functional ComponentでHOCを書けます。  
 
 ```
