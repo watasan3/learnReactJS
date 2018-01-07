@@ -10,36 +10,6 @@ Material-UIのパッケージをインストールします。
 $ yarn add --dev material-ui@next material-ui-icons
 ```
 
-package.jsonは次のようになります。
-
-```package.json
-{
-  "name": "learnReactJS",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/teradonburi/learnReactJS.git",
-  "author": "teradonburi <daikiterai@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "axios": "^0.17.1",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "material-ui": "^1.0.0-beta.22",
-    "material-ui-icons": "^1.0.0-beta.17",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-devtools": "^3.4.1",
-    "redux-thunk": "^2.2.0",
-    "webpack": "^3.9.1"
-  }
-}
-```
-
 index.jsにmaterial-uiのテーマの指定をします。  
 createMuiThemeでテーマを作成し、  
 MuiThemeProviderでテーマを全体に指定します。  
