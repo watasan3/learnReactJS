@@ -4,7 +4,7 @@ props経由にデータを渡したり、親コンポーネントのイベント
 ただし、アプリケーション全体のデータ（DBのデータ）をpropsでバケツリレーのように受け渡したりするのは非効率な上に、  
 親コンポーネントのstateに子コンポーネントが影響する構造はstateが把握できなくなるのは不具合の原因になります。  
 
-![Reactのデータフロー](https://github.com/teradonburi/learnReactJS/tree/ReactRedux/dataflow.png)
+![Reactのデータフロー](https://github.com/teradonburi/learnReactJS/blob/ReactRedux/dataflow.png)
 
 そこでReduxを用いることでアプリケーション全体の状態を管理し、  
 イベントコールバック→一元管理されたストアのパラメータ更新→描画反映  
