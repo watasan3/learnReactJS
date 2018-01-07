@@ -75,7 +75,7 @@ class App extends React.Component {
 export default App
 ```
 
-修正後、以下でビルド
+以下でビルド
 
 ```
 $ webpack --watch
@@ -86,7 +86,7 @@ Logger経由でpropsに追加されています。
 このように、HOCを使うことで元のコンポーネントに手を加えることなく、  
 propsを追加したり、処理を追加したりできます。  
 
-# 補足１(decoratrosを使わない場合)
+# 補足１(decoratorsを使わない場合)
 decoratorsを使わない場合はApp.jsは次のようにもかけます。  
 ただし、見づらいのでdecoratorsを使ったほうがすっきりかけます。  
 
