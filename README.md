@@ -268,3 +268,9 @@ $ serve .
    │                                                   │
    └───────────────────────────────────────────────────┘
 ```
+
+express + Nginx + EC2でサーバを立てる場合は下記を参考にしてください  
+[ReactJSで作る今時のSPA入門（リリース編）](https://qiita.com/teradonburi/items/212fab958b896e6ee85a#%E3%82%B5%E3%83%BC%E3%83%90%E8%B5%B7%E5%8B%95%E3%81%AE%E6%B0%B8%E7%B6%9A%E5%8C%96)  
+
+バックエンドをServerlessフレームワークにする場合は下記を参考にしてください  
+[Serverless+SPAで超低費用な個人サービス構築のススメ](https://qiita.com/teradonburi/items/aa31fa91d618dd6955a1)  
