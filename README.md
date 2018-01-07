@@ -36,3 +36,4 @@ $ node -v
 ```
 
 エディタは個人的に[Visual Studio Code](https://code.visualstudio.com/)がおすすめ  
+VSCodeをお使いの人はついでに[VSCodeで爆速コーディング環境を構築する(主にReactJS向け設定)](https://qiita.com/teradonburi/items/c4cbd7dd5b4810e1a3a9)も読むと幸せになれるかも  
