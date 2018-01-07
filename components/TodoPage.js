@@ -18,8 +18,6 @@ export default class TodoPage extends React.Component {
   render () {
     const { classes } = this.props
     
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    // console.log(users)
     return (
       <div>
         <AppBar position="static" color="primary">

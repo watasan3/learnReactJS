@@ -8,7 +8,8 @@ React Routerはバージョンごとで破壊的変更が入って互換性が�
 $npm install --save-dev react-router-dom@4.2.2 history react-router-redux@next
 ```
 
-webpack.config.jsonのdevServerにhistoryApiFallbackをtrueにします。後で使うhistory APIのブラウザリロード時に対応します。
+webpack.config.jsonのdevServerにhistoryApiFallbackをtrueにします。  
+後で使うhistory APIのブラウザリロード時に対応します。
 
 ```webpack.config.js
   // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
@@ -204,8 +205,6 @@ export default class TodoPage extends React.Component {
   render () {
     const { classes } = this.props
     
-    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
-    // console.log(users)
     return (
       <div>
         <AppBar position="static" color="primary">
