@@ -113,7 +113,7 @@ export default Logger('Hello World!', 'render log')(App)
 ```
 import React from 'react'
 
-// 今回はrenderしかないのでStateless Functinal Componentでも書ける
+// 今回はrenderしかないのでStateless Functional Componentでも書ける
 export default (inject, message) => {
   return (WrappedComponent) => {
     // Stateless Functinal Component

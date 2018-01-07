@@ -16,7 +16,7 @@ export default (inject, message) => {
   }
 }
 
-// 今回はrenderしかないのでStateless Functinal Componentでも書ける
+// 今回はrenderしかないのでStateless Functional Componentでも書ける
 
 /*
 export default (inject, message) => {
