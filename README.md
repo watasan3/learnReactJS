@@ -10,6 +10,7 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [webpack](https://github.com/teradonburi/learnReactJS/tree/webpack): webpackの導入とReactコンポーネント作成手順
 - [ReactJSBasic](https://github.com/teradonburi/learnReactJS/tree/ReactJSBasic): ReactJSの基本お作法
 - [decorators](https://github.com/teradonburi/learnReactJS/tree/decorators):decoratorsについて 
+- [HOC](https://github.com/teradonburi/learnReactJS/tree/HOC):HOCについて 
 - [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):状態管理について 
 - [MaterialUI](https://github.com/teradonburi/learnReactJS/tree/MaterialUI):マテリアルデザインでのUI実装 
 - [ReactHotLoader](https://github.com/teradonburi/learnReactJS/tree/ReactHotLoader):クライアントとサーバ統合の環境構築とReactHotLoaderでの自動リロード 
