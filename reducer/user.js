@@ -1,7 +1,7 @@
 // reducerで受け取るaction名を定義
 const LOAD = 'user/LOAD'
 const ADD = 'user/ADD'
-const CUSTOMADD = 'user/CUSTOMADD'
+
 
 // 初期化オブジェクト
 const initialState = {
@@ -15,14 +15,9 @@ export default function reducer(state = initialState, action = {}){
     case LOAD:
       // ユーザ一覧取得
       return {
-        users:action.results,
+        users: state.users ? state.users : action.results
       }
     case ADD:
-      // ユーザ一覧末尾にユーザを追加する
-      return {
-        users: [...state.users, action.results]
-      }
-    case CUSTOMADD:
       // ユーザ一覧末尾にユーザを追加する
       return {
         users: state.users ? [...state.users, action.results] : [action.results]
@@ -38,40 +33,23 @@ export function load() {
   // ユーザ一覧を取得
   return (dispatch, getState, client) => {
     return client
-      .get('/api/user')
+      .get('https://randomuser.me/api')
       .then(res => res.data)
       .then(data => {
-        const results = data
+        const results = data.results
         // dispatchしてreducer呼び出し
         dispatch({ type: LOAD, results })
       })
   }
 }
 
-export function add() {
+export function add(user) {
   // ユーザを追加
   return (dispatch, getState, client) => {
-    return client
-      .post('/api/user')
-      .then(res => res.data)
-      .then(data => {
-        const results = data
-        // dispatchしてreducer呼び出し
-        dispatch({ type: ADD, results })
-      })
-  }
-}
-
-export function customadd(data) {
-  // 入力ユーザを追加
-  return (dispatch, getState, client) => {
-    return client
-      .post('/api/user/input',{user:data})
-      .then(res => res.data)
-      .then(data => {
-        const results = data
-        // dispatchしてreducer呼び出し
-        dispatch({ type: CUSTOMADD, results })
-      })
+    // 疑似ユーザ作成
+    const data = {"results":[{"gender":user.gender,"name":{"first":user.firstname,"last":user.lastname},"email":user.email,"picture":{"thumbnail":"https://avatars1.githubusercontent.com/u/771218?s=460&v=4"}}]}
+    const results = data.results[0]
+    dispatch({ type: ADD, results })
+    return Promise.resolve()
   }
 }
