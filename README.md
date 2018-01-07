@@ -17,20 +17,20 @@ webpack.config.jsonのdevServerにhistoryApiFallbackをtrueにします。後で
 ```
 
 index.jsにてcreateHistoryメソッドにてhistoryオブジェクトの作成、  
-historyオブジェクトをミドルウェア追加でreduxのstoreに格納します。  
-Appコンポーネントのpropsにhistoryオブジェクトを渡します。  
+historyオブジェクトをrouterMiddlewareに追加でreduxのstoreに格納します。  
+その後、Appコンポーネントのpropsにhistoryオブジェクトを渡します。  
 
 ```index.js
 import React  from 'react'
 import ReactDOM from 'react-dom'
-import createHistory from 'history/createBrowserHistory' // 追加
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
 import { AppContainer } from 'react-hot-loader'
-import { routerMiddleware } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux' // 追加
+import createHistory from 'history/createBrowserHistory' // 追加
 
 import App from './App'
 import reducer from './reducer/reducer'
