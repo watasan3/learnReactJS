@@ -1,16 +1,31 @@
 import React from 'react'
-import Rect from './Rect'
+import Logger from './Logger'
 
-export default class App extends React.Component {
+// decoratorsでHOCでAppコンポーネントをWrapする
+@Logger('Hello World!', 'render log')
+class App extends React.Component {
 
   render () {
+    // Loggerでpropsにinjectが追加される
     return (
-      <div>
-        <Rect />
-        <Rect num={1} bgcolor='#e02020' />
-        <Rect num={2} bgcolor='#20e020' />
-        <Rect num={3} bgcolor='#2020e0' />
-      </div>
+      <div>{this.props.inject}</div>
     )
   }
 }
+
+export default App
+
+// ※decoratorsを使わない場合は以下のように書ける
+
+/*
+class App extends React.Component {
+
+  render () {
+    return (
+      <div>{this.props.inject}</div>
+    )
+  }
+}
+
+export default Logger('Hello World!', 'render log')(App)
+*/
