@@ -17,7 +17,6 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ReactRouterRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRouterRedux):ReactJSでの画面遷移(SPA)
 - [ReduxForm](https://github.com/teradonburi/learnReactJS/tree/ReduxForm):ReduxFormでのフォーム送信
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
-- [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintの導入
 
 次のコマンドでブランチを切り替えて進めていきます。  
 
