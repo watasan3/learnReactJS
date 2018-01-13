@@ -6,7 +6,7 @@ React Hot Loaderの設定を行うことで
 パッケージにwebpack-dev-server、react-hot-loaderを追加します。  
 
 ```
-$ yarn add --dev webpack-dev-server react-hot-loader
+$ yarn add --dev webpack-dev-server react-hot-loader babel-polyfill
 ```
 
 package.jsonにwebpack-dev-server起動用のスクリプトを追加します。
@@ -112,11 +112,6 @@ if (module.hot) {
 
 ```
 $ yarn run dev
-yarn run v1.3.2
-$ webpack-dev-server
-Project is running at http://localhost:8080/
-webpack output is served from /
-Content not from webpack is served from /Users/daikiterai/Desktop/learnReactJS
 ```
 
 App.jsなどを編集して保存するとブラウザが更新されます。（ビルド＆部分リロード（HMR））
