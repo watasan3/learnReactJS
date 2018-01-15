@@ -172,7 +172,7 @@ $ yarn run lint
 マジックコメント（特殊なコメント）でeslintをignoreすることもできます。  
 今回はclient/src/index.jsにて使用しています。  
 
-```client/src/index.js
+```index.js
 /*globals module: false */
 
 // 本来ならば定義されていないグローバル変数エラーのlint表示が出るが、HMRはデバッグ時のみ有効なので無視したい
