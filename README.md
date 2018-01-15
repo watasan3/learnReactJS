@@ -11,11 +11,12 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ReactJSBasic](https://github.com/teradonburi/learnReactJS/tree/ReactJSBasic): ReactJSの基本お作法
 - [decorators](https://github.com/teradonburi/learnReactJS/tree/decorators):decoratorsについて 
 - [HOC](https://github.com/teradonburi/learnReactJS/tree/HOC):HOCについて 
-- [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):状態管理について 
+- [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):アプリケーション全体の状態管理について 
 - [MaterialUI](https://github.com/teradonburi/learnReactJS/tree/MaterialUI):マテリアルデザインでのUI実装 
 - [ReactHotLoader](https://github.com/teradonburi/learnReactJS/tree/ReactHotLoader):ReactHotLoaderでの自動リロード 
 - [ReactRouterRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRouterRedux):ReactJSでの画面遷移(SPA)
 - [ReduxForm](https://github.com/teradonburi/learnReactJS/tree/ReduxForm):ReduxFormでのフォーム送信
+- [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintでのコードチェック
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
 
 次のコマンドでブランチを切り替えて進めていきます。  
