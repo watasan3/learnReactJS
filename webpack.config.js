@@ -1,3 +1,4 @@
+/*globals module: false require: false __dirname: false */
 const webpack = require('webpack')
 const precss = require('precss')
 const autoprefixer = require('autoprefixer')
@@ -5,7 +6,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル追加 
+  devtool: 'inline-source-map', // ソースマップファイル出力
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
@@ -21,7 +22,7 @@ module.exports = {
   },
   output: {
     publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -29,10 +30,10 @@ module.exports = {
       template: 'static/index.html', // template対象のindex.htmlのパス
     }),
     new webpack.HotModuleReplacementPlugin(), // HMR(Hot Module Reload)プラグイン利用
-    // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける 
+    // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける
     new webpack.LoaderOptionsPlugin({options: {
-      postcss: [precss, autoprefixer({browsers: ['last 2 versions']})]
-    }})
+      postcss: [precss, autoprefixer({browsers: ['last 2 versions']})],
+    }}),
   ],
   module: {
     rules: [{
@@ -47,11 +48,11 @@ module.exports = {
             [
               'env', {
                 targets: {
-                  browsers: ['last 2 versions', '> 1%'] // ビルド最適化のブラウザターゲット
+                  browsers: ['last 2 versions', '> 1%'], // ビルド最適化のブラウザターゲット
                 },
                 modules: false,
                 useBuiltIns: true,  // ビルトイン有効
-              }
+              },
             ],
             'stage-0', // stage-0のプラグイン
             'react', // reactのプラグインまとめ
@@ -60,11 +61,11 @@ module.exports = {
           plugins: [
             'transform-class-properties', // classのプロパティ用
             'babel-plugin-transform-decorators-legacy', // decorator用
-            'react-hot-loader/babel' // react-hot-loader用
-          ] 
-        }
-      }
-    }]
-  }
+            'react-hot-loader/babel', // react-hot-loader用
+          ],
+        },
+      },
+    }],
+  },
 }
 

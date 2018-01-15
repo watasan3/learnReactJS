@@ -1,3 +1,4 @@
+/*globals module: false require: false __dirname: false process: false */
 const webpack = require('webpack')
 const path = require('path')
 const webpackConfig = require('./webpack.config.js')
@@ -8,7 +9,7 @@ const revision = require('child_process').execSync('git rev-parse HEAD').toStrin
 
 
 function createConfig() {
-  
+
   const config = Object.assign({}, webpackConfig)
 
   // ソースマップファイルをファイル出力
@@ -18,7 +19,7 @@ function createConfig() {
     'bundle': [
       'babel-polyfill',
       path.join(__dirname, '/index'), // エントリポイントのjsxファイル
-    ]
+    ],
   }
   // 出力ファイル
   config.output = {
@@ -38,7 +39,7 @@ function createConfig() {
       filename: 'js-[hash:8]/vendor.js',
       minChunks: (module) => {
         return module.context && module.context.indexOf('node_modules') !== -1
-      }
+      },
     }),
     // 環境変数をエクスポート
     new webpack.DefinePlugin({
@@ -54,13 +55,13 @@ function createConfig() {
       compress: {
         drop_debugger: true,
         drop_console: true,
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: `static/index.html`,
+      template: 'static/index.html',
     }),
   ]
 
@@ -73,7 +74,7 @@ function createConfig() {
 }
 
 const configs = [
-  createConfig()
+  createConfig(),
 ]
 
 module.exports = configs

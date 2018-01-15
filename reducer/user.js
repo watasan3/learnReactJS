@@ -8,7 +8,7 @@ const initialState = {
 }
 
 // reducerの定義（dispatch時にコールバックされる）
-export default function reducer(state = initialState, action = {}){
+export default function reducer(state = initialState, action = {}) {
   // actionの種別に応じてstateを更新する
   switch (action.type) {
     case LOAD:
@@ -19,7 +19,7 @@ export default function reducer(state = initialState, action = {}){
     case ADD:
       // ユーザ一覧末尾にユーザを追加する
       return {
-        users: state.users ? [...state.users, action.results] : [action.results]
+        users: state.users ? [...state.users, action.results] : [action.results],
       }
     default:
       // 初期化時はここに来る（initialStateのオブジェクトが返却される）
@@ -44,10 +44,10 @@ export function load() {
 
 export function add(user) {
   // 入力ユーザを追加
-  return (dispatch, getState, client) => {
+  return (dispatch) => {
     // 疑似ユーザ作成（本来はサーバ送信＆DB保存）
-    const data = {"results":[{"gender":user.gender,"name":{"first":user.firstname,"last":user.lastname},"email":user.email,"picture":{"thumbnail":"https://avatars1.githubusercontent.com/u/771218?s=460&v=4"}}]}
-    const results = data.results[0]   
+    const data = {'results': [{'gender': user.gender, 'name': {'first': user.firstname, 'last': user.lastname}, 'email': user.email, 'picture': {'thumbnail': 'https://avatars1.githubusercontent.com/u/771218?s=460&v=4'}}]}
+    const results = data.results[0]
     // dispatchしてreducer呼び出し
     dispatch({ type: ADD, results })
     return Promise.resolve()

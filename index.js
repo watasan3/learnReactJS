@@ -1,3 +1,4 @@
+/*globals module: false */
 import React  from 'react'
 import ReactDOM from 'react-dom'
 import createHistory from 'history/createBrowserHistory'
@@ -17,7 +18,7 @@ const history = createHistory()
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
 // redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
-const store = createStore(reducer, applyMiddleware(routerMiddleware(history),thunkWithClient))
+const store = createStore(reducer, applyMiddleware(routerMiddleware(history), thunkWithClient))
 
 
 // Material-UIテーマを上書きする
@@ -75,7 +76,7 @@ const theme = createMuiTheme({
       'xs': 360, // スマホ用
       'sm': 768, // タブレット用
       'md': 992, // PC用
-      'lg': 1000000000, 
+      'lg': 1000000000,
       'xl': 1000000000,
     },
   },
@@ -107,5 +108,7 @@ render(App)
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
+  module.hot.accept('./App', () => {
+    render(App)
+  })
 }
