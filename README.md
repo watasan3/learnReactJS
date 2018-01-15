@@ -18,6 +18,7 @@ package.jsonは次のようになります。
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server",
+    "lint": "eslint .",
     "rm": "rm -rf dist/*",
     "build-webpack": "parallel-webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack"
@@ -26,6 +27,7 @@ package.jsonは次のようになります。
     "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -35,6 +37,9 @@ package.jsonは次のようになります。
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "copy-webpack-plugin": "^4.2.3",
+    "eslint": "^4.15.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-react": "^7.5.1",
     "history": "^4.7.2",
     "html-webpack-plugin": "^2.30.1",
     "material-ui": "^1.0.0-beta.27",
