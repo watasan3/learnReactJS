@@ -7,5 +7,5 @@ import user from './user'
 export default combineReducers({
   routing: routerReducer,
   form: formReducer,
-  user
+  user,
 })

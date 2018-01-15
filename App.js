@@ -1,6 +1,6 @@
 import React from 'react'
 import { ConnectedRouter as Router } from 'react-router-redux'
-import { Route, Redirect, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import NotFound from './components/NotFound'
 import UserPage from './components/UserPage'
@@ -17,11 +17,11 @@ export default class App extends React.Component {
   }
 }
 
-const AppRoute = (props) => (
+const AppRoute = () => (
   <Switch>
     <Route exact path="/" component={UserPage} />
-    <Route path="/todo" component={TodoPage} /> 
+    <Route path="/todo" component={TodoPage} />
     {/* それ以外のパス */}
-    <Route component={NotFound} />　
+    <Route component={NotFound} />
   </Switch>
 )
