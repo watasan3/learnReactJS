@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { load } from 'user'
+import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
