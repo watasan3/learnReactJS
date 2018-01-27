@@ -19,7 +19,7 @@ eslintコマンドを使うにはeslintをグローバルインストールし�
 VSCodeの人は[VS Code ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint#overview)を入れておくとエディット中も随時lintチェックが有効になるのでlintエラーを編集しながら確認できます。  
 
 ```
-$ yarn add --global eslint
+$ yarn global add eslint
 ```
 
 プロジェクト内では.eslintrc.jsという設定ファイルに基づいてlintチェックを行ってくれます。  
