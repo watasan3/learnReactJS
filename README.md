@@ -243,7 +243,7 @@ function asyncFunc(param) {
   // 非同期処理
   setTimeout(() => {
     console.log(param)
-  },100)    
+  },100)
 }
 
 // 順番が前後する例
@@ -258,10 +258,16 @@ test()
 
 // async awaitで同期待ちをする例(ES7)
 function asyncFuncPromise(param) {
-  return new Promise((resolve,reject) =>{
+  return new Promise((resolve, reject) =>{
     setTimeout(() => {
+      if (param === 'b') {
+        // エラー時
+        reject({data: 'err'})
+        return
+      }
+      // 正常終了時
       resolve(param)
-    },100)    
+    },100)
   })
 }
 
@@ -270,9 +276,11 @@ async function testAwait() {
   // 非同期処理をawaitで処理待ちする
   const ret1 = await asyncFuncPromise('a')
   console.log(ret1)
-  const ret2 = await asyncFuncPromise('b')
+  // error時はcatchで補足した戻り値を取得
+  const ret2 = await asyncFuncPromise('b').catch(err => err.data)
   console.log(ret2)
-  const ret3 = await asyncFuncPromise('c')
+  // thenでさらに処理をつなげることもできる
+  const ret3 = await asyncFuncPromise('c').then(data => data + 'c')
   console.log(ret3)
 
   // 並列実行待ち
@@ -283,6 +291,14 @@ async function testAwait() {
   ])
   console.log(rets)
 
+  // 非同期処理を順次実行待ち
+  const asyncFuncPromises = [asyncFuncPromise, asyncFuncPromise, asyncFuncPromise]
+  const ret = await ['g', 'h', 'k'].reduce((promise, param, idx) => {
+    return promise.then(async (prev) => {
+      return await asyncFuncPromises[idx](param + ' ' + prev)
+    })
+  }, Promise.resolve(''))
+  console.log(ret)
 }
 testAwait()
 ```
@@ -300,6 +316,8 @@ $ node asyncawait.js
 /////////// 通常関数のthis ///////////
 
 function test1() {
+  this.param = 'test1'
+
   function printParam () {
     console.log(this.param) // このthisは呼び出され元のオブジェクト
   }
@@ -321,7 +339,7 @@ test1()
 /////////// アロー関数のthis ///////////
 
 function test2() {
-  this.param = 'global'
+  this.param = 'test2'
 
   // アロー関数式で宣言された関数は、宣言された時点で、thisを確定（＝束縛）してしまう
   let printParamArrow = () => {
@@ -364,7 +382,6 @@ class Component {
   }
 
   render() {
-
     let call1 = this.method1
     call1()
     // Reactのイベントコールバックに使うパターン１(bind済み関数)

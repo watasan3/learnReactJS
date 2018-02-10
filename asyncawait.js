@@ -3,7 +3,7 @@ function asyncFunc(param) {
   // 非同期処理
   setTimeout(() => {
     console.log(param)
-  },100)    
+  },100)
 }
 
 // 順番が前後する例
@@ -18,8 +18,14 @@ test()
 
 // async awaitで同期待ちをする例(ES7)
 function asyncFuncPromise(param) {
-  return new Promise((resolve,reject) =>{
+  return new Promise((resolve, reject) =>{
     setTimeout(() => {
+      if (param === 'b') {
+        // エラー時
+        reject({data: 'err'})
+        return
+      }
+      // 正常終了時
       resolve(param)
     },100)
   })
@@ -30,9 +36,11 @@ async function testAwait() {
   // 非同期処理をawaitで処理待ちする
   const ret1 = await asyncFuncPromise('a')
   console.log(ret1)
-  const ret2 = await asyncFuncPromise('b')
+  // error時はcatchで補足した戻り値を取得
+  const ret2 = await asyncFuncPromise('b').catch(err => err.data)
   console.log(ret2)
-  const ret3 = await asyncFuncPromise('c')
+  // thenでさらに処理をつなげることもできる
+  const ret3 = await asyncFuncPromise('c').then(data => data + 'c')
   console.log(ret3)
 
   // 並列実行待ち

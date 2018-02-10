@@ -2,6 +2,8 @@
 /////////// 通常関数のthis ///////////
 
 function test1() {
+  this.param = 'test1'
+
   function printParam () {
     console.log(this.param) // このthisは呼び出され元のオブジェクト
   }
@@ -23,7 +25,7 @@ test1()
 /////////// アロー関数のthis ///////////
 
 function test2() {
-  this.param = 'global'
+  this.param = 'test2'
 
   // アロー関数式で宣言された関数は、宣言された時点で、thisを確定（＝束縛）してしまう
   let printParamArrow = () => {
@@ -66,7 +68,6 @@ class Component {
   }
 
   render() {
-
     let call1 = this.method1
     call1()
     // Reactのイベントコールバックに使うパターン１(bind済み関数)
