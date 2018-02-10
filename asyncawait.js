@@ -21,7 +21,7 @@ function asyncFuncPromise(param) {
   return new Promise((resolve,reject) =>{
     setTimeout(() => {
       resolve(param)
-    },100)    
+    },100)
   })
 }
 
@@ -43,5 +43,13 @@ async function testAwait() {
   ])
   console.log(rets)
 
+  // 非同期処理を順次実行待ち
+  const asyncFuncPromises = [asyncFuncPromise, asyncFuncPromise, asyncFuncPromise]
+  const ret = await ['g', 'h', 'k'].reduce((promise, param, idx) => {
+    return promise.then(async (prev) => {
+      return await asyncFuncPromises[idx](param + ' ' + prev)
+    })
+  }, Promise.resolve(''))
+  console.log(ret)
 }
 testAwait()
