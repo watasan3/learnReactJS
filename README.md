@@ -104,6 +104,12 @@ module.exports = {
 }
 ```
 
+webpackをインストールします  
+
+```
+$ yarn global add webpack
+```
+
 次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
 
 ```webpack.config.js
