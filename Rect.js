@@ -17,7 +17,7 @@ export default class Rect extends React.Component {
 
   componentWillMount () {
     // propsに属性値が渡ってくる
-    const { num, bgcolor } = this.props
+    const { bgcolor } = this.props
 
     // CSS スタイルはキャメルケースでプロパティを書く
     this.rectStyle = {
