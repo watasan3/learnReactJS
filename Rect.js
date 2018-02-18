@@ -38,13 +38,13 @@ export default class Rect extends React.Component {
     this.setState({ num : this.state.num + 1 })
   }
 
-  render () {
+  render (props) {
 
     // DOMが複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
     return (
-      <div style={ this.rectStyle } onClick={() => this.countUp()}>
-        <NumberPlate>{this.state.num}</NumberPlate>
+      <div style={ this.rectStyle } onClick={(e) => this.countUp()}>
+        <NumberPlate><i>{this.state.num}</i></NumberPlate>
       </div>
     )
   }

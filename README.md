@@ -67,7 +67,7 @@ export default class Rect extends React.Component {
     // 返却する最上位のDOMは１つのみ
     return (
       <div style={ this.rectStyle } onClick={() => this.countUp()}>
-        <NumberPlate>{this.state.num}</NumberPlate>
+        <NumberPlate><i>{this.state.num}</i></NumberPlate>
       </div>
     )
   }
@@ -117,9 +117,7 @@ export default class App extends React.Component {
 初期化時と属性値変更時に呼ばれるcomponentWillMountメソッドと  
 描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
 通信処理後のpropsの変更をみて、さらに何か処理したい場合には  
-componentWillReceivePropsメソッドを使ったり、  
-どうしても直接DOM操作をしたいときにcomponentDidMountメソッドにDOMのイベントを追加して  
-componentWillUnmountメソッドでDOMイベントを削除したりします。  
+componentWillReceivePropsメソッドを使ったりします。  
 
 # Stateless Functional Componentについて
 reactをimportするだけで関数もReactのコンポーネントになります。  
@@ -139,7 +137,7 @@ const NumberPlate = (props) => {
 
 export default NumberPlate
 
-// これと同じ
+// 処理自体はこれと同じ
 // export default class NumberPlate extends React.Component {
 //   render (props) {
 //     return <span style={{ color: '#eeeeee' }}>{props.children}</span>
@@ -156,7 +154,8 @@ export default NumberPlate
 <Rect num={1} bgcolor='#e02020' />
 ```
 
-独自に定義したプロパティはpropsオブジェクト内に格納されてRectコンポーネントに渡ってきます。
+独自に定義したプロパティはpropsオブジェクト内に格納されてRectコンポーネントに渡ってきます。  
+生成時(constructor時点)に入っているため、this.propsで参照するか、各種ライフサイクルメソッドの引数から参照します。  
 
 ```Rect.js
 componentWillMount () {
@@ -174,10 +173,13 @@ defaultPropsを使うことで属性値がない場合のデフォルトの属�
   }
 ```
 
-子要素に関しては、
+入れ子にした要素はprops.childrenとしてDOM子要素が渡ります。  
 
 ```
+  {/* 呼び出し側 */}
   <NumberPlate>{this.state.num}</NumberPlate>
+  {/* 呼び出され側(NumberPlateのprops.childrenにNumberPlateのDOM子要素が渡る) */}
+  <span>{props.children}</span>
 ```
 
 # CSS Styleについて
@@ -205,6 +207,23 @@ JSX内で{}した箇所にはJSを書くことができます。
 
 ```Rect.js
   <div style={ this.rectStyle } />
+```
+
+次のようにインラインで直接CSSスタイル指定することも可能です。  
+
+```
+  <span style={{ color: '#eeeeee' }}>
+```
+
+# イベントハンドリングについて
+
+基本的なaddEventListenerのイベントハンドリングが使えます。  
+[addEventListener type一覧と各ブラウザ対応](https://qiita.com/mrpero/items/156968e3512d42fffc5e)
+ただし書き方はon(イベント名)のキャメルケース表記になります。  
+例えば、clickイベントはonClickでイベントハンドリングを行います。  
+
+```
+  <div onClick={() => this.countUp()}>
 ```
 
 # コンポーネントのstateについて

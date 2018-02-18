@@ -9,7 +9,7 @@ const NumberPlate = (props) => {
 
 export default NumberPlate
 
-// これと同じ
+// 処理自体はこれと同じ
 // export default class NumberPlate extends React.Component {
 //   render (props) {
 //     return <span style={{ color: '#eeeeee' }}>{props.children}</span>
