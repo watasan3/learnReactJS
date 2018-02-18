@@ -107,7 +107,7 @@ actionにaxiosオブジェクトが引数として渡るようになります。
 ```index.js
 import React  from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import client from 'axios'
 import thunk from 'redux-thunk'
@@ -115,10 +115,12 @@ import thunk from 'redux-thunk'
 import App from './App'
 import reducer from './reducer'
 
+// redux-devtoolの設定
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
 // redux-thunkをミドルウェアに適用
-const store = createStore(reducer, applyMiddleware(thunkWithClient))
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunkWithClient)))
 
 ReactDOM.render(
     <Provider store={store}>
@@ -194,3 +196,17 @@ export default connect(
   { load }  
 )(App)
 ```
+
+# Redux-devtoolsについて
+[Redux-devtoolのプラグイン拡張](https://github.com/zalmoxisus/redux-devtools-extension)を使うと  
+Reduxのstoreの状態やaction履歴について可視化できます。  
+[Chrome　Addon](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)を追加後、localhostサーバ上で動かすと確認できます。  
+webpack-dev-serverを用いるとwebpackとlocalhostサーバの起動を同時に行うことができます。  
+webpack-dev-serverの詳細な設定はReact Hot Loaderの項にて説明します。  
+
+```
+$ yarn add webpack-dev-server
+$ node_modules/webpack-dev-server/bin/webpack-dev-server.js 
+Project is running at http://localhost:8080/
+```
+
