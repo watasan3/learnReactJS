@@ -22,3 +22,13 @@ const testES6Obj = ({a,b}) => {
   console.log(a,b)
 }
 testES6Obj({a:'a',b:'b'})
+
+// 一行でオブジェクトをreturnする書き方
+const testES6RetObj = () => ({a: 'a param', b: 'b param'})
+// これと同じ
+// const testES6RetObj = () => {
+//   return {a: 'a param', b: 'b param'}
+// }
+
+console.log(testES6RetObj())
+
