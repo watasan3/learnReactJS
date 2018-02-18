@@ -1,6 +1,5 @@
 # webpackしたコンポーネントを非同期でレンダリングする(Code Spliting)
-参考：[Code Splitting for React Router with Webpack and HMR]
-(https://hackernoon.com/code-splitting-for-react-router-with-webpack-and-hmr-bb509968e86f)  
+参考：[Code Splitting for React Router with Webpack and HMR](https://hackernoon.com/code-splitting-for-react-router-with-webpack-and-hmr-bb509968e86f)  
 
 プロジェクトが大きくなってくるとwebpack.jsでコンパイルしたbundle.jsが肥大化します。  
 bundle.jsが肥大化するとbundle.jsの読み込みに時間がかかってしまい、初回のページの表示が遅くなります（SPAの欠点）  
