@@ -1,10 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { add } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
-import { Email } from 'material-ui-icons'
+import { AppBar, Toolbar, Card, Button, TextField } from 'material-ui'
 import { Field, reduxForm } from 'redux-form'
 import { error } from 'util'
 
@@ -103,7 +102,7 @@ export default class TodoPage extends React.Component {
             </div>
             <Field name="email" type="email" component={FormTextField} label="メールアドレス" />
             <br/>
-            <Button style={{marginTop:10}} raised type="submit" disabled={submitting}>送信</Button>
+            <Button style={{marginTop:10}} variant='raised' type="submit" disabled={submitting}>送信</Button>
           </form>
         </Card>
       </div>
