@@ -1,10 +1,10 @@
 # webpackしたコンポーネントを非同期でレンダリングする(Code Spliting)
 参考：[Code Splitting for React Router with Webpack and HMR]
-(https://hackernoon.com/code-splitting-for-react-router-with-webpack-and-hmr-bb509968e86f)
+(https://hackernoon.com/code-splitting-for-react-router-with-webpack-and-hmr-bb509968e86f)  
 
-プロジェクトが大きくなってくるとwebpack.jsでコンパイルしたbundle.jsが肥大化します。
-bundle.jsが肥大化するとbundle.jsの読み込みに時間がかかってしまい、初回のページの表示が遅くなります（SPAの欠点）
-そこでAsyncComponentを作成して、非同期リソース読み込みを行います。
+プロジェクトが大きくなってくるとwebpack.jsでコンパイルしたbundle.jsが肥大化します。  
+bundle.jsが肥大化するとbundle.jsの読み込みに時間がかかってしまい、初回のページの表示が遅くなります（SPAの欠点）  
+そこでAsyncComponentを作成して、非同期リソース読み込みを行います。  
 
 ``` asyncComponent.js
 import React from 'react'
@@ -49,16 +49,18 @@ export default (loader, collection) => (
 )
 ```
 
+次のようにimportをラップして読み込みを行います。
+
 ```
 const UserPage = asyncComponent(() => import('./components/UserPage'))
 ```
 
 ## webpackでトランスパイル後のファイル名を指定のファイル名にする方法
-上記のacyncComponentでラップしたコンポーネントをwebpackでトランスパイルすると
-0.jsのようにファイル名がリネームされて出力されてしまいます。
-これを回避するためにWebpack 2.4.0以降でmagicコメントが使えます。
-参考：[How to use Webpack’s new “magic comment” feature with React Universal Component + SSR](https://medium.com/faceyspacey/how-to-use-webpacks-new-magic-comment-feature-with-react-universal-component-ssr-a38fd3e296a)
-このmagicコメントを指定することでwebpackでコンパイルされた後のファイル名を指定することができます。(App.js)
+上記のacyncComponentでラップしたコンポーネントをwebpackでトランスパイルすると  
+0.jsのようにファイル名がリネームされて出力されてしまいます。  
+これを回避するためにWebpack 2.4.0以降でmagicコメントが使えます。  
+参考：[How to use Webpack’s new “magic comment” feature with React Universal Component + SSR](https://medium.com/faceyspacey/how-to-use-webpacks-new-magic-comment-feature-with-react-universal-component-ssr-a38fd3e296a)  
+このmagicコメントを指定することでwebpackでコンパイルされた後のファイル名を指定することができます。(App.js)  
 
 ```
 const UserPage = asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
