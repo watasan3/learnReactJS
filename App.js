@@ -1,8 +1,13 @@
 import React from 'react'
+import Child from './Child'
 
 // 子コンポーネント
 const TextInput = (props) => {
   return <input ref={props.inputRef} />
+}
+
+const MyButton = (props) => {
+  return <button onClick={() => props.handleClick('call from child')} >親呼び出し</button>
 }
 
 export default class App extends React.Component {
@@ -31,6 +36,10 @@ export default class App extends React.Component {
     this.textInput.value = this.input.value
   }
 
+  handleClick = () => {
+    alert('parent')
+  }
+
   render () {
     return (
       <div>
@@ -45,6 +54,11 @@ export default class App extends React.Component {
         </div>
         <p>子コンポーネントのref参照を取得し、入力連動させる例:</p>
         <TextInput inputRef={el => this.textInput = el} />
+        <p>親コンポーネントのメソッドを呼び出す例:</p>
+        <MyButton handleClick={this.handleClick} />
+        <p>子コンポーネントのメソッドを呼び出す例:</p>
+        <button onClick={() => this.child && this.child.message('call from parent')}>子呼び出し</button>
+        <Child onRef={(ref) => this.child = ref} />
       </div>
     )
   }
