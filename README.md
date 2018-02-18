@@ -194,7 +194,7 @@ export default class App extends React.Component {
                   <p style={{margin:10, color:primary[500]}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
                   <p style={{margin:10, color:secondary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                   <div style={{textAlign: 'right'}} >
-                    <Button raised color='accent' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>Email</Button>
+                    <Button variant="raised" color='secondary' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>Email</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -202,7 +202,7 @@ export default class App extends React.Component {
         })}
         {
           this.state.open &&
-          <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose()}>
+          <Dialog open={this.state.open} onClose={() => this.handleRequestClose()}>
             <DialogTitle>メールアドレス</DialogTitle>
             <DialogContent>{this.state.user.email}</DialogContent>
           </Dialog>
@@ -273,7 +273,7 @@ const theme = createMuiTheme({
 利用側では、  
 withThemeデコレータを使うとprops.themeが使えるようになります。  
 カラーパレットからcommon,primary,secondary,grey,errorなどが使えます。  
-color属性を持っている[Button](https://material-ui-next.com/demos/buttons/)等のコンポーネントは'primary'、'accent'、'contrast'などで色指定することもできます（※この場合、accentはsecondary色に相当するので注意）
+color属性を持っている[Button](https://material-ui-next.com/demos/buttons/)等のコンポーネントは'primary'、'secondary'、'default'、'inherit'などで背景色指定することもできます
 
 ```App.js
 import { withTheme } from 'material-ui/styles'
@@ -288,7 +288,7 @@ export default class App extends React.Component {
       <div>
         <p style={{margin:10, color:primary[500]}}>名前</p>
         <p style={{margin:10, color:seconary[500]}}>性別</p>
-        <Button raised color='accent'>Email</Button>
+        <Button variant="raised" color='secondary'>Email</Button>
       </div>
     )
   }
