@@ -7,7 +7,7 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ES6](https://github.com/teradonburi/learnReactJS/tree/ES6): ES6,ES7のよく使うJavaScript文法のおさらい
 - [ReactJSStart](https://github.com/teradonburi/learnReactJS/tree/ReactJSStart): ReactJSの概念、JSXについて
 - [webpack](https://github.com/teradonburi/learnReactJS/tree/webpack): webpackの導入とReactコンポーネント作成手順
-- [ReactJSBasic](https://github.com/teradonburi/learnReactJS/tree/ReactJSBasic): ReactJSの基本お作法
+- [ReactJSBasic](https://github.com/teradonburi/learnReactJS/tree/ReactJSBasic): ReactJSの基本(props、state、css)
 - [refs](https://github.com/teradonburi/learnReactJS/tree/refs):ref参照について
 - [decorators](https://github.com/teradonburi/learnReactJS/tree/decorators):decoratorsについて 
 - [HOC](https://github.com/teradonburi/learnReactJS/tree/HOC):HOCについて 
