@@ -67,24 +67,9 @@ AppContainerコンポーネントで全体を囲います。
 webpack-dev-serverで起動時はmodule.hotで自動リロードの設定をAppに適応します。  
 
 ```index.js
-import React  from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
-import client from 'axios'
-import thunk from 'redux-thunk'
 import { AppContainer } from 'react-hot-loader' // 追加
 
-import App from './App'
-import reducer from './reducer'
-
-// axiosをthunkの追加引数に加える
-const thunkWithClient = thunk.withExtraArgument(client)
-// redux-thunkをミドルウェアに適用
-const store = createStore(reducer, applyMiddleware(thunkWithClient))
-
-const theme = createMuiTheme({})
+...(略)
 
 // renderでWrapする
 const render = Component => {
