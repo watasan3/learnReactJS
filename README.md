@@ -37,3 +37,51 @@ $ node -v
 
 エディタは個人的に[Visual Studio Code](https://code.visualstudio.com/)がおすすめ  
 VSCodeをお使いの人はついでに[VSCodeで爆速コーディング環境を構築する(主にReactJS向け設定)](https://qiita.com/teradonburi/items/c4cbd7dd5b4810e1a3a9)も読むと幸せになれるかも  
+
+
+# npmについて
+NodeJS付属のnpmというパッケージ管理ツールを使うとパッケージをまとめて管理できます。  
+パッケージ管理用のpackage.jsonファイルを作成します。  
+
+```
+$ npm init -y
+```
+
+次のコマンドで使いたいパッケージをインストールすることができます。
+
+```
+$ npm install --save (パッケージ名)
+
+# 開発用としてインストールする(Babelなどでトランスパイルするパッケージはこちら)
+$ npm install --save-dev (パッケージ名)
+```
+
+package.jsonに記述された依存パッケージを  
+次のコマンドでまとめてインストールすることができます。  
+(gitにnode_modulesフォルダを管理する必要はありません)  
+
+```
+$ npm install
+```
+
+もしくは後発の[Yarn](https://yarnpkg.com/lang/en/)というパッケージ管理ツールでもインストールできます。
+
+```
+# yarn インストール
+$ npm install -g yarn
+
+# npm initと等価
+$ yarn init
+
+# npm installと等価
+$ yarn
+
+# npm install --save (パッケージ名)と等価
+$ yarn add (パッケージ名)
+
+# npm install --save-dev (パッケージ名)と等価
+# yarn add --dev (パッケージ名)
+```
+
+npmコマンドとyarnコマンドの比較はこちら  
+[yarnチートシート](https://qiita.com/morrr/items/558bf64cd619ebdacd3d)
