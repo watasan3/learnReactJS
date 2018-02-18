@@ -40,7 +40,7 @@ export default class Rect extends React.Component {
 
   render () {
 
-    // 複数行になる場合は()で囲む
+    // DOMが複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
     return (
       <div style={ this.rectStyle } onClick={() => this.countUp()}>
