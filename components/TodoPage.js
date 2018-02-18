@@ -102,7 +102,7 @@ export default class TodoPage extends React.Component {
             </div>
             <Field name="email" type="email" component={FormTextField} label="メールアドレス" />
             <br/>
-            <Button style={{marginTop: 10}} raised type="submit" disabled={submitting}>送信</Button>
+            <Button style={{marginTop: 10}} variant='raised' type="submit" disabled={submitting}>送信</Button>
           </form>
         </Card>
       </div>
