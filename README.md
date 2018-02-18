@@ -18,6 +18,7 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ReduxForm](https://github.com/teradonburi/learnReactJS/tree/ReduxForm):ReduxFormでのフォーム送信
 - [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintでのコードチェック
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
+- [AsyncComponent](https://github.com/teradonburi/learnReactJS/tree/AsyncComponent):遅延レンダリング（Code Spliting）
 
 次のコマンドでブランチを切り替えて進めていきます。  
 
