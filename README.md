@@ -22,50 +22,21 @@ historyオブジェクトをrouterMiddlewareに追加でreduxのstoreに格納�
 その後、Appコンポーネントのpropsにhistoryオブジェクトを渡します。  
 
 ```index.js
-import React  from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
-import client from 'axios'
-import thunk from 'redux-thunk'
-import { AppContainer } from 'react-hot-loader'
 import { routerMiddleware } from 'react-router-redux' // 追加
 import createHistory from 'history/createBrowserHistory' // 追加
 
 import App from './App'
 import reducer from './reducer/reducer'
 
+// redux-devtoolの設定
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 // ブラウザ履歴保存用のストレージを作成
 const history = createHistory()
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
 // redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
-const store = createStore(reducer, applyMiddleware(routerMiddleware(history),thunkWithClient))
+const store = createStore(reducer, composeEnhancers(applyMiddleware(routerMiddleware(history),thunkWithClient)))
 
-
-// Material-UIテーマを上書きする
-const theme = createMuiTheme({})
-
-const render = Component => {
-  ReactDOM.render(
-    <AppContainer warnings={false}>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component history={history} />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
-    document.getElementById('root'),
-  )
-}
-
-render(App)
-
-// Webpack Hot Module Replacement API
-if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
-}
 ```
 
 reducer.jsにrouterReducerを追加します。　　
