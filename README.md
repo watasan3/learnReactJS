@@ -10,7 +10,7 @@ package.jsonは次のようになります。
 
 ```package.json
 {
-  "name": "learnReactJS",
+  "name": "learnreactjs",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/teradonburi/learnReactJS.git",
@@ -20,7 +20,7 @@ package.jsonは次のようになります。
     "dev": "webpack-dev-server",
     "lint": "eslint .",
     "rm": "rm -rf dist/*",
-    "build-webpack": "parallel-webpack -p --config webpack.build.js",
+    "build-webpack": "NODE_ENV=production parallel-webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack"
   },
   "devDependencies": {
@@ -246,6 +246,22 @@ const configs = [
 module.exports = configs
 ```
 
+index.jsのredux-devtoolを本番時はデバッグできないように修正します。  
+process.env.NODE_ENVはリリースビルド時の環境変数を参照しています。  
+
+```
+/*globals module: false process: false */
+
+...(略)
+
+// redux-devtoolの設定
+let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+// 本番時はredux-devtoolを無効化する
+if (process.env.NODE_ENV === 'production') {
+  composeEnhancers = compose
+}
+```
+
 npm-run-allパッケージを使うとrun-s（順次）、run-p（並列）で複数のnpmコマンドを実行できます。
 `run-s rm build-webpack`
 次のコマンドでリリースビルドを行います。  
@@ -255,6 +271,7 @@ $ yarn run build
 ```
 
 成功するとdistフォルダにリリースビルド完了後のソースファイルが出力されるのでこのフォルダをS3や本番サーバの公開フォルダにデプロイします。  
+(このとき出力されるソースマップファイル(.map)は元ソースコードがバレてしまうのでデプロイには含めないようにします)  
 今回は簡易的にサーバを立てて確認します。  
 serveパッケージを使うと簡単にサーバをローカル上に立てれます。  
 

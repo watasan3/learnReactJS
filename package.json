@@ -1,5 +1,5 @@
 {
-  "name": "learnReactJS",
+  "name": "learnreactjs",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/teradonburi/learnReactJS.git",
@@ -9,7 +9,7 @@
     "dev": "webpack-dev-server",
     "lint": "eslint .",
     "rm": "rm -rf dist/*",
-    "build-webpack": "parallel-webpack -p --config webpack.build.js",
+    "build-webpack": "NODE_ENV=production parallel-webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack"
   },
   "devDependencies": {
