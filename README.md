@@ -218,7 +218,7 @@ JSX内で{}した箇所にはJSを書くことができます。
 # イベントハンドリングについて
 
 基本的なaddEventListenerのイベントハンドリングが使えます。  
-[addEventListener type一覧と各ブラウザ対応](https://qiita.com/mrpero/items/156968e3512d42fffc5e)  
+公式：[SyntheticEvent](https://reactjs.org/docs/events.html)  
 ただし書き方はon(イベント名)のキャメルケース表記になります。  
 例えば、clickイベントはonClickでイベントハンドリングを行います。  
 
