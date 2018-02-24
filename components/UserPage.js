@@ -3,9 +3,8 @@ import { connect } from 'react-redux'
 import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
+import { Hidden, AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
 import { Email } from 'material-ui-icons'
-import withWidth from 'material-ui/utils/withWidth'
 import { orange } from 'material-ui/colors'
 
 // connectのdecorator
@@ -17,7 +16,6 @@ import { orange } from 'material-ui/colors'
   // propsに付与するactions
   { load }
 )
-@withWidth()
 @withTheme()
 @withStyles({
   root: {
@@ -36,7 +34,7 @@ export default class UserPage extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // user取得APIコールのactionをキックする
     this.props.load()
   }
@@ -57,7 +55,7 @@ export default class UserPage extends React.Component {
   }
 
   render () {
-    const { users, theme, classes, width } = this.props
+    const { users, theme, classes } = this.props
     const { primary, secondary } = theme.palette
 
     // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
@@ -66,7 +64,12 @@ export default class UserPage extends React.Component {
       <div>
         <AppBar position="static" color="primary">
           <Toolbar classes={{root: classes.root}}>
-            ユーザページ({ width === 'xs' ? 'スマホ' : 'PC'})
+            <Hidden xsDown>
+              ユーザページ(PC)
+            </Hidden>
+            <Hidden smUp>
+              ユーザページ(スマホ)
+            </Hidden>
             <Button style={{color: '#fff', position: 'absolute', top: 15, right: 0}} onClick={() => this.handlePageMove('/todo')}>TODOページへ</Button>
           </Toolbar>
         </AppBar>

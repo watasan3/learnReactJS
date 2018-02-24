@@ -14,11 +14,19 @@ module.exports = {
   ],
   // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
-    contentBase: path.join(__dirname, '/static'), // index.htmlの格納場所
-    historyApiFallback: true, // history APIが404エラーを返す場合にindex.htmlに飛ばす
+    contentBase: path.join(__dirname, '/static'), // template.htmlの格納場所
+    historyApiFallback: true, // history APIが404エラーを返す場合にtemplate.htmlに飛ばす
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
     port: 8080, // 起動ポート,
+    publicPath: '/',
+    proxy: {
+      '**': {
+        target: 'http://0.0.0.0:8000',
+        secure: false,
+        logLevel: 'debug',
+      },
+    },
   },
   output: {
     publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
@@ -26,8 +34,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'index.html', // 出力ファイル名
-      template: 'static/index.html', // template対象のindex.htmlのパス
+      filename: 'template.html', // 出力ファイル名
+      template: 'static/template.html', // template対象のitemplate.htmlのパス
     }),
     new webpack.HotModuleReplacementPlugin(), // HMR(Hot Module Reload)プラグイン利用
     // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける

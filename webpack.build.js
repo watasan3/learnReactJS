@@ -2,6 +2,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const webpackConfig = require('./webpack.config.js')
+const webpackServer = require('./webpack.server.js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -60,21 +61,36 @@ function createConfig() {
     }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'static/index.html',
+      filename: 'template.html', // renameしておく
+      template: 'static/template.html',
     }),
   ]
 
   // staticフォルダのリソースをコピーする（CSS、画像ファイルなど）
   config.plugins.push(
-    new CopyWebpackPlugin([{ from: 'static', ignore: 'index.html' }]),
+    new CopyWebpackPlugin([{ from: 'static', ignore: 'template.html' }]),
   )
 
   return config
 }
 
+// SSR用webpackビルド設定追加
+function createServerConfig() {
+  const config = Object.assign({}, webpackServer)
+  config.plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+  ]
+  return config
+}
+
 const configs = [
   createConfig(),
+  createServerConfig(),
 ]
+
 
 module.exports = configs

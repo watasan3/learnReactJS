@@ -30,12 +30,10 @@ export default class App extends React.Component {
 }
 
 const AppRoute = () => (
-  <div>
-    <Switch>
-      <Route exact path="/" component={UserPage} />
-      <Route path="/todo" component={TodoPage} />
-      {/* それ以外のパス */}
-      <Route component={NotFound} />
-    </Switch>
-  </div>
+  <Switch>
+    <Route exact path="/" component={UserPage} />
+    <Route path="/todo" component={TodoPage} />
+    {/* それ以外のパス */}
+    <Route component={NotFound} />
+  </Switch>
 )
