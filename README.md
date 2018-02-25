@@ -300,14 +300,14 @@ async function testAwait() {
   ])
   console.log(rets)
 
-  // 非同期処理を順次実行待ち
-  const asyncFuncPromises = [asyncFuncPromise, asyncFuncPromise, asyncFuncPromise]
-  const ret = await ['g', 'h', 'k'].reduce((promise, param, idx) => {
-    return promise.then(async (prev) => {
-      return await asyncFuncPromises[idx](param + ' ' + prev)
-    })
-  }, Promise.resolve(''))
-  console.log(ret)
+  // 非同期処理を順次実行待ち(結果を受け取って次の非同期を呼び出す)
+  const rets2 = await [{func: asyncFuncPromise, param: 'g'}, {func: asyncFuncPromise, param: 'h'}]
+    .reduce((promise, current) => {
+      return promise.then(async (prev) => {
+        return await current.func(current.param + ' ' + prev)
+      })
+    }, Promise.resolve(''))
+  console.log(rets2)
 }
 testAwait()
 ```

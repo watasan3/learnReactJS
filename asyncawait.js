@@ -51,14 +51,13 @@ async function testAwait() {
   ])
   console.log(rets1)
 
-  // 非同期処理を順次実行ls待ち
-  const rets2 = await [{func: asyncFuncPromise, param: 'g'},{func: asyncFuncPromise, param: 'h'}]
+  // 非同期処理を順次実行待ち
+  const rets2 = await [{func: asyncFuncPromise, param: 'g'}, {func: asyncFuncPromise, param: 'h'}]
     .reduce((promise, current) => {
       return promise.then(async (prev) => {
         return await current.func(current.param + ' ' + prev)
       })
     }, Promise.resolve(''))
-  const asyncFuncPromises = [asyncFuncPromise, asyncFuncPromise, asyncFuncPromise]
   console.log(rets2)
 }
 testAwait()
