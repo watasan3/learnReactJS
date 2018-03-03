@@ -174,10 +174,11 @@ defaultPropsを使うことで属性値がない場合のデフォルトの属�
 ```
 
 入れ子にした要素はprops.childrenとしてDOM子要素が渡ります。  
+下の例だとNumberPlate内部のiタグを含んだ子要素が入ります。  
 
 ```
   {/* 呼び出し側 */}
-  <NumberPlate>{this.state.num}</NumberPlate>
+  <NumberPlate><i>{this.state.num}</i></NumberPlate>
   {/* 呼び出され側(NumberPlateのprops.childrenにNumberPlateのDOM子要素が渡る) */}
   <span>{props.children}</span>
 ```
