@@ -5,6 +5,9 @@
   "repository": "https://github.com/teradonburi/learnReactJS.git",
   "author": "teradonburi <daikiterai@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "webpack": "webpack"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
