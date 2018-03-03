@@ -19,6 +19,9 @@ package.jsonは次のようになります。
   "repository": "https://github.com/teradonburi/learnReactJS.git",
   "author": "teradonburi <daikiterai@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "webpack": "webpack"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -39,7 +42,7 @@ index.htmlを次のようにbundle.jsのみ読み込むように書き換えて�
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
 </head>
 <body>
   <div id="root"></div>
@@ -104,16 +107,10 @@ module.exports = {
 }
 ```
 
-webpackをインストールします  
-
-```
-$ yarn global add webpack
-```
-
 次のコマンドでindex.jsに付随するJSファイルをまとめてビルドして一つのbundle.jsとして出力することができます
 
 ```webpack.config.js
-$ webpack
+$ yarn webpack
 Hash: 4abc329581564efc9932
 Version: webpack 3.9.1
 Time: 1408ms
@@ -133,7 +130,7 @@ index.htmlを開くと表示されるはずです。
 下記のコマンドでwebpackの監視モードにするとビルド対象のJSファイルの変更が保存されるとビルドされるようになります。（開発中は楽です。）
 
 ```
-$ webpack --watch
+$ yarn webpack --watch
 ```
 
 ## コンポーネント単位のDOM把握
