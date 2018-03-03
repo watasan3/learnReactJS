@@ -19,6 +19,7 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintでのコードチェック
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
 - [AsyncComponent](https://github.com/teradonburi/learnReactJS/tree/AsyncComponent):遅延レンダリング（Code Spliting）
+- [SSR](https://github.com/teradonburi/learnReactJS/tree/SSR):サーバサイドレンダリング（Server Side Rendering）
 
 次のコマンドでブランチを切り替えて進めていきます。  
 
