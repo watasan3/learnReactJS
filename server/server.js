@@ -32,6 +32,7 @@ if (process.env.NODE_ENV === 'dev') {
 }
 
 app.get('/', (req, res) => {
+  // redux storeに代入する初期パラメータ、各ページの初期ステートと同じ構造にする
   const initialData = {
     user: {
       users: null,

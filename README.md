@@ -1,5 +1,5 @@
 # SSR(サーバサイドレンダリング)について
-今まではクライアントサイドのみでReactを動かしてきました。  
+今まではクライアントサイドのみでReactを動かしてきました。(CSR)  
 今回はサーバ側でReact Componentのビルドを行い。  
 初回のHTML生成をサーバ側で行います。  
 ただし、アプリケーションの複雑性が増すため、以下のケースを除いて安易に導入するべきではありません。  
@@ -12,7 +12,9 @@
 
 * アプリケーションの複雑度が増す
 * サーバ側のDOMとクライアントサイド側のDOMの一致（初期化時）を強いられる
-* 公開ページのルーティングが一致していないといけない（APIアクセス→SSR→CSRでかつ初回以外のルーティングはクライアント側のReact Routerとなるため）
+* 公開ページのルーティングが一致していないといけない（APIアクセス→SSR→CSR(初回以外のルーティングはクライアント側のReact Routerとなるため))
+
+一般にデメリットの方が大きいです。  
 
 # 追加のパッケージをインストール
 
@@ -35,13 +37,14 @@ package.jsonは次のようになります。
   "license": "MIT",
   "scripts": {
     "dev": "run-p dev:*",
-    "dev:server-build": "NODE_ENV=dev node-dev --inspect server/server.js",
-    "dev:server": "webpack --config webpack.server.js --watch",
+    "dev:server-build": "webpack --config webpack.server.js --watch",
+    "dev:server": "NODE_ENV=dev node-dev --inspect server/server.js",
     "dev:client": "webpack-dev-server",
     "lint": "eslint .",
     "rm": "rm -rf dist/*",
     "build-webpack": "NODE_ENV=production parallel-webpack -p --config webpack.build.js",
-    "build": "run-s rm build-webpack"
+    "build": "run-s rm build-webpack",
+    "prod": "NODE_ENV=production node server/server.js"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
@@ -82,12 +85,11 @@ package.jsonは次のようになります。
     "webpack-dev-server": "^2.9.5"
   },
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "jsdom": "^11.6.2"
   }
 }
 ```
-
-
 
 # ESLintの設定追加
 
@@ -100,7 +102,6 @@ package.jsonは次のようになります。
     'node': true, // NodeJS
   },
 ```
-
 
 # webpackの設定追加・修正
 
@@ -170,25 +171,52 @@ module.exports = {
 
 webpack.config.jsのwebpack-dev-serverにproxyの設定を追加します。  
 これにより、webpack-dev-serverにアクセス時でもサーバ経由のシミュレーションができます。（サーバは8000ポートで起動している想定です）  
+index.htmlだとルートパス(/)が正しくルーティングされない問題が発生するのでtemplate.htmlにリネームします。(static/template.html)  
+HtmlWebpackPluginの読み込みhtmlをtemplate.htmlにリネームします。
 
 ```
   devServer: {
+    publicPath: '/',
     proxy: {
-      '/': {
+      '**': {
         target: 'http://0.0.0.0:8000',
         secure: false,
-        changeOrigin: true,
+        logLevel: 'debug',
       },
     },
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'template.html', // 出力ファイル名
+      template: 'static/template.html', // template対象のtemplate.htmlのパス
+    }),
+  ],
 ```
 
 webpack.build.jsにwebpack.server.jsを含めるようにします。  
 リリースビルド時にssr.build.jsも生成するようにします。  
+HtmlWebpackPlugin、CopyWebpackPluginもindex.htmlからtemplate.htmlに修正します。  
 
 ```
 const webpackServer = require('./webpack.server.js')
- 
+
+function createConfig() {
+
+  config.plugins = [
+    // HTMLテンプレートに生成したJSを埋め込む
+    new HtmlWebpackPlugin({
+      filename: 'template.html',  // 出力ファイル名
+      template: 'static/template.html', // template対象のtemplate.htmlのパス
+    }),
+  ]
+
+  // staticフォルダのリソースをコピーする（CSS、画像ファイルなど）
+  config.plugins.push(
+    new CopyWebpackPlugin([{ from: 'static', ignore: 'template.html' }]),
+  )
+}
+
+
 // SSR用webpackビルド設定追加
 function createServerConfig() {
   const config = Object.assign({}, webpackServer)
@@ -206,4 +234,363 @@ const configs = [
   createConfig(),
   createServerConfig(),
 ]
+
+module.exports = configs
 ```
+
+# クライアント側の修正
+
+Material-UIのテーマはSSRでも使うため、theme.jsに分離します。  
+
+```
+import { createMuiTheme } from 'material-ui/styles'
+
+// Material-UIテーマを作成
+export default createMuiTheme({
+  // カラーパレット
+  palette: {
+    type: 'light',
+    // メインカラー
+    primary: {
+      50: '#e3f2fd',
+      100: '#bbdefb',
+      200: '#90caf9',
+      300: '#64b5f6',
+      400: '#42a5f5',
+      500: '#2196f3',
+      600: '#1e88e5',
+      700: '#1976d2',
+      800: '#1565c0',
+      900: '#0d47a1',
+      A100: '#82b1ff',
+      A200: '#448aff',
+      A400: '#2979ff',
+      A700: '#2962ff',
+      contrastDefaultColor: 'light', // 対象色のデフォルト色をlightテーマにする
+    },
+    // アクセントカラー
+    secondary: {
+      50: '#fce4ec',
+      100: '#f8bbd0',
+      200: '#f48fb1',
+      300: '#f06292',
+      400: '#ec407a',
+      500: '#e91e63',
+      600: '#d81b60',
+      700: '#c2185b',
+      800: '#ad1457',
+      900: '#880e4f',
+      A100: '#ff80ab',
+      A200: '#ff4081',
+      A400: '#f50057',
+      A700: '#c51162',
+      contrastDefaultColor: 'light', // 対象色のデフォルト色をlightテーマにする
+    },
+  },
+  // レスポンシブレイアウト用の指定
+  'breakpoints': {
+    'keys': [
+      'xs',
+      'sm',
+      'md',
+      'lg',
+      'xl',
+    ],
+    'values': {
+      'xs': 360, // スマホ用
+      'sm': 768, // タブレット用
+      'md': 992, // PC用
+      'lg': 1000000000,
+      'xl': 1000000000,
+    },
+  },
+  // Material-UIコンポーネントのclassのstyleを上書きする
+  overrides: {
+    MuiButton: {
+      root: {
+        // ボタン内アルファベット文字を大文字変換しない
+        textTransform: 'none',
+      },
+    },
+  },
+})
+```
+
+index.jsを修正します。  
+レンダリングにはReact.renderではなくReact.hydrateを使用します。  
+React.hydrateはCSRとSSRで生成されたDOMとが一致する必要があります。  
+initial-dataはSSR側からのRedux Storeの初期状態を取得し、  
+CSRのレンダリング時にRedux Storeを引き継ぎするためのものです。  
+createStore生成時にinitialDataとして付与しています。  
+SSR側でのパラメータの渡し方は後述します。  
+
+```
+import theme from './theme'
+
+const render = Component => {
+  const initialData = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'))
+
+  // ブラウザ履歴保存用のストレージを作成
+  const history = createHistory()
+  // axiosをthunkの追加引数に加える
+  const thunkWithClient = thunk.withExtraArgument(client)
+  // redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
+  const store = createStore(reducer, initialData, composeEnhancers(applyMiddleware(routerMiddleware(history), thunkWithClient)))
+
+  ReactDOM.hydrate(
+    <AppContainer>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <Component history={history} />
+        </Provider>
+      </MuiThemeProvider>
+    </AppContainer>,
+    document.getElementById('root'),
+  )
+}
+
+```
+
+template.htmlです。  
+Redux Store初期パラメータ渡し用のscriptタグを追加してあります。  
+data-jsonパラメータ経由で取得します。  
+
+```
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>learnReactJS</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script id="initial-data" type="text/plain" data-json="{}"></script>
+</body>
+</html>
+```
+
+App.jsです。  
+SSRでは、withWidthが使えないので代わりに[Hiddenコンポーネント](https://material-ui-next.com/layout/hidden/)を使っています。  
+また、SSRでもcomponentWillMountは呼ばれてしまうので  
+APIコールはcomponentWillMountではなく、componentDidMountで行うようにします。  
+サーバ側から経由する際の初期化パラメータはinitialDataとしてRedux Storeから取得します。（@connectのパラメータ）  
+
+```
+import { Hidden } from 'material-ui'
+
+// connectのdecorator
+@connect(
+  // propsに受け取るreducerのstate
+  state => ({
+    users: state.user.users,
+  }),
+  // propsに付与するactions
+  { load }
+)
+@withTheme()
+@withStyles({
+  root: {
+    fontStyle: 'italic',
+    fontSize: 21,
+    minHeight: 64,
+  },
+})
+export default class UserPage extends React.Component {
+
+  componentDidMount() {
+    // user取得APIコールのactionをキックする
+    this.props.load()
+  }
+
+  render () {
+    const { users, theme, classes } = this.props
+    const { primary, secondary } = theme.palette
+
+    // 初回はnullが返ってくる（initialState）、処理完了後に再度結果が返ってくる
+    // console.log(users)
+    return (
+      <div>
+        <AppBar position="static" color="primary">
+          <Toolbar classes={{root: classes.root}}>
+            <Hidden xsDown>
+              ユーザページ(PC)
+            </Hidden>
+            <Hidden smUp>
+              ユーザページ(スマホ)
+            </Hidden>
+            <Button style={{color: '#fff', position: 'absolute', top: 15, right: 0}} onClick={() => this.handlePageMove('/todo')}>TODOページへ</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    )
+  }
+}
+```
+
+# SSR
+
+server.jsです。  
+expressフレームワークによるサーバ実装をしています。  
+React Componentを含むssr.jsをwebpackビルドしてssr.build.jsを読み込みます。  
+開発時のwebpack-dev-serverで起動時はwebpack-dev-server側のbundle.jsを取得するようにします。（パス取得にJSDOMというライブラリを使用しています）  
+本番時はビルド済みのdistフォルダをホスティングし、bundle.jsのパスをhtmlより取得しています。  
+取得したパスをapp.allにて各ページ表示apiアクセス時にreqパラメータに付与しています。  
+
+```
+
+const express = require('express')
+const app = express()
+
+// webpackでbuild済みのSSRモジュールを読み込む
+const ssr = require('./ssr.build').default
+
+let bundles = []
+if (process.env.NODE_ENV === 'dev') {
+  // webpack-dev-serverのbundle.jsにredirect
+  app.get('/bundle.js', (req, res) => res.redirect('http://localhost:8080/bundle.js'))
+} else if (process.env.NODE_ENV === 'production') {
+  const jsdom = require('jsdom')
+  const { JSDOM } = jsdom
+  // distフォルダをホスティング
+  app.use(express.static('dist'))
+  // distのtemplate.htmlのbundle.jsパスを取得
+  JSDOM.fromFile(__dirname + '/../dist/template.html').then(dom => {
+    const document = dom.window.document
+    const scripts = document.querySelectorAll('script[type="text/javascript"]')
+    for (let i = 0; i < scripts.length; i++) {
+      const s = scripts[i]
+      if (s.src.indexOf('bundle.js') !== -1 || s.src.indexOf('vendor.js') !== -1) {
+        bundles.push(s.src.replace('file:///', '/'))
+      }
+    }
+    console.log(bundles)
+  })
+  app.all('*', (req, res, next) => {
+    req.bundles = bundles
+    next()
+  })
+}
+
+app.get('/', (req, res) => {
+  // redux storeに代入する初期パラメータ、各ページの初期ステートと同じ構造にする
+  const initialData = {
+    user: {
+      users: null,
+    },
+  }
+  ssr(req, res, initialData)
+})
+
+app.get('/todo', (req, res) => {
+  const initialData = {}
+  ssr(req, res, initialData)
+})
+
+
+app.listen(8000, function () {
+  console.log('app listening on port 8000')
+})
+
+// 例外ハンドリング
+process.on('uncaughtException', (err) => console.log('uncaughtException => ' + err))
+process.on('unhandledRejection', (err) => console.log('unhandledRejection => ' + err))
+
+```
+
+ssr.jsです。ReactのComponentをレンダリングし、各ページの初期表示用のhtmlを返却します。  
+SheetsRegistry、JssProvider、MuiThemeProvider、createGenerateClassNameでMaterial-UIのSSRを初期化します。  
+createStoreでRedux Storeを作成します。  
+各ページの初期状態をinitial-dataに埋め込みます。(クライアント側のRedux Storeに渡す)  
+`<script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)}></script>`  
+StaticRouter、Route、Switchで各apiパスでページのルーティングを割当します。(apiパスとReact Routerのルーティングが一致している必要があります)  
+template.htmlとDOM構造が一致した各ページのルーティングに対応したmetaタグ要素を変更したhtmlを返却します。  
+
+```
+import React from 'react'
+// SSR用ライブラリ
+import ReactDOMServer from 'react-dom/server'
+// Redux
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+// Material-UI SSR
+import { SheetsRegistry } from 'react-jss/lib/jss'
+import JssProvider from 'react-jss/lib/JssProvider'
+import { MuiThemeProvider, createGenerateClassName } from 'material-ui/styles'
+// React Router
+import { StaticRouter } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
+// reducer
+import reducer from '../reducer/reducer'
+// material-ui theme
+import theme from '../theme'
+
+// クライアントサイドと同じComponentを使う
+import UserPage from '../components/UserPage'
+import TodoPage from '../components/TodoPage'
+
+
+export default function ssr(req, res, initialData) {
+  console.log('------------------ssr------------------')
+  const context = {}
+  // Material-UIの初期化
+  const sheetsRegistry = new SheetsRegistry()
+  const generateClassName = createGenerateClassName({productionPrefix: 'mm'})
+
+  // Redux Storeの作成(initialDataには各Componentが参照するRedux Storeのstateを代入する)
+  const store = createStore(reducer, initialData, applyMiddleware(thunk))
+
+  const body = () => (
+    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+      <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
+        <Provider store={store}>
+          {/* ここでurlに対応するReact RouterでComponentを取得 */}
+          <StaticRouter location={req.url} context={context}>
+            <Switch>
+              <Route exact path="/" component={UserPage} />
+              <Route path="/todo" component={TodoPage} />
+            </Switch>
+          </StaticRouter>
+        </Provider>
+      </MuiThemeProvider>
+    </JssProvider>
+  )
+
+  // htmlを生成
+  ReactDOMServer.renderToNodeStream(
+    <HTML
+      bundles={req.bundles}
+      style={sheetsRegistry.toString()} // Material-UIのスタイルをstyleタグに埋め込む
+      initialData={initialData}
+    >
+      {body}
+    </HTML>
+  ).pipe(res)
+
+}
+
+const HTML = (props) => {
+  return (
+    <html lang='ja'>
+      <head>
+        {/* ここでmetaタグの切り替えやAMP用のhtml出力の切り替えを行う、今回は具体例は省略 */}
+        <meta charSet="utf-8" />
+        <title>learnReactJS</title>
+        <style>{props.style}</style>
+      </head>
+      <body>
+        <div id='root'>{props.children}</div>
+        <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)}></script>
+        {
+          props.bundles ?
+            props.bundles.map(bundle => <script key={bundle} type='text/javascript' src={bundle}></script>)
+            :
+            <script type='text/javascript' src='/bundle.js'></script>
+        }
+      </body>
+    </html>
+  )
+}
+```
+
+
+

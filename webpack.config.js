@@ -35,7 +35,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'template.html', // 出力ファイル名
-      template: 'static/template.html', // template対象のitemplate.htmlのパス
+      template: 'static/template.html', // template対象のtemplate.htmlのパス
     }),
     new webpack.HotModuleReplacementPlugin(), // HMR(Hot Module Reload)プラグイン利用
     // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける
