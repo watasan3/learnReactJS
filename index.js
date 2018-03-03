@@ -16,8 +16,8 @@ const thunkWithClient = thunk.withExtraArgument(client)
 const store = createStore(reducer, composeEnhancers(applyMiddleware(thunkWithClient)))
 
 ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
 )
