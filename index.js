@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
-import { AppContainer } from 'react-hot-loader'
+import { hot } from 'react-hot-loader'
 import { routerMiddleware } from 'react-router-redux'
 
 import App from './App'
@@ -94,20 +94,16 @@ const theme = createMuiTheme({
 
 const render = Component => {
   ReactDOM.render(
-    <AppContainer>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component history={history} /> 
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <Component history={history} /> 
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'),
   )
 }
 
-render(App)
-
 // Webpack Hot Module Replacement API
-if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
-}
+hot(module)(render)
+
+render(App)
