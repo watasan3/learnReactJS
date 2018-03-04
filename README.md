@@ -3,7 +3,7 @@
 リリースビルド用に下記のパッケージを追加でインストールしてあります。
 
 ```
-$ yarn add --dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-react babel-preset-stage-0 parallel-webpack 
+$ yarn add --dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-stage-0 
 ```
 
 package.jsonは次のようになります。  
@@ -17,10 +17,10 @@ package.jsonは次のようになります。
   "author": "teradonburi <daikiterai@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --mode development",
     "lint": "eslint .",
     "rm": "rm -rf dist/*",
-    "build-webpack": "NODE_ENV=production parallel-webpack -p --config webpack.build.js",
+    "build-webpack": "NODE_ENV=production webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack"
   },
   "devDependencies": {
@@ -28,28 +28,26 @@ package.jsonは次のようになります。
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "copy-webpack-plugin": "^4.2.3",
+    "copy-webpack-plugin": "^4.5.0",
     "eslint": "^4.15.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-react": "^7.5.1",
     "history": "^4.7.2",
-    "html-webpack-plugin": "^2.30.1",
-    "material-ui": "^1.0.0-beta.27",
+    "html-webpack-plugin": "^3.0.4",
+    "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "npm-run-all": "^4.1.2",
-    "parallel-webpack": "^2.2.0",
     "precss": "^2.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^3.1.3",
+    "react-hot-loader": "^4.0.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
@@ -57,8 +55,9 @@ package.jsonは次のようになります。
     "redux-devtools": "^3.4.1",
     "redux-form": "^7.2.0",
     "redux-thunk": "^2.2.0",
-    "webpack": "^3.9.1",
-    "webpack-dev-server": "^2.9.5"
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
   }
 }
 ```
@@ -67,10 +66,9 @@ webpack.config.jsです。
 HtmlWebpackPluginとautoprefixerのプラグインを追加しました。  
 HtmlWebpackPluginはindex.htmlのbundle.js埋め込みを動的に行ってくれます。  
 autoprefixerはcss3のベンダープレフィックスをBabelビルド時に付与してくれます。  
-presetsにenvオプションを追加しました。  
-対象ブラウザは最新から２つ前までにビルド最適化します。  
 
 ```webpack.config.js
+/*globals module: false require: false __dirname: false */
 const webpack = require('webpack')
 const precss = require('precss')
 const autoprefixer = require('autoprefixer')
@@ -78,9 +76,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル追加 
+  mode: 'development', // 開発モード
+  devtool: 'cheap-module-source-map', // ソースマップファイル出力
   entry: [
-    'babel-polyfill',
+    'babel-polyfill', // babelのpolyfill設定
     'react-hot-loader/patch',
     path.join(__dirname, '/index'), // エントリポイントのjsxファイル
   ],
@@ -93,8 +92,8 @@ module.exports = {
     port: 8080, // 起動ポート,
   },
   output: {
-    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
-    filename: 'bundle.js'
+    publicPath: '/', // 公開パスの指定
+    filename: 'bundle.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -102,10 +101,10 @@ module.exports = {
       template: 'static/index.html', // template対象のindex.htmlのパス
     }),
     new webpack.HotModuleReplacementPlugin(), // HMR(Hot Module Reload)プラグイン利用
-    // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける 
+    // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける
     new webpack.LoaderOptionsPlugin({options: {
-      postcss: [precss, autoprefixer({browsers: ['last 2 versions']})]
-    }})
+      postcss: [precss, autoprefixer({browsers: ['last 2 versions']})],
+    }}),
   ],
   module: {
     rules: [{
@@ -115,30 +114,11 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          // babel build presets
-          presets: [
-            [
-              'env', {
-                targets: {
-                  browsers: ['last 2 versions', '> 1%'] // ビルド最適化のブラウザターゲット
-                },
-                modules: false,
-                useBuiltIns: true,  // ビルトイン有効
-              }
-            ],
-            'stage-0', // stage-0のプラグイン
-            'react', // reactのプラグインまとめ
-          ],
-          // babel トランスパイルプラグイン
-          plugins: [
-            'transform-class-properties', // classのプロパティ用
-            'babel-plugin-transform-decorators-legacy', // decorator用
-            'react-hot-loader/babel' // react-hot-loader用
-          ] 
-        }
-      }
-    }]
-  }
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
+    }],
+  },
 }
 ```
 
@@ -154,9 +134,32 @@ index.htmlからはbundle.jsの埋め込みを削除します。
 </head>
 <body>
   <div id="root"></div>
-  <!-- <script src='bundle.js'></script>-->
+  <!-- <script src='./dist/bundle.js'></script>-->
 </body>
 </html>
+```
+
+.babelrcの設定です。  
+stage-0文法をサポートするプラグインを追加しています。  
+targetsで最新ブラウザの2個前までに最適化しています。  
+modulesは特定のES6文法に最適化しません。  
+useBuiltInsはpolyfillを有効化します。  
+
+```
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions", "> 1%"]
+      },
+      "modules": false,
+      "useBuiltIns": true
+    }],
+    "react",
+    "stage-0"
+  ],
+  "plugins": ["transform-class-properties", "transform-decorators-legacy"]
+}
 ```
 
 webpack.build.jsです。  
@@ -164,20 +167,21 @@ webpack.build.jsです。
 プラグインでソースコードの圧縮、環境変数の埋め込みを行います。  
 
 ```webpack.build.js
+/*globals module: false require: false __dirname: false process: false */
 const webpack = require('webpack')
 const path = require('path')
 const webpackConfig = require('./webpack.config.js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-// Gitのリビジョン取得（リビジョン別に生成されるjsファイルは別名）
 const revision = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
-
 function createConfig() {
-  
+
   const config = Object.assign({}, webpackConfig)
 
+  // ソースマップファイルをファイル出力
+  config.mode = 'production'
   // ソースマップファイルをファイル出力
   config.devtool = 'source-map'
   // React Hot loaderは外す
@@ -185,7 +189,7 @@ function createConfig() {
     'bundle': [
       'babel-polyfill',
       path.join(__dirname, '/index'), // エントリポイントのjsxファイル
-    ]
+    ],
   }
   // 出力ファイル
   config.output = {
@@ -195,18 +199,24 @@ function createConfig() {
     publicPath: '/',
   }
 
+  config.optimization = {
+    splitChunks: {
+      cacheGroups: {
+        react: {
+          test: /react/,
+          name: 'react',
+          chunks: 'all',
+        },
+        core: {
+          test: /redux|core-js|jss|history|matarial-ui|lodash|moment|rollbar|radium|prefixer|\.io|platform|axios/,
+          name: 'core',
+          chunks: 'all',
+        },
+      },
+    },
+  }
+
   config.plugins = [
-    // Scope Hoisting
-    // スコープの巻き上げによる呼び出し回数の削減と圧縮
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    // 共通モジュールをまとめる
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'js-[hash:8]/vendor.js',
-      minChunks: (module) => {
-        return module.context && module.context.indexOf('node_modules') !== -1
-      }
-    }),
     // 環境変数をエクスポート
     new webpack.DefinePlugin({
       'process.env': {
@@ -214,20 +224,10 @@ function createConfig() {
         'GIT_REVISION': JSON.stringify(revision),
       },
     }),
-    // JSミニファイ
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      minimize: true,
-      compress: {
-        drop_debugger: true,
-        drop_console: true,
-        warnings: false
-      }
-    }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: `static/index.html`,
+      template: 'static/index.html',
     }),
   ]
 
@@ -240,7 +240,7 @@ function createConfig() {
 }
 
 const configs = [
-  createConfig()
+  createConfig(),
 ]
 
 module.exports = configs
