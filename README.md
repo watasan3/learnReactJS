@@ -68,7 +68,7 @@ myclass.test1()
 myclass.test2('a','b')
 ```
 
-今回はCLIからトランスパイルするので.babelrcを作成します。
+今回はBabel CLIからトランスパイルするので次の.babelrcを作成します。
 
 ```.babelrc
 {
