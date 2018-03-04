@@ -4,7 +4,6 @@ const webpack = require('webpack')
 module.exports = {
   mode: 'development', // 開発モード
   devtool: 'cheap-module-source-map', // ソースマップファイル追加 
-  name: 'bundle',
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
