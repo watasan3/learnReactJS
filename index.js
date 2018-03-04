@@ -92,11 +92,11 @@ const theme = createMuiTheme({
   },
 })
 
-const render = Component => {
+const render = () => {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-        <Component history={history} /> 
+        <App history={history} /> 
       </Provider>
     </MuiThemeProvider>,
     document.getElementById('root'),
@@ -106,4 +106,4 @@ const render = Component => {
 // Webpack Hot Module Replacement API
 hot(module)(render)
 
-render(App)
+render()
