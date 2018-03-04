@@ -10,25 +10,12 @@ webpackにdecoratorsプラグインを追加します。
 $ yarn add --dev babel-plugin-transform-decorators-legacy
 ```
 
-webpack.config.jsのpluginsにtransform-decorators-legacyプラグインを追加します。  
+.babelrcのpluginsにtransform-decorators-legacyプラグインを追加します。  
 
 ```
-module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル追加 
-  entry: './index.js', // エントリポイントのjsxファイル
-  output: {
-    filename: 'bundle.js' // 出力するファイル
-  },
-  module: {
-    loaders: [{
-      test: /\.js?$/, // 拡張子がjsで
-      exclude: /node_modules/, // node_modulesフォルダ配下は除外
-      loader: 'babel-loader', // babel-loaderを使って変換する
-      query: {
-        plugins: ['transform-react-jsx', 'transform-class-properties', 'transform-decorators-legacy'] 
-      }
-    }]
-  }
+{
+  "presets": ["env", "react"],
+  "plugins": ["transform-class-properties", "transform-decorators-legacy"]
 }
 ```
 
