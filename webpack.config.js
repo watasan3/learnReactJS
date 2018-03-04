@@ -1,7 +1,10 @@
+const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル追加 
+  mode: 'development', // 開発モード
+  devtool: 'cheap-module-source-map', // ソースマップファイル追加 
+  name: 'bundle',
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
@@ -15,8 +18,8 @@ module.exports = {
     port: 8080, // 起動ポート
   },
   output: {
-    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
-    filename: 'bundle.js'
+    publicPath: '/dist', // distフォルダ以下を公開パスに指定
+    filename: 'bundle.js',
   },
   plugins: [
     new webpack.NamedModulesPlugin(), // 名前変更無効プラグイン利用
@@ -30,9 +33,12 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: ['transform-react-jsx','transform-class-properties','babel-plugin-transform-decorators-legacy','react-hot-loader/babel'] 
-        }
-      }
+          // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
+          // 変更時のリビルドが速くなります
+          cacheDirectory: true,
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
     }]
   }
 }

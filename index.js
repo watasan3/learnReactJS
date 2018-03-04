@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
-import { AppContainer } from 'react-hot-loader'
+import { hot } from 'react-hot-loader'
 
 import App from './App'
 import reducer from './reducer'
@@ -88,23 +88,20 @@ const theme = createMuiTheme({
   },
 })
 
-const render = Component => {
+const render = () => {
   ReactDOM.render(
-    <AppContainer warnings={false}>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'),
   )
 }
 
-render(App)
 
 // webpack-dev-server起動時はWebpack Hot Module Replacement APIでWrapする
-if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
-}
+hot(module)(render)
+
+render()
 

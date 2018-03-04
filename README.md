@@ -14,18 +14,21 @@ package.jsonにwebpack-dev-server起動用のスクリプトを追加します�
 ```
 {
   "scripts": {
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server --mode development"
   },
 }
 ```
 
-webpack.config.jsにreact-hot-loaderの設定を追加します。  
+webpack.config.jsにwebpack-dev-serverとreact-hot-loaderの設定を追加します。  
 
 ```webpack.config.js
+const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル追加 
+  mode: 'development', // 開発モード
+  devtool: 'cheap-module-source-map', // ソースマップファイル追加 
+  name: 'bundle',
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
@@ -39,8 +42,8 @@ module.exports = {
     port: 8080, // 起動ポート
   },
   output: {
-    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
-    filename: 'bundle.js'
+    publicPath: '/dist', // distフォルダ以下を公開パスに指定
+    filename: 'bundle.js',
   },
   plugins: [
     new webpack.NamedModulesPlugin(), // 名前変更無効プラグイン利用
@@ -54,43 +57,50 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: ['transform-react-jsx','transform-class-properties','babel-plugin-transform-decorators-legacy','react-hot-loader/babel'] 
-        }
-      }
+          // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
+          // 変更時のリビルドが速くなります
+          cacheDirectory: true,
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
     }]
   }
 }
 ```
 
+.babelrcにreact-hot-loaderのプラグインを追加します。  
+
+```
+{
+  "presets": ["env", "react"],
+  "plugins": ["transform-class-properties", "transform-decorators-legacy", "react-hot-loader/babel"]
+}
+```
+
 index.jsにReact Hot Loaderの設定を追加します。  
-AppContainerコンポーネントで全体を囲います。  
-webpack-dev-serverで起動時はmodule.hotで自動リロードの設定をAppに適応します。  
+hotモジュールで全体を囲います。  
 
 ```index.js
-import { AppContainer } from 'react-hot-loader' // 追加
+import { hot } from 'react-hot-loader'
 
-...(略)
+(中略)
 
-// renderでWrapする
-const render = Component => {
+const render = () => {
   ReactDOM.render(
-    <AppContainer warnings={false}>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'),
   )
 }
 
-render(App)
 
 // webpack-dev-server起動時はWebpack Hot Module Replacement APIでWrapする
-if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
-}
+hot(module)(render)
+
+render()
 ```
 
 次のコマンドでwebpack-dev-serverが8080ポートで起動できます。
