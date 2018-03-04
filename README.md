@@ -6,30 +6,31 @@ webpackを使うことで複数のリソースファイルを１つにまとめ�
 webpackでビルドするためにパッケージを追加します。  
 
 ```
-$ yarn add --dev webpack babel-core babel-loader babel-plugin-transform-react-jsx babel-preset-react react react-dom
+$ yarn add --dev webpack webpack-cli babel-core babel-loader babel-preset-env babel-preset-react react react-dom
 ```
 
 package.jsonは次のようになります。
 
 ```package.json
 {
-  "name": "learnReactJS",
+  "name": "learnreactjs",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/teradonburi/learnReactJS.git",
   "author": "teradonburi <daikiterai@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "webpack": "webpack"
+    "webpack": "webpack --mode development"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "webpack": "^3.9.1"
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10"
   }
 }
 ```
@@ -46,7 +47,7 @@ index.htmlを次のようにbundle.jsのみ読み込むように書き換えて�
 </head>
 <body>
   <div id="root"></div>
-  <script type='text/javascript' src="bundle.js" ></script>
+  <script type='text/javascript' src="./dist/bundle.js" ></script>
 </body>
 </html>
 ```
@@ -61,9 +62,9 @@ import React from 'react'
 
 export default class App extends React.Component {
 
-    render () {
-        return <h1>Hello, world!</h1>
-    }
+  render () {
+    return <h1>Hello, world!</h1>
+  }
 
 }
 ```
@@ -80,8 +81,8 @@ import ReactDOM from 'react-dom'
 import App from './App'
 
 ReactDOM.render(
-    <App />,
-    document.getElementById('root')
+  <App />,
+  document.getElementById('root')
 )
 ```
 
@@ -89,21 +90,30 @@ webpack.config.jsにてbundle.jsを生成する設定を書きます。
 
 ```webpack.config.js
 module.exports = {
+  mode: 'development', // 開発モード
   devtool: 'inline-source-map', // ソースマップファイル追加 
   entry: './index.js', // エントリポイントのjsxファイル
   output: {
     filename: 'bundle.js' // 出力するファイル
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js?$/, // 拡張子がjsで
       exclude: /node_modules/, // node_modulesフォルダ配下は除外
-      loader: 'babel-loader', // babel-loaderを使って変換する
-      query: {
-        plugins: ['transform-react-jsx'] // babelのtransform-react-jsxプラグインを使ってjsxを変換
+      use: {
+        loader: "babel-loader" // babel-loaderを使って変換する
       }
     }]
   }
+}
+```
+
+babelの変換プラグインpresetを追加するため、.babelrcを作成します。  
+env presetでES2015向けに変換、react presetでReactのJSX文法を変換します。  
+
+```
+{
+  "presets": ["env", "react"]
 }
 ```
 
