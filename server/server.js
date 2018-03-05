@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'dev') {
     const scripts = document.querySelectorAll('script[type="text/javascript"]')
     for (let i = 0; i < scripts.length; i++) {
       const s = scripts[i]
-      if (s.src.indexOf('bundle.js') !== -1 || s.src.indexOf('vendor.js') !== -1) {
+      if (s.src.indexOf('bundle.js') !== -1 || s.src.indexOf('core.js') !== -1 || s.src.indexOf('react.js') !== -1) {
         bundles.push(s.src.replace('file:///', '/'))
       }
     }

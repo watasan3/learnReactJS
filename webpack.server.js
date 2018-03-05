@@ -2,6 +2,7 @@
 const path = require('path')
 
 module.exports = {
+  mode: 'development', // 開発モード
   devtool: 'inline-source-map', // ソースマップファイル出力
   watch: true,  // 修正時に再ビルドする
   target: 'node', // NodeJS用ビルド

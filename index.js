@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import { MuiThemeProvider } from 'material-ui/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
-import { AppContainer } from 'react-hot-loader'
+import { hot } from 'react-hot-loader'
 import { routerMiddleware } from 'react-router-redux'
 
 import reducer from './reducer/reducer'
@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-const render = Component => {
+const render = () => {
   const initialData = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'))
 
   // ブラウザ履歴保存用のストレージを作成
@@ -34,22 +34,16 @@ const render = Component => {
   const store = createStore(reducer, initialData, composeEnhancers(applyMiddleware(routerMiddleware(history), thunkWithClient)))
 
   ReactDOM.hydrate(
-    <AppContainer>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component history={history} />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App history={history} />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'),
   )
 }
 
-render(App)
-
 // Webpack Hot Module Replacement API
-if (module.hot) {
-  module.hot.accept('./App', () => {
-    render(App)
-  })
-}
+hot(module)(render)
+
+render()
