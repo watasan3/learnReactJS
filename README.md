@@ -38,10 +38,10 @@ package.jsonは次のようになります。
     "dev": "run-p dev:*",
     "dev:server-build": "webpack --config webpack.server.js --watch",
     "dev:server": "NODE_ENV=dev node-dev --inspect server/server.js",
-    "dev:client": "webpack-dev-server",
+    "dev:client": "webpack-dev-server --mode development",
     "lint": "eslint .",
     "rm": "rm -rf dist/*",
-    "build-webpack": "NODE_ENV=production parallel-webpack -p --config webpack.build.js",
+    "build-webpack": "NODE_ENV=production webpack -p --config webpack.build.js",
     "build": "run-s rm build-webpack",
     "prod": "NODE_ENV=production node server/server.js"
   },
@@ -50,29 +50,27 @@ package.jsonは次のようになります。
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.3",
     "babel-plugin-direct-import": "^0.5.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "copy-webpack-plugin": "^4.2.3",
+    "copy-webpack-plugin": "^4.5.0",
     "eslint": "^4.15.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-react": "^7.5.1",
     "history": "^4.7.2",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.0.4",
     "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "npm-run-all": "^4.1.2",
-    "parallel-webpack": "^2.2.0",
     "precss": "^2.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^3.1.3",
+    "react-hot-loader": "^4.0.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
@@ -80,8 +78,9 @@ package.jsonは次のようになります。
     "redux-devtools": "^3.4.1",
     "redux-form": "^7.2.0",
     "redux-thunk": "^2.2.0",
-    "webpack": "^3.9.1",
-    "webpack-dev-server": "^2.9.5"
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
   },
   "dependencies": {
     "express": "^4.16.2",
@@ -115,6 +114,7 @@ targetにnodeを指定、libraryTargetにCommonJS形式を指定するように�
 const path = require('path')
 
 module.exports = {
+  mode: 'development', // 開発モード
   devtool: 'inline-source-map', // ソースマップファイル出力
   watch: true,  // 修正時に再ビルドする
   target: 'node', // NodeJS用ビルド
@@ -367,7 +367,7 @@ data-jsonパラメータ経由で取得します。
 </html>
 ```
 
-App.jsです。  
+UserPage.jsです。  
 SSRでは、withWidthが使えないので代わりに[Hiddenコンポーネント](https://material-ui-next.com/layout/hidden/)を使っています。  
 また、SSRでもcomponentWillMountは呼ばれてしまうので  
 APIコールはcomponentWillMountではなく、componentDidMountで行うようにします。  
@@ -430,12 +430,11 @@ export default class UserPage extends React.Component {
 server.jsです。  
 expressフレームワークによるサーバ実装をしています。  
 React Componentを含むssr.jsをwebpackビルドしてssr.build.jsを読み込みます。  
-開発時のwebpack-dev-serverで起動時はwebpack-dev-server側のbundle.jsを取得するようにします。（パス取得にJSDOMというライブラリを使用しています）  
-本番時はビルド済みのdistフォルダをホスティングし、bundle.jsのパスをhtmlより取得しています。  
+開発時のwebpack-dev-serverで起動時はwebpack-dev-server側のbundle.jsを取得するようにします。本番時はビルド済みのdistフォルダをホスティングし、bundle.jsのパスをhtmlより取得しています。  
+（パス取得にJSDOMというライブラリを使用しています）  
 取得したパスをapp.allにて各ページ表示apiアクセス時にreqパラメータに付与しています。  
 
 ```
-
 const express = require('express')
 const app = express()
 
@@ -457,7 +456,7 @@ if (process.env.NODE_ENV === 'dev') {
     const scripts = document.querySelectorAll('script[type="text/javascript"]')
     for (let i = 0; i < scripts.length; i++) {
       const s = scripts[i]
-      if (s.src.indexOf('bundle.js') !== -1 || s.src.indexOf('vendor.js') !== -1) {
+      if (s.src.indexOf('bundle.js') !== -1 || s.src.indexOf('core.js') !== -1 || s.src.indexOf('react.js') !== -1) {
         bundles.push(s.src.replace('file:///', '/'))
       }
     }
