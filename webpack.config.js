@@ -6,9 +6,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'inline-source-map', // ソースマップファイル出力
+  mode: 'development', // 開発モード
+  devtool: 'cheap-module-source-map', // ソースマップファイル出力
   entry: [
-    'babel-polyfill',
+    'babel-polyfill', // babelのpolyfill設定
     'react-hot-loader/patch',
     path.join(__dirname, '/index'), // エントリポイントのjsxファイル
   ],
@@ -21,7 +22,7 @@ module.exports = {
     port: 8080, // 起動ポート,
   },
   output: {
-    publicPath: '/', // デフォルトルートにしないとHMRは有効にならない
+    publicPath: '/', // 公開パスの指定
     filename: 'bundle.js',
   },
   plugins: [
@@ -43,29 +44,9 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          // babel build presets
-          presets: [
-            [
-              'env', {
-                targets: {
-                  browsers: ['last 2 versions', '> 1%'], // ビルド最適化のブラウザターゲット
-                },
-                modules: false,
-                useBuiltIns: true,  // ビルトイン有効
-              },
-            ],
-            'stage-0', // stage-0のプラグイン
-            'react', // reactのプラグインまとめ
-          ],
-          // babel トランスパイルプラグイン
-          plugins: [
-            'transform-class-properties', // classのプロパティ用
-            'babel-plugin-transform-decorators-legacy', // decorator用
-            'react-hot-loader/babel', // react-hot-loader用
-          ],
+          plugins: ['react-hot-loader/babel'],
         },
       },
     }],
   },
 }
-
