@@ -67,8 +67,11 @@ $ npm install
 もしくは後発の[Yarn](https://yarnpkg.com/lang/en/)というパッケージ管理ツールでもインストールできます。
 
 ```
+# homebrew インストール
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
 # yarn インストール
-$ npm install -g yarn
+$ brew install yarn --without-node
 
 # npm initと等価
 $ yarn init
