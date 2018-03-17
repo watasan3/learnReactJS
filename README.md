@@ -89,6 +89,16 @@ package.jsonは次のようになります。
 }
 ```
 
+
+```
+# 開発版実行
+$ yarn dev:server-build
+$ yarn dev
+# リリース版実行
+$ yarn build
+$ yarn prod
+```
+
 # ESLintの設定追加
 
 .eslintrcにNodeJS用のlint設定を追加します。
