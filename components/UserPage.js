@@ -1,11 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import { load } from '../reducer/user'
 
 import { withTheme, withStyles } from 'material-ui/styles'
 import { Hidden, AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
 import { Email } from 'material-ui-icons'
 import { orange } from 'material-ui/colors'
+
+const StyledButton = styled(Button)`
+  && {
+    background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+    border-radius: 3px;
+    border: 0;
+    color: white;
+    height: 48px;
+    padding: 0 30px;
+    box-shadow: 0 3px 5px 2px rgba(255, 105, 135, .30);
+  }
+`
 
 // connectのdecorator
 @connect(
@@ -83,7 +96,7 @@ export default class UserPage extends React.Component {
                 <p style={{margin: 10, color: primary[500]}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
                 <p style={{margin: 10, color: secondary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                 <div style={{textAlign: 'right'}} >
-                  <Button variant='raised' color='secondary' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</Button>
+                  <StyledButton onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</StyledButton>
                 </div>
               </CardContent>
             </Card>

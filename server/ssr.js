@@ -32,6 +32,7 @@ export default function ssr(req, res, initialData) {
   // Redux Storeの作成(initialDataには各Componentが参照するRedux Storeのstateを代入する)
   const store = createStore(reducer, initialData, applyMiddleware(thunk))
 
+
   const body = () => (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
