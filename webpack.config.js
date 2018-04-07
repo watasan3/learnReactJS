@@ -52,7 +52,21 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: ['react-hot-loader/babel'],
+          presets: [
+            [
+              'env',
+              {
+                targets: {
+                  browsers: ['last 2 versions', '> 1%']
+                },
+                modules: false,
+                useBuiltIns: true
+              }
+            ],
+            'react',
+            'stage-0',
+          ],
+          plugins: ['react-hot-loader/babel', 'transform-class-properties', 'transform-decorators-legacy'],
         },
       },
     }],
