@@ -148,7 +148,7 @@ import { load } from './user'
 )
 export default class App extends React.Component {
 
-  componentWillMount() {
+  componentDidMount() {
     // user取得APIコールのactionをキックする
     this.props.load()
   }
