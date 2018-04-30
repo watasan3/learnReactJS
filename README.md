@@ -17,7 +17,7 @@ export default (loader, collection) => (
       this.state = { Component: AsyncComponent.Component }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       // 遅延して読み込み完了させる
       setTimeout(() => this.setState({startProgress: true}), 500)
       if (!this.state.Component) {
