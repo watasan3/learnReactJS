@@ -12,6 +12,13 @@ const MyButton = (props) => {
 
 export default class App extends React.Component {
 
+  constructor (props) {
+    super(props)
+    // createRefでref変数作成
+    this.upload = React.createRef()
+    this.done = React.createRef()
+  }
+
   // アップロードされたファイルの処理
   handleUpload = (e) => {
     const file = e.target.files[0]
@@ -22,8 +29,8 @@ export default class App extends React.Component {
     }
     e.target.value = null
 
-    // refs経由で生のHTMLElementを操作できる
-    this.refs.done.style.display = ''
+    // currentプロパティ経由で生のHTMLElementを操作できる
+    this.done.current.style.display = ''
   }
 
   // フォーカス
@@ -43,10 +50,10 @@ export default class App extends React.Component {
   render () {
     return (
       <div>
-        <p>別のDOMからrefs参照でクリックイベント処理をキックする例:</p>
-        <input type='file' ref='upload' style={{display: 'none'}} onChange={this.handleUpload} />
-        <button onClick={() => this.refs.upload.click()}>アップロード</button>
-        <div ref='done' style={{display: 'none'}}>アップロード完了</div>
+        <p>別のDOMからref参照でクリックイベント処理をキックする例:</p>
+        <input type='file' ref={this.upload} style={{display: 'none'}} onChange={this.handleUpload} />
+        <button onClick={() => this.upload.current.click()}>アップロード</button>
+        <div ref={this.done} style={{display: 'none'}}>アップロード完了</div>
         <div>
           <p>refsを仲介しないで変数に格納する例:</p>
           <input type="text" ref={(input) => { this.input = input }} onChange={this.changeInput} />

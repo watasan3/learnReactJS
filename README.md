@@ -4,13 +4,20 @@
 refsはReactのライフサイクルを無視して直接DOMを操作するため、必要な場面以外は極力使わないようにしましょう。  
 以前はcomponentDidMountでも参照できていましたがReact16からは非推奨になりました。  
 参照する際はイベントコールバック内のみに留めるようにしましょう。  
-refsから参照する方法と変数に保存する方法と二通りあります。  
+React.createRefから変数生成する方法(React v16.3以降)とコールバックで取得する方法と二通りあります。  
 
-refsプロパティから参照する方法はref属性に属性値を指定します。  
-this.refs経由でDOM([HTMLElement](https://developer.mozilla.org/ja/docs/Web/API/HTMLElement))オブジェクトが参照できます。  
+変数生成する方法はReact.createRefでref変数生成し、ref属性にref変数を指定します。  
+ref変数のcurrentプロパティ経由でDOM([HTMLElement](https://developer.mozilla.org/ja/docs/Web/API/HTMLElement))オブジェクトが参照できます。  
 
 ```
 export default class App extends React.Component {
+
+  constructor (props) {
+    super(props)
+    // createRefでref変数作成
+    this.upload = React.createRef()
+    this.done = React.createRef()
+  }
 
   // アップロードされたファイルの処理
   handleUpload = (e) => {
@@ -22,16 +29,16 @@ export default class App extends React.Component {
     }
     e.target.value = null
 
-    // refs経由で生のHTMLElementを操作できる
-    this.refs.done.style.display = ''
+    // currentプロパティ経由で生のHTMLElementを操作できる
+    this.done.current.style.display = ''
   }
 
   render () {
     return (
       <div>
-        <input type='file' ref='upload' style={{display: 'none'}} onChange={this.handleUpload} />
-        <button onClick={() => this.refs.upload.click()}>アップロード</button>
-        <div ref='done' style={{display: 'none'}}>アップロード完了</div>
+        <input type='file' ref={this.upload} style={{display: 'none'}} onChange={this.handleUpload} />
+        <button onClick={() => this.upload.current.click()}>アップロード</button>
+        <div ref={this.done} style={{display: 'none'}}>アップロード完了</div>
       </div>
     )
   }
@@ -39,7 +46,7 @@ export default class App extends React.Component {
 ```
 
 refにコールバックを指定して変数値として持つことも可能です。  
-次の例はrefs属性を経由しないで変数経由で別のDOMを操作する例です。  
+次の例はコールバック経由でref変数を取得し、別のDOMを操作する例です。  
 
 ```
 export default class App extends React.Component {
