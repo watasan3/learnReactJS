@@ -13,7 +13,7 @@ module.exports = {
     contentBase: __dirname, // index.htmlの格納場所
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
-    port: 8080, // 起動ポート
+    port: 7070, // 起動ポート
   },
   output: {
     publicPath: '/dist', // distフォルダ以下を公開パスに指定
@@ -34,7 +34,8 @@ module.exports = {
           // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
           // 変更時のリビルドが速くなります
           cacheDirectory: true,
-          plugins: ['react-hot-loader/babel'],
+          presets: ['env', 'react'],
+          plugins: ['transform-class-properties', 'transform-decorators-legacy','react-hot-loader/babel'],
         },
       },
     }]

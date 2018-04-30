@@ -39,7 +39,7 @@ module.exports = {
     contentBase: __dirname, // index.htmlの格納場所
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
-    port: 8080, // 起動ポート
+    port: 7070, // 起動ポート
   },
   output: {
     publicPath: '/dist', // distフォルダ以下を公開パスに指定
@@ -103,7 +103,7 @@ hot(module)(render)
 render()
 ```
 
-次のコマンドでwebpack-dev-serverが8080ポートで起動できます。
+次のコマンドでwebpack-dev-serverが7070ポートで起動できます。
 
 ```
 $ yarn run dev
