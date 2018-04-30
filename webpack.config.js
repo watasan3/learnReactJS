@@ -10,7 +10,10 @@ module.exports = {
       test: /\.js?$/, // 拡張子がjsで
       exclude: /node_modules/, // node_modulesフォルダ配下は除外
       use: {
-        loader: "babel-loader" // babel-loaderを使って変換する
+        loader: 'babel-loader', // babel-loaderを使って変換する
+        options: {
+          presets: ['env', 'react'], // env presetでES2015向けに変換、react presetでReactのJSX文法を変換
+        }
       }
     }]
   }
