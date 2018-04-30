@@ -96,7 +96,7 @@ export default class App extends React.Component {
 ```
 
 ## 高度なトピック
-HOC経由の子コンポーネントのref参照を親コンポーネントで使いたい場合はforwardRef APIを使う。（React 16.3以降）
+HOC経由の子コンポーネントのref参照を親コンポーネントで使いたい場合はforwardRef APIを使う。（React v16.3以降）
 参考：[React v16.3 changes](http://blog.koba04.com/post/2018/04/04/react-v163-changes/)
 そもそもあまり使う場面がないですが・・・
 
