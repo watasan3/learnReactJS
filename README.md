@@ -10,12 +10,12 @@ webpackにdecoratorsプラグインを追加します。
 $ yarn add --dev babel-plugin-transform-decorators-legacy
 ```
 
-.babelrcのpluginsにtransform-decorators-legacyプラグインを追加します。  
+webpack.config.jsのpluginsにtransform-decorators-legacyプラグインを追加します。  
 
 ```
-{
-  "presets": ["env", "react"],
-  "plugins": ["transform-class-properties", "transform-decorators-legacy"]
+options: {
+  presets: ['env', 'react'],
+  plugins: ['transform-class-properties', 'transform-decorators-legacy'], // 追加
 }
 ```
 
