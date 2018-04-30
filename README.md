@@ -6,13 +6,13 @@
 $ yarn add --dev babel-plugin-transform-class-properties
 ```
 
-.babelrcにてpluginsを追加します。
+webpack.config.jsにてpluginsを追加します。
 
 ```
-{
-  "presets": ["env", "react"],
-  "plugins": ["transform-class-properties"]
-} 
+options: {
+  presets: ['env', 'react'],
+  plugins: ['transform-class-properties'], // 追加
+}
 ```
 
 # サンプル
