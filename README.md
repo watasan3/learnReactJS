@@ -39,12 +39,18 @@ export default class Rect extends React.Component {
     this.state = { num : this.props.num }
   }
 
-  componentWillMount () {
+  // カウントアップ
+  countUp () {
+    // setStateメソッドでステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
+    this.setState({ num : this.state.num + 1 })
+  }
+
+  render () {
     // propsに属性値が渡ってくる
     const { bgcolor } = this.props
 
     // CSS スタイルはキャメルケースでプロパティを書く
-    this.rectStyle = {
+    const rectStyle = {
       background: bgcolor,
       display: 'table-cell',
       border: '1px #000 solid',
@@ -54,20 +60,12 @@ export default class Rect extends React.Component {
       textAlign: 'center',
       verticalAlign: 'center',
     }
-  }
-
-  // カウントアップ
-  countUp () {
-    // setStateメソッドでステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
-    this.setState({ num : this.state.num + 1 })
-  }
-
-  render () {
 
     // 複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
+    // JSX内のブロック{}はJS式が評価される
     return (
-      <div style={ this.rectStyle } onClick={() => this.countUp()}>
+      <div style={rectStyle} onClick={() => this.countUp()}>
         <NumberPlate><i>{this.state.num}</i></NumberPlate>
       </div>
     )
@@ -115,10 +113,13 @@ export default class App extends React.Component {
 各種メソッドの説明はこちら  
 [React Componentのライフサイクルのまとめと利用用途](https://qiita.com/yukika/items/1859743921a10d7e3e6b)
   
-初期化時と属性値変更時に呼ばれるcomponentWillMountメソッドと  
+  
 描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
 通信処理後のpropsの変更をみて、さらに何か処理したい場合には  
-componentWillReceivePropsメソッドを使ったりします。  
+~~componentWillReceivePropsメソッドを使ったりします。~~  
+componentWillMount、componentWillReceivePropsは廃止予定です。  
+React16.3以降はgetDerivedStateFromPropsを使います。  
+参考：[React v16.3 changes](http://blog.koba04.com/post/2018/04/04/react-v163-changes/)
 
 # Stateless Functional Componentについて
 reactをimportするだけで関数もReactのコンポーネントになります。  
@@ -159,9 +160,9 @@ export default NumberPlate
 生成時(constructor時点)に入っているため、this.propsで参照するか、各種ライフサイクルメソッドの引数から参照します。  
 
 ```Rect.js
-componentWillMount () {
+render () {
   // propsに属性値が渡ってくる
-  const { num, bgcolor } = this.props
+  const { bgcolor } = this.props
 ```
 
 defaultPropsを使うことで属性値がない場合のデフォルトの属性値を指定することができます。  
@@ -192,7 +193,7 @@ babelでCSSに変換してもらいます。
 
 ```Rect.js
   // CSS スタイルはキャメルケースでプロパティを書く
-  this.rectStyle = {
+  const rectStyle = {
     background: bgcolor,
     display: 'table-cell',
     border: '1px #000 solid',
@@ -208,7 +209,7 @@ JSX内で{}した箇所にはJSを書くことができます。
 今回はJSのスタイルオブジェクトを渡しています。  
 
 ```Rect.js
-  <div style={ this.rectStyle } />
+  <div style={rectStyle} />
 ```
 
 次のようにインラインで直接CSSスタイル指定することも可能です。  

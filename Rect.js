@@ -39,11 +39,26 @@ export default class Rect extends React.Component {
   }
 
   render (props) {
+    // propsに属性値が渡ってくる
+    const { bgcolor } = this.props
+
+    // CSS スタイルはキャメルケースでプロパティを書く
+    const rectStyle = {
+      background: bgcolor,
+      display: 'table-cell',
+      border: '1px #000 solid',
+      fontSize: 20,
+      width: 30,
+      height: 30,
+      textAlign: 'center',
+      verticalAlign: 'center',
+    }
 
     // DOMが複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
+    // JSX内のブロック{}はJS式が評価される
     return (
-      <div style={ this.rectStyle } onClick={(e) => this.countUp()}>
+      <div style={rectStyle} onClick={(e) => this.countUp()}>
         <NumberPlate><i>{this.state.num}</i></NumberPlate>
       </div>
     )
