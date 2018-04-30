@@ -47,7 +47,7 @@ package.jsonは次のようになります。
     "precss": "^2.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^4.0.0",
+    "react-hot-loader": "^4.1.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
@@ -66,6 +66,11 @@ webpack.config.jsです。
 HtmlWebpackPluginとautoprefixerのプラグインを追加しました。  
 HtmlWebpackPluginはindex.htmlのbundle.js埋め込みを動的に行ってくれます。  
 autoprefixerはcss3のベンダープレフィックスをBabelビルド時に付与してくれます。  
+presetsにstage-0文法をサポートするプラグインを追加しています。  
+targetsで最新ブラウザの2個前およびシェア１％以上のブラウザまでをビルド対象としています。  
+modulesは特定のES6文法に最適化しません。  
+useBuiltInsはpolyfillを有効化します。  
+
 
 ```webpack.config.js
 /*globals module: false require: false __dirname: false */
@@ -89,7 +94,7 @@ module.exports = {
     historyApiFallback: true, // history APIが404エラーを返す場合にindex.htmlに飛ばす
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
-    port: 8080, // 起動ポート,
+    port: 7070, // 起動ポート,
   },
   output: {
     publicPath: '/', // 公開パスの指定
@@ -114,7 +119,18 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: ['react-hot-loader/babel'],
+          presets: [
+            ['env', {
+              'targets': {
+                'browsers': ['last 2 versions', '> 1%'],
+              },
+              'modules': false,
+              'useBuiltIns': true
+            }],
+            'react',
+            'stage-0',
+          ],
+          plugins: ['transform-class-properties', 'transform-decorators-legacy', 'react-hot-loader/babel'],
         },
       },
     }],
@@ -137,29 +153,6 @@ index.htmlからはbundle.jsの埋め込みを削除します。
   <!-- <script src='./dist/bundle.js'></script>-->
 </body>
 </html>
-```
-
-.babelrcの設定です。  
-stage-0文法をサポートするプラグインを追加しています。  
-targetsで最新ブラウザの2個前までに最適化しています。  
-modulesは特定のES6文法に最適化しません。  
-useBuiltInsはpolyfillを有効化します。  
-
-```
-{
-  "presets": [
-    ["env", {
-      "targets": {
-        "browsers": ["last 2 versions", "> 1%"]
-      },
-      "modules": false,
-      "useBuiltIns": true
-    }],
-    "react",
-    "stage-0"
-  ],
-  "plugins": ["transform-class-properties", "transform-decorators-legacy"]
-}
 ```
 
 webpack.build.jsです。  

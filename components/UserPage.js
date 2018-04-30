@@ -36,7 +36,7 @@ export default class UserPage extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // user取得APIコールのactionをキックする
     this.props.load()
   }
