@@ -19,11 +19,11 @@ module.exports = {
     historyApiFallback: true, // history APIが404エラーを返す場合にtemplate.htmlに飛ばす
     inline: true, // ソース変更時リロードモード
     hot: true, // HMR(Hot Module Reload)モード
-    port: 8080, // 起動ポート,
+    port: 7070, // 起動ポート,
     publicPath: '/',
     proxy: {
       '**': {
-        target: 'http://0.0.0.0:8000',
+        target: 'http://0.0.0.0:7000',
         secure: false,
         logLevel: 'debug',
       },
@@ -52,7 +52,18 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: ['react-hot-loader/babel'],
+          presets: [
+            ['env', {
+              targets: {
+                browsers: ['last 2 versions', '> 1%'],
+              },
+              modules: false,
+              useBuiltIns: true,
+            }],
+            'react',
+            'stage-0',
+          ],
+          plugins: ['transform-class-properties', 'transform-decorators-legacy', 'react-hot-loader/babel'],
         },
       },
     }],

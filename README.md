@@ -70,7 +70,7 @@ package.jsonは次のようになります。
     "precss": "^2.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^4.0.0",
+    "react-hot-loader": "^4.1.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
@@ -179,7 +179,7 @@ module.exports = {
 ```
 
 webpack.config.jsのwebpack-dev-serverにproxyの設定を追加します。  
-これにより、webpack-dev-serverにアクセス時でもサーバ経由のシミュレーションができます。（サーバは8000ポートで起動している想定です）  
+これにより、webpack-dev-serverにアクセス時でもサーバ経由のシミュレーションができます。（サーバは7000ポートで起動している想定です）  
 index.htmlだとルートパス(/)が正しくルーティングされない問題が発生するのでtemplate.htmlにリネームします。(static/template.html)  
 HtmlWebpackPluginの読み込みhtmlをtemplate.htmlにリネームします。
 
@@ -188,7 +188,7 @@ HtmlWebpackPluginの読み込みhtmlをtemplate.htmlにリネームします。
     publicPath: '/',
     proxy: {
       '**': {
-        target: 'http://0.0.0.0:8000',
+        target: 'http://0.0.0.0:7000',
         secure: false,
         logLevel: 'debug',
       },
@@ -379,8 +379,6 @@ data-jsonパラメータ経由で取得します。
 
 UserPage.jsです。  
 SSRでは、withWidthが使えないので代わりに[Hiddenコンポーネント](https://material-ui-next.com/layout/hidden/)を使っています。  
-また、SSRでもcomponentWillMountは呼ばれてしまうので  
-APIコールはcomponentWillMountではなく、componentDidMountで行うようにします。  
 サーバ側から経由する際の初期化パラメータはinitialDataとしてRedux Storeから取得します。（@connectのパラメータ）  
 
 ```
@@ -454,7 +452,7 @@ const ssr = require('./ssr.build').default
 let bundles = []
 if (process.env.NODE_ENV === 'dev') {
   // webpack-dev-serverのbundle.jsにredirect
-  app.get('/bundle.js', (req, res) => res.redirect('http://localhost:8080/bundle.js'))
+  app.get('/bundle.js', (req, res) => res.redirect('http://localhost:7070/bundle.js'))
 } else if (process.env.NODE_ENV === 'production') {
   const jsdom = require('jsdom')
   const { JSDOM } = jsdom
@@ -494,8 +492,8 @@ app.get('/todo', (req, res) => {
 })
 
 
-app.listen(8000, function () {
-  console.log('app listening on port 8000')
+app.listen(7000, function () {
+  console.log('app listening on port 7000')
 })
 
 // 例外ハンドリング
