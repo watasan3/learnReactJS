@@ -7,7 +7,6 @@ ReactJSでDOMをレンダリングするには
 * Babel Core
 
 が必要です。  
-簡易のため、上記JSファイルをCDN経由で読み込みます  
 
 ```index.html
 <!DOCTYPE html>
