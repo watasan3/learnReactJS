@@ -33,7 +33,8 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           cacheDirectory: true,
-          plugins: ['react-hot-loader/babel'],
+          presets: ['env', 'react'],
+          plugins: ['transform-class-properties', 'transform-decorators-legacy', 'react-hot-loader/babel'],
         }
       }
     }]
