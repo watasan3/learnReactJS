@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { load } from './user'
 
-import { withTheme, withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
-import { Email } from 'material-ui-icons'
-import withWidth from 'material-ui/utils/withWidth'
-import { orange } from 'material-ui/colors'
+import { withTheme, withStyles } from '@material-ui/core/styles'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from '@material-ui/core'
+import { Email } from '@material-ui/icons'
+import withWidth from '@material-ui/core/withWidth'
+import { orange } from '@material-ui/core/colors'
 
 // connectのdecorator
 @connect(
