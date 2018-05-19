@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { add } from '../reducer/user'
 
-import { withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Card, Button, TextField } from 'material-ui'
+import { withStyles } from '@material-ui/core/styles'
+import { AppBar, Toolbar, Card, Button, TextField } from '@material-ui/core'
 import { Field, reduxForm } from 'redux-form'
 
 const FormTextField = ({
