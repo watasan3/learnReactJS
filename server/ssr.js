@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 // Material-UI SSR
 import { SheetsRegistry } from 'react-jss/lib/jss'
 import JssProvider from 'react-jss/lib/JssProvider'
-import { MuiThemeProvider, createGenerateClassName } from 'material-ui/styles'
+import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles'
 // React Router
 import { StaticRouter } from 'react-router'
 import { Route, Switch } from 'react-router-dom'

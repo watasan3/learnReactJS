@@ -43,7 +43,7 @@ module.exports = {
             ],
             plugins: [
               ['direct-import', [
-                'material-ui', // material-ui
+                '@material-ui/core', // material-ui
                 'redux-form',  // redux-form
               ]],
               'babel-plugin-transform-decorators-legacy', // decorator用
