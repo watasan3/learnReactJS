@@ -38,7 +38,7 @@ import { add } from '../reducer/user'
 
 import { withStyles } from 'material-ui/styles'
 import { AppBar,Toolbar, Avatar, Card, CardContent, Button, TextField } from 'material-ui'
-import { Email } from 'material-ui-icons'
+import { Email } from '@material-ui/icons'
 import { Field, reduxForm } from 'redux-form'
 import { error } from 'util'
 
