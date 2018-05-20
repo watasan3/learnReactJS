@@ -7,7 +7,7 @@ ReactJSではマテリアルデザインを踏襲した[Material-UI](https://mat
 Material-UIのパッケージをインストールします。  
 
 ```
-$ yarn add --dev material-ui@next material-ui-icons
+$ yarn add --dev @material-ui/core @material-ui/icons
 ```
 
 index.jsにmaterial-uiのテーマの指定をします。  
@@ -19,7 +19,7 @@ import React  from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
 
@@ -121,11 +121,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { load } from './user'
 
-import { withTheme, withStyles } from 'material-ui/styles'
-import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from 'material-ui'
-import { Email } from 'material-ui-icons'
-import withWidth from 'material-ui/utils/withWidth'
-import { orange } from 'material-ui/colors'
+import { withTheme, withStyles } from '@material-ui/core/styles'
+import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from '@material-ui/core'
+import { Email } from '@material-ui/icons'
+import withWidth from '@material-ui/core/withWidth'
+import { orange } from '@material-ui/core/colors'
 
 // connectのdecorator
 @connect(
@@ -214,11 +214,11 @@ export default class App extends React.Component {
 ```
 
 Material-UIの各コンポーネントに関しては  
-公式：[Material-UI](https://material-ui-next.com/)のComponents Demoに各種コンポーネントのデモがあるので、それを見たほうが理解できると思います。  
+公式：[Material-UI](https://material-ui.com/)のComponents Demoに各種コンポーネントのデモがあるので、それを見たほうが理解できると思います。  
 
 # テーマ
 Material-UIではマテリアルデザインガイドに沿った  
-[色パレット](https://material-ui-next.com/style/color/)や[テーマ](https://material-ui-next.com/customization/themes/)の指定を行います。  
+[色パレット](https://material-ui.com/style/color/)や[テーマ](https://material-ui.com/customization/themes/)の指定を行います。  
 デフォルトではlightテーマとdarkテーマが用意されていますが、  
 サービスによってテーマ色を変えたいという要望は普通なのでカラーパレットを上書きします。  
 独自に色作るときは、色の濃淡も規則性があるのでGeneratorを使って生成したほうが[マテリアルデザインガイド通り](https://material.io/guidelines/style/color.html#color-color-system)なので無難です。  
@@ -273,10 +273,10 @@ const theme = createMuiTheme({
 利用側では、  
 withThemeデコレータを使うとprops.themeが使えるようになります。  
 カラーパレットからcommon,primary,secondary,grey,errorなどが使えます。  
-color属性を持っている[Button](https://material-ui-next.com/demos/buttons/)等のコンポーネントは'primary'、'secondary'、'default'、'inherit'などで背景色指定することもできます
+color属性を持っている[Button](https://material-ui.com/demos/buttons/)等のコンポーネントは'primary'、'secondary'、'default'、'inherit'などで背景色指定することもできます
 
 ```App.js
-import { withTheme } from 'material-ui/styles'
+import { withTheme } from '@material-ui/core/styles'
 
 @withTheme()
 export default class App extends React.Component {
@@ -320,7 +320,7 @@ withStylesデコレータを使います。
 上書き対象となるMaterial UIコンポーネントのclasses属性に指定します。  
 
 ```App.js
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 @withStyles({
   root: {
@@ -344,12 +344,12 @@ export default class App extends React.Component {
 }
 ```
 
-もっと詳細は[こちら](https://material-ui-next.com/customization/overrides/#overriding-with-classes)
+もっと詳細は[こちら](https://material-ui.com/customization/overrides/)
 
 # レスポンシブレイアウト対応
 withWidthを使えば,  
 widthのpropsが画面サイズに合わせて渡ってきます。  
-- [Hidden](https://material-ui-next.com/layout/hidden/#js)
+- [Hidden](https://material-ui.com/layout/hidden/)
 
 `xs < sm < md < lg < xl`の順に横幅の大きさが大きいです。  
 index.jsのcreateMuiThemeのbreakpointsにて上書きしています。  
@@ -382,7 +382,7 @@ this.props.widthが参照できるようになります。
 ブラウザの画面サイズを変えることでxs, sm, mdに変わり、再度renderが呼ばれます。  
 
 ```App.js
-import withWidth from 'material-ui/utils/withWidth'
+import withWidth from '@material-ui/core/withWidth'
 
 @withWidth()
 export default class App extends React.Component {
@@ -409,7 +409,7 @@ emailというアイコン名になっているので、
 次のように先頭大文字でメールアイコンを読み込みできます。  
 
 ```App.js
-import { Email } from 'material-ui-icons'
+import { Email } from '@material-ui/icons'
 
 export default class App extends React.Component {
   render() {
@@ -420,11 +420,11 @@ export default class App extends React.Component {
 
 # テーマ外の色を使う
 アイコン色など、テーマ外の色をピンポイントで使いたい場合もあると思います。  
-その場合は、`material-ui/colors`をimportすることで直接定義色を参照できます。  
+その場合は、`@material-ui/core/colors`をimportすることで直接定義色を参照できます。  
 ちなみに、アイコンの背景色はcolorsで変更できます。  
 
 ```
-import { orange } from 'material-ui/colors'
+import { orange } from '@material-ui/core/colors'
 
 export default class App extends React.Component {
   render() {
