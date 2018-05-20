@@ -46,10 +46,12 @@ package.jsonは次のようになります。
     "prod": "NODE_ENV=production node server/server.js"
   },
   "devDependencies": {
+    "@material-ui/core": "^1.0.0",
+    "@material-ui/icons": "^1.0.0",
     "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.1",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.3",
     "babel-plugin-direct-import": "^0.5.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -59,17 +61,15 @@ package.jsonは次のようになります。
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "copy-webpack-plugin": "^4.5.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.19.1",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-react": "^7.5.1",
     "history": "^4.7.2",
-    "html-webpack-plugin": "^3.0.4",
-    "material-ui": "^1.0.0-beta.34",
-    "material-ui-icons": "^1.0.0-beta.17",
+    "html-webpack-plugin": "^3.2.0",
     "npm-run-all": "^4.1.2",
     "precss": "^2.0.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-hot-loader": "^4.1.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
@@ -78,13 +78,13 @@ package.jsonは次のようになります。
     "redux-devtools": "^3.4.1",
     "redux-form": "^7.2.0",
     "redux-thunk": "^2.2.0",
-    "webpack": "^4.1.0",
-    "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0"
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.1.2",
+    "webpack-dev-server": "^3.1.3"
   },
   "dependencies": {
     "express": "^4.16.2",
-    "jsdom": "^11.6.2"
+    "jsdom": "^11.10.0"
   }
 }
 ```
@@ -165,7 +165,7 @@ module.exports = {
             ],
             plugins: [
               ['direct-import', [
-                'material-ui', // material-ui
+                '@material-ui/core', // material-ui
                 'redux-form',  // redux-form
               ]],
               'babel-plugin-transform-decorators-legacy', // decorator用
@@ -382,7 +382,7 @@ SSRでは、withWidthが使えないので代わりに[Hiddenコンポーネン�
 サーバ側から経由する際の初期化パラメータはinitialDataとしてRedux Storeから取得します。（@connectのパラメータ）  
 
 ```
-import { Hidden } from 'material-ui'
+import { Hidden } from '@material-ui/core'
 
 // connectのdecorator
 @connect(
