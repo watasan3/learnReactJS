@@ -157,8 +157,8 @@ handlePageMove(path) {
 
 ```TodoPage.js
 import React from 'react'
-import { AppBar, Toolbar, Button } from 'material-ui'
-import { withStyles } from 'material-ui/styles'
+import { AppBar, Toolbar, Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 
 @withStyles({
   root: {
