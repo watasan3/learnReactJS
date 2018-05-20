@@ -3,7 +3,7 @@
 フラットデザインに現実の物理要素（影やフィードバック）を持たせたようなデザインです。  
 Androidアプリでの全面的な利用など最近のアプリケーションのデザインは大体マテリアルデザインでできています。  
   
-ReactJSではマテリアルデザインを踏襲した[Material-UI](https://material-ui-next.com/)というライブラリがあります。    
+ReactJSではマテリアルデザインを踏襲した[Material-UI](https://material-ui.com/)というライブラリがあります。    
 Material-UIのパッケージをインストールします。  
 
 ```
@@ -402,7 +402,7 @@ export default class App extends React.Component {
 
 # アイコン
 Material UIのアイコンに関しては下記ページのアイコンが使えます。  
-[Material icons](material.io/icons/)
+[Material icons](https://material.io/tools/icons/?style=baseline)
   
 今回はメールのアイコンを使っています。  
 emailというアイコン名になっているので、  
