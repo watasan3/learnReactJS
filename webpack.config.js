@@ -50,7 +50,7 @@ module.exports = {
                 'browsers': ['last 2 versions', '> 1%'],
               },
               'modules': false,
-              'useBuiltIns': true
+              'useBuiltIns': true,
             }],
             'react',
             'stage-0',
