@@ -79,7 +79,7 @@ myclass.test2('a','b')
 下記のコマンドでトランスパイルします。
 
 ```
-babel --plugins transform-decorators-legacy decorator.js > compile.js
+babel --plugins transform-decorators-legacy decorators.js > compile.js
 ```
 
 トランスパイル後のコードを実行すると、  
