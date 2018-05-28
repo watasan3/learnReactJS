@@ -15,23 +15,6 @@ export default class Rect extends React.Component {
     this.state = { num : this.props.num }
   }
 
-  componentWillMount () {
-    // propsに属性値が渡ってくる
-    const { bgcolor } = this.props
-
-    // CSS スタイルはキャメルケースでプロパティを書く
-    this.rectStyle = {
-      background: bgcolor,
-      display: 'table-cell',
-      border: '1px #000 solid',
-      fontSize: 20,
-      width: 30,
-      height: 30,
-      textAlign: 'center',
-      verticalAlign: 'center',
-    }
-  }
-
   // カウントアップ
   countUp () {
     // setStateメソッドでステートオブジェクトのパラメータを更新→renderメソッドが呼ばれ、再描画される
