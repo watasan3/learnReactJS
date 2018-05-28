@@ -60,20 +60,12 @@ module.exports = {
           // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
           // 変更時のリビルドが速くなります
           cacheDirectory: true,
-          plugins: ['react-hot-loader/babel'],
+          presets: ['env', 'react'],
+          plugins: ['transform-class-properties', 'transform-decorators-legacy','react-hot-loader/babel'],
         },
       },
     }]
   }
-}
-```
-
-.babelrcにreact-hot-loaderのプラグインを追加します。  
-
-```
-{
-  "presets": ["env", "react"],
-  "plugins": ["transform-class-properties", "transform-decorators-legacy", "react-hot-loader/babel"]
 }
 ```
 
