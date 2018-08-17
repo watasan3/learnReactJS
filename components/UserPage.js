@@ -1,4 +1,5 @@
 import React from 'react'
+import qs from 'qs'
 import { connect } from 'react-redux'
 import { load } from '../reducer/user'
 
@@ -30,26 +31,49 @@ export default class UserPage extends React.Component {
 
   constructor (props) {
     super(props)
+    const state = this.props.location.state || qs.parse(this.props.location.search.slice(1))
     this.state = {
-      open:false,
-      user:null,
+      open: !!(state && state.modal),
+      email: state.email,
+      location: {pathname: ''},
+    }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.location.pathname !== prevState.location.pathname) {
+      return { location: nextProps.location }
+    }
+    if (nextProps.location.search !== prevState.location.search) {
+      const state = qs.parse(nextProps.location.search.slice(1))
+      return {
+        open: !!(state && state.modal),
+        email: state.email,
+        location: nextProps.location,
+      }
+    }
+    return null
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.state.location.pathname) {
+      this.setState({location: prevProps.location})
+      this.props.wpUnload()
+      this.props.load()
     }
   }
 
   componentDidMount() {
-    // user取得APIコールのactionをキックする
     this.props.load()
   }
 
+
   handleClickOpen (user) {
-    this.setState({
-      open: true,
-      user: user,
-    })
+    this.props.history.replace(`${this.props.location.pathname}?modal=true&email=${user.email}`)
   }
 
   handleRequestClose () {
     this.setState({ open: false })
+    this.props.history.replace(`${this.props.location.pathname}`)
   }
 
   handlePageMove(path) {
@@ -90,7 +114,7 @@ export default class UserPage extends React.Component {
           this.state.open &&
           <Dialog open={this.state.open} onClose={() => this.handleRequestClose()}>
             <DialogTitle>メールアドレス</DialogTitle>
-            <DialogContent>{this.state.user.email}</DialogContent>
+            <DialogContent>{this.state.email}</DialogContent>
           </Dialog>
         }
       </div>
