@@ -365,3 +365,27 @@ render () {
 }
 ```
 
+# React.FragmentでのDOM返し(ReactJS v16.2)
+React v16.2からReact.Fragmentという機能が追加されました。  
+配列同様にFragment部分のDOMはレンダリングされません。  
+配列の場合はkeyが必要でしたが、Fragmentの場合はkeyが不要です。  
+
+```App.js
+import React from 'react'
+import Rect from './Rect'
+const Fragment = React.Fragment
+
+export default class App extends React.Component {
+
+  render () {
+    return (
+      <Fragment>
+        <Rect />
+        <Rect num={1} bgcolor='#e02020' />
+        <Rect num={2} bgcolor='#20e020' />
+        <Rect num={3} bgcolor='#2020e0' />
+      </Fragment>
+    )
+  }
+}
+```
