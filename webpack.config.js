@@ -12,8 +12,11 @@ module.exports = {
       use: {
         loader: 'babel-loader', // babel-loaderを使って変換する
         options: {
-          presets: ['env', 'react'],
-          plugins: ['transform-class-properties', 'transform-decorators-legacy'],
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: [
+            ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+            ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+          ],
         }
       }
     }]
