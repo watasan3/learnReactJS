@@ -205,8 +205,8 @@ webpack-dev-serverを用いるとwebpackとlocalhostサーバの起動を同時�
 webpack-dev-serverの詳細な設定はReact Hot Loaderの項にて説明します。  
 
 ```
-$ yarn add webpack-dev-server
-$ node_modules/webpack-dev-server/bin/webpack-dev-server.js 
+$ yarn add --dev webpack-dev-server
+$ npx webpack-dev-server
 Project is running at http://localhost:8080/
 ```
 
