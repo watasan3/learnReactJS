@@ -57,9 +57,12 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
-          ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
-          'react-hot-loader/babel', // react-hot-loader用
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: [
+            ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+            ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+            'react-hot-loader/babel', // react-hot-loader用
+          ],
         },
       },
     }]
