@@ -6,7 +6,7 @@ React Hot Loaderの設定を行うことで
 パッケージにwebpack-dev-server、react-hot-loaderを追加します。  
 
 ```
-$ yarn add --dev webpack-dev-server react-hot-loader babel-polyfill
+$ yarn add --dev webpack-dev-server react-hot-loader @babel/polyfill
 ```
 
 package.jsonにwebpack-dev-server起動用のスクリプトを追加します。
@@ -30,7 +30,7 @@ module.exports = {
   devtool: 'cheap-module-source-map', // ソースマップファイル追加 
   name: 'bundle',
   entry: [
-    'babel-polyfill',
+    '@babel/polyfill', // 古いブラウザへの互換性をもたせる
     'react-hot-loader/patch',
     __dirname + '/index', // エントリポイントのjsxファイル
   ],
@@ -57,11 +57,9 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
-          // 変更時のリビルドが速くなります
-          cacheDirectory: true,
-          presets: ['env', 'react'],
-          plugins: ['transform-class-properties', 'transform-decorators-legacy','react-hot-loader/babel'],
+          ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+          ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+          'react-hot-loader/babel', // react-hot-loader用
         },
       },
     }]
@@ -98,7 +96,7 @@ render()
 次のコマンドでwebpack-dev-serverが7070ポートで起動できます。
 
 ```
-$ yarn run dev
+$ yarn dev
 ```
 
 App.jsなどを編集して保存するとブラウザが更新されます。（ビルド＆部分リロード（HMR））
