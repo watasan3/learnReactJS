@@ -7,7 +7,10 @@ import { AppBar,Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle,
 import { Email } from '@material-ui/icons'
 import withWidth from '@material-ui/core/withWidth'
 import { orange } from '@material-ui/core/colors'
+import { hot } from 'react-hot-loader'
 
+// https://github.com/gaearon/react-hot-loader/issues/905
+@hot(module)
 // connectのdecorator
 @connect(
   // propsに受け取るreducerのstate
@@ -92,3 +95,4 @@ export default class App extends React.Component {
     )
   }
 }
+

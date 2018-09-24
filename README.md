@@ -67,30 +67,16 @@ module.exports = {
 }
 ```
 
-index.jsにReact Hot Loaderの設定を追加します。  
-hotモジュールで全体を囲います。  
+App.jsにReact Hot Loaderの設定を追加します。  
+hotモジュールでApp Componentを囲います。  
 
-```index.js
+```App.js
 import { hot } from 'react-hot-loader'
 
-(中略)
-
-const render = () => {
-  ReactDOM.render(
-    <MuiThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </MuiThemeProvider>,
-    document.getElementById('root'),
-  )
-}
-
-
-// webpack-dev-server起動時はWebpack Hot Module Replacement APIでWrapする
-hot(module)(render)
-
-render()
+@hot(module)
+export default class App extends React.Component {
+  ...
+} 
 ```
 
 次のコマンドでwebpack-dev-serverが7070ポートで起動できます。
