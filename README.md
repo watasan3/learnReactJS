@@ -49,18 +49,16 @@ ReactDOM.render(
 BabelとJSXトランスパイラをインストールします。  
 
 ```
-# Babelコマンドをインストール
-$ yarn global add babel-cli
 # package.json作成
 $ yarn init -y
-# BabelのJSXトランスパイラプラグインをダウンロード
-$ yarn add babel-plugin-transform-react-jsx
+# BabelコマンドとBabelのJSXトランスパイラプラグインをダウンロード
+$ yarn add @babel/cli @babel/core @babel/plugin-transform-react-jsx
 ```
 
 次のコマンドでtest.jsxに対して直接Babelのトランスパイルを行うとcompile.jsが出力されます。
 
 ```
-$ babel --plugins transform-react-jsx test.jsx
+$ npx babel --plugins @babel/transform-react-jsx test.jsx
 ReactDOM.render(React.createElement(
   'h1',
   null,
