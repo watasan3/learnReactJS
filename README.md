@@ -7,15 +7,18 @@ Wrapすることで外部からパラメータを付与したりします。
 webpackにdecoratorsプラグインを追加します。  
 
 ```
-$ yarn add --dev babel-plugin-transform-decorators-legacy
+$ yarn add --dev @babel/plugin-proposal-decorators
 ```
 
-webpack.config.jsのpluginsにtransform-decorators-legacyプラグインを追加します。  
+webpack.config.jsのpluginsに@babel/plugin-proposal-decoratorsプラグインを追加します。  
 
 ```
 options: {
-  presets: ['env', 'react'],
-  plugins: ['transform-class-properties', 'transform-decorators-legacy'], // 追加
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: [
+    ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+    ['@babel/plugin-proposal-class-properties', { loose: true }], // 追加
+  ], 
 }
 ```
 
@@ -65,7 +68,7 @@ export default App
 以下でビルド
 
 ```
-$ webpack --watch
+$ npx webpack --watch
 ```
 
 実行時にはAppコンポーネントのpropsにはinjectは存在しないのに  
