@@ -5,7 +5,7 @@ React RouterとReact Router Reduxを使うと画面遷移状態をhistoryオブ�
 React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。  
 
 ```
-$npm install --save-dev react-router-dom@4.2.2 history react-router-redux@next
+$ yarn add --dev react-router-dom@4.3.1 history react-router-redux@next
 ```
 
 webpack.config.jsonのdevServerにhistoryApiFallbackをtrueにします。  
@@ -67,11 +67,13 @@ App.jsにてルーティングの指定をします。
 import React from 'react'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import { Route, Switch } from 'react-router-dom'
+import { hot } from 'react-hot-loader'
 
 import NotFound from './components/NotFound'
 import UserPage from './components/UserPage'
 import TodoPage from './components/TodoPage'
 
+@hot(module)
 export default class App extends React.Component {
   render() {
     const { history } = this.props
