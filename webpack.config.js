@@ -12,7 +12,7 @@ module.exports = {
       use: {
         loader: 'babel-loader', // babel-loaderを使って変換する
         options: {
-          presets: ['env', 'react'], // env presetでES2015向けに変換、react presetでReactのJSX文法を変換
+          presets: ['@babel/preset-env', '@babel/preset-react'], // env presetでES2015向けに変換、react presetでReactのJSX文法を変換
         }
       }
     }]

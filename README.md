@@ -6,7 +6,7 @@ webpackを使うことで複数のリソースファイルを１つにまとめ�
 webpackでビルドするためにパッケージを追加します。  
 
 ```
-$ yarn add --dev webpack webpack-cli babel-core babel-loader babel-preset-env babel-preset-react react react-dom
+$ yarn add --dev webpack webpack-cli babel-loader @babel/core @babel/preset-env @babel/preset-react react react-dom
 ```
 
 package.jsonは次のようになります。
@@ -23,14 +23,14 @@ package.jsonは次のようになります。
     "webpack": "webpack --mode development"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.3",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.10"
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1"
   }
 }
 ```
@@ -136,6 +136,15 @@ index.htmlを開くと表示されるはずです。
 ```
 $ yarn webpack --watch
 ```
+
+次のコマンドでも等価です。  
+
+```
+$ npx webpack --mode development --watch
+// webpack.config.jsの設定を参照するのでmodeフラグは不要
+$ npx webpack --watch
+```
+
 
 ## コンポーネント単位のDOM把握
 
