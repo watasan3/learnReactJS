@@ -3,15 +3,17 @@
 後述のdefaultPropsを使うためにtransform-class-propertiesプラグインをダウンロードします。
 
 ```
-$ yarn add --dev babel-plugin-transform-class-properties
+$ yarn add --dev @babel/plugin-proposal-class-properties
 ```
 
 webpack.config.jsにてpluginsを追加します。
 
 ```
 options: {
-  presets: ['env', 'react'],
-  plugins: ['transform-class-properties'], // 追加
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: [
+    ['@babel/plugin-proposal-class-properties', { loose: true }], // 追加
+  ],
 }
 ```
 
