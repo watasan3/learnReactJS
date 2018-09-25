@@ -1,11 +1,11 @@
-# ReactRouterReduxで画面遷移状態をストア管理
+# ReactRouterで画面遷移と遷移履歴の管理
 
-React RouterとReact Router Reduxを使うと画面遷移状態をhistoryオブジェクトで管理することができます。  
-下記コマンドでreact-router-domとreact-router-reduxとhistoryをインストールします。  
+React Connected React Routerを使うと画面遷移状態をhistoryオブジェクトで管理することができます。  
+下記コマンドでreact-router-domとconnected-react-routerとhistoryをインストールします。  
 React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。  
 
 ```
-$ yarn add --dev react-router-dom@4.3.1 history react-router-redux@next
+$ yarn add --dev react-router-dom@4.3.1 history connected-react-router
 ```
 
 webpack.config.jsonのdevServerにhistoryApiFallbackをtrueにします。  
@@ -22,8 +22,8 @@ historyオブジェクトをrouterMiddlewareに追加でreduxのstoreに格納�
 その後、Appコンポーネントのpropsにhistoryオブジェクトを渡します。  
 
 ```index.js
-import { routerMiddleware } from 'react-router-redux' // 追加
 import createHistory from 'history/createBrowserHistory' // 追加
+import { connectRouter, routerMiddleware } from 'connected-react-router' // 追加
 
 import App from './App'
 import reducer from './reducer/reducer'
@@ -34,23 +34,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const history = createHistory()
 // axiosをthunkの追加引数に加える
 const thunkWithClient = thunk.withExtraArgument(client)
-// redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
-const store = createStore(reducer, composeEnhancers(applyMiddleware(routerMiddleware(history),thunkWithClient)))
+// redux-thunkをミドルウェアに適用、historyをミドルウェアに追加（routerのミドルウェアを追加）
+const store = createStore(connectRouter(history)(reducer), composeEnhancers(applyMiddleware(routerMiddleware(history),thunkWithClient)))
 
-```
-
-reducer.jsにrouterReducerを追加します。　　
-
-```reducer.js
-import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
-
-import user from './user'
-
-export default combineReducers({
-  routing: routerReducer,
-  user
-})
 ```
 
 App.jsにてルーティングの指定をします。  
@@ -65,8 +51,8 @@ App.jsにてルーティングの指定をします。
 
 ```App.js
 import React from 'react'
-import { ConnectedRouter as Router } from 'react-router-redux'
 import { Route, Switch } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
 import { hot } from 'react-hot-loader'
 
 import NotFound from './components/NotFound'
@@ -78,9 +64,9 @@ export default class App extends React.Component {
   render() {
     const { history } = this.props
     return (
-      <Router history={history}>
+      <ConnectedRouter history={history}>
         <Route component={AppRoute} />
-      </Router>
+      </ConnectedRouter>
     )
   }
 }
