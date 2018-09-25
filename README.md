@@ -14,7 +14,7 @@ ReactJS勉強会用資料を各ブランチにまとめてます。
 - [ReactRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRedux):アプリケーション全体の状態管理について 
 - [MaterialUI](https://github.com/teradonburi/learnReactJS/tree/MaterialUI):マテリアルデザインでのUI実装 
 - [ReactHotLoader](https://github.com/teradonburi/learnReactJS/tree/ReactHotLoader):ReactHotLoaderでの自動リロード 
-- [ReactRouterRedux](https://github.com/teradonburi/learnReactJS/tree/ReactRouterRedux):ReactJSでの画面遷移(SPA)
+- [ReactRouter](https://github.com/teradonburi/learnReactJS/tree/ReactRouter):ReactJSでの画面遷移(SPA)
 - [ReduxForm](https://github.com/teradonburi/learnReactJS/tree/ReduxForm):ReduxFormでのフォーム送信
 - [ESLint](https://github.com/teradonburi/learnReactJS/tree/ESLint):ESLintでのコードチェック
 - [ReleaseBuild](https://github.com/teradonburi/learnReactJS/tree/ReleaseBuild):リリースビルド
