@@ -516,6 +516,8 @@ import { SheetsRegistry } from 'react-jss/lib/jss'
 import JssProvider from 'react-jss/lib/JssProvider'
 import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles'
 // React Router
+import createMemoryHistory from 'history/createMemoryHistory'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { StaticRouter } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 // reducer
@@ -534,9 +536,10 @@ export default function ssr(req, res, initialData) {
   // Material-UIの初期化
   const sheetsRegistry = new SheetsRegistry()
   const generateClassName = createGenerateClassName({productionPrefix: 'mm'})
+  const history = createMemoryHistory({initialEntries: []})
 
   // Redux Storeの作成(initialDataには各Componentが参照するRedux Storeのstateを代入する)
-  const store = createStore(reducer, initialData, applyMiddleware(thunk))
+  const store = createStore(connectRouter(history)(reducer), initialData, applyMiddleware(routerMiddleware(history), thunk))
 
   const body = () => (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
@@ -578,12 +581,12 @@ const HTML = (props) => {
       </head>
       <body>
         <div id='root'>{props.children}</div>
-        <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)}></script>
+        <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)} />
         {
           props.bundles ?
-            props.bundles.map(bundle => <script key={bundle} type='text/javascript' src={bundle}></script>)
+            props.bundles.map(bundle => <script key={bundle} type='text/javascript' src={bundle} />)
             :
-            <script type='text/javascript' src='/bundle.js'></script>
+            <script type='text/javascript' src='/bundle.js' />
         }
       </body>
     </html>
