@@ -18,10 +18,6 @@
 eslintコマンドを使うにはeslintをグローバルインストールします。  
 VSCodeの人は[VS Code ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint#overview)を入れておくとエディット中も随時lintチェックが有効になるのでlintエラーを編集しながら確認できます。  
 
-```
-$ yarn global add eslint
-```
-
 プロジェクト内では.eslintrc.jsという設定ファイルに基づいてlintチェックを行ってくれます。  
 次のeslint系のパッケージをインストールします。  
 webpack用にeslint-loader、  
@@ -45,9 +41,13 @@ module.exports = {
   'parserOptions': {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
-      'jsx': true // JSX文法有効
+      'jsx': true, // JSX文法有効
+      'legacyDecorators': true
     },
     'sourceType': 'module'
+  },
+  'settings': { 
+    'react': { 'version' : '16.5.2' }
   },
   // reactプラグイン使用
   'plugins': [
@@ -142,20 +142,8 @@ module.exports = {
 }
 ```
 
-eslintコマンドで直接フォルダをlintするには下記のコマンドで行えます。  
-
-```
-$ eslint .
-```
-
-lintチェックと同時に自動修正するには`--fix`オプションをつけます。  
-（warnは自動修正してくれないので注意）  
-
-```
-$ eslint . --fix
-```
-
-今回はpackage.jsonにlintスクリプトを作成してます。
+eslintコマンドでlintチェックします。 
+package.jsonにlintスクリプトを作成してます。
 
 ```package.json
 "scripts": {
@@ -166,16 +154,23 @@ $ eslint . --fix
 上記lintは下記のコマンドにて実行できます。  
 
 ```
-$ yarn run lint
+$ yarn lint
+```
+
+lintチェックと同時に自動修正するには`--fix`オプションをつけます。  
+（warnは自動修正してくれないので注意）  
+
+```
+$ yarn lint --fix
 ```
 
 マジックコメント（特殊なコメント）でeslintをignoreすることもできます。  
-今回はclient/src/index.jsにて使用しています。  
+今回はclient/src/App.jsにて使用しています。  
 
-```index.js
+```App.js
 /*globals module: false */
 
 // 本来ならば定義されていないグローバル変数エラーのlint表示が出るが、HMRはデバッグ時のみ有効なので無視したい
 // Webpack Hot Module Replacement API
-hot(module)(render)
+@hot(module)
 ```

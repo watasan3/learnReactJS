@@ -5,13 +5,20 @@ module.exports = {
     'es6': true
   },
   // reactプラグイン
-  'extends': ['eslint:recommended', 'plugin:react/recommended'],
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended',
+  ],
   'parserOptions': {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
-      'jsx': true // JSX文法有効
+      'jsx': true, // JSX文法有効
+      'legacyDecorators': true
     },
     'sourceType': 'module'
+  },
+  'settings': { 
+    'react': { 'version' : '16.5.2' }
   },
   // reactプラグイン使用
   'plugins': [
@@ -101,6 +108,14 @@ module.exports = {
     // reactのprop-typesチェックをしない
     'react/prop-types': 'off',
     // reactのコンポーネント名チェックをしない
-    'react/display-name': 'off'
+    'react/display-name': 'off',
+    'react/prefer-stateless-function': [
+      2,
+      { 'ignorePureComponents': true },
+    ],
+    'react/no-typos': 'error',
+    'react/no-unused-prop-types': 'error',
+    'react/no-unused-state': 'error',
+    'react/self-closing-comp': 'error',
   }
 }

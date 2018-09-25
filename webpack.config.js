@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development', // 開発モード
   devtool: 'cheap-module-source-map', // ソースマップファイル追加
   entry: [
-    'babel-polyfill',
+    '@babel/polyfill',
     'react-hot-loader/patch',
     __dirname + '/index', // エントリポイントのjsxファイル
   ],
@@ -33,11 +33,12 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          // 以下のフォルダにキャッシュを有効にします ./node_modules/.cache/babel-loader/
-          // 変更時のリビルドが速くなります
-          cacheDirectory: true,
-          presets: ['env', 'react'],
-          plugins: ['transform-class-properties', 'transform-decorators-legacy', 'react-hot-loader/babel'],
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: [
+            ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+            ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+            'react-hot-loader/babel', // react-hot-loader用
+          ],
         },
       },
     }],
