@@ -72,12 +72,12 @@ const HTML = (props) => {
       </head>
       <body>
         <div id='root'>{props.children}</div>
-        <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)}></script>
+        <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)} />
         {
           props.bundles ?
-            props.bundles.map(bundle => <script key={bundle} type='text/javascript' src={bundle}></script>)
+            props.bundles.map(bundle => <script key={bundle} type='text/javascript' src={bundle} />)
             :
-            <script type='text/javascript' src='/bundle.js'></script>
+            <script type='text/javascript' src='/bundle.js' />
         }
       </body>
     </html>

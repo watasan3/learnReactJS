@@ -10,9 +10,13 @@ module.exports = {
   'parserOptions': {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
-      'jsx': true // JSX文法有効
+      'jsx': true, // JSX文法有効
+      'legacyDecorators': true
     },
     'sourceType': 'module'
+  },
+  'settings': { 
+    'react': { 'version' : '16.5.2' }
   },
   // reactプラグイン使用
   'plugins': [
@@ -102,6 +106,19 @@ module.exports = {
     // reactのprop-typesチェックをしない
     'react/prop-types': 'off',
     // reactのコンポーネント名チェックをしない
-    'react/display-name': 'off'
+    'react/display-name': 'off',
+    // stateless functional componentを優先させる
+    'react/prefer-stateless-function': [
+      2,
+      { 'ignorePureComponents': true }, // PureComponentsは除く
+    ],
+    // 静的クラスのプロパティとライフサイクルメソッドを宣言する際に、大文字と小文字の区別がないようにする
+    'react/no-typos': 'error',
+    // 未使用propsはエラー
+    'react/no-unused-prop-types': 'error',
+    // 未使用stateはエラー
+    'react/no-unused-state': 'error',
+    // 中身が空のタグはself closingをさせる
+    'react/self-closing-comp': 'error',
   }
 }

@@ -8,7 +8,7 @@ module.exports = {
   target: 'node', // NodeJS用ビルド
   entry: {
     ssr: [
-      'babel-polyfill',
+      '@babel/polyfill',
       path.join(__dirname, '/server/ssr.js'), // エントリポイントのjsxファイル
     ],
   },
@@ -30,23 +30,18 @@ module.exports = {
             cacheDirectory: true, // キャッシュディレクトリを使用する
             presets: [
               [
-                'env', {
+                '@babel/preset-env', {
                   targets: {
                     node: '8.6', // NodeJS バージョン8.6
                   },
                   modules: false,
-                  useBuiltIns: true, // ビルトイン有効
+                  useBuiltIns: 'usage', // ビルトイン有効
                 },
               ],
-              'stage-0', // stage-0のプラグイン
-              'react',
+              '@babel/preset-react',
             ],
             plugins: [
-              ['direct-import', [
-                '@material-ui/core', // material-ui
-                'redux-form',  // redux-form
-              ]],
-              'babel-plugin-transform-decorators-legacy', // decorator用
+              ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
             ],
           },
         },

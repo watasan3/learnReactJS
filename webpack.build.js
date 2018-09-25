@@ -20,7 +20,7 @@ function createConfig() {
   // React Hot loaderは外す
   config.entry = {
     'bundle': [
-      'babel-polyfill',
+      '@babel/polyfill',
       path.join(__dirname, '/index'), // エントリポイントのjsxファイル
     ],
   }
