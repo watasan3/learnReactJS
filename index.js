@@ -1,4 +1,4 @@
-/*globals module: false process: false */
+/*globals process: false */
 import React  from 'react'
 import ReactDOM from 'react-dom'
 import createHistory from 'history/createBrowserHistory'
@@ -7,7 +7,6 @@ import { Provider } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
-import { hot } from 'react-hot-loader'
 import { routerMiddleware } from 'react-router-redux'
 
 import App from './App'
@@ -108,8 +107,5 @@ const render = () => {
     document.getElementById('root'),
   )
 }
-
-// Webpack Hot Module Replacement API
-hot(module)(render)
 
 render()

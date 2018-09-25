@@ -1,7 +1,8 @@
-/*globals module: false require: false */
+/*globals module: false */
 import React from 'react'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import { Route, Switch } from 'react-router-dom'
+import { hot } from 'react-hot-loader'
 
 import asyncComponent from './AsyncComponent'
 
@@ -11,13 +12,7 @@ const UserPage = asyncComponent(() => import(/* webpackChunkName: 'userpage' */ 
 const TodoPage = asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
 const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
 
-// ReactHotLoader時は全部読み込んでしまう
-if (module.hot) {
-  require('./components/UserPage')
-  require('./components/TodoPage')
-  require('./components/NotFound')
-}
-
+@hot(module)
 export default class App extends React.Component {
   render() {
     const { history } = this.props

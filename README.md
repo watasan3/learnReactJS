@@ -1,6 +1,7 @@
 # webpackしたコンポーネントを非同期でレンダリングする(Code Spliting)
 参考：[Code Splitting for React Router with Webpack and HMR](https://hackernoon.com/code-splitting-for-react-router-with-webpack-and-hmr-bb509968e86f)  
 
+
 プロジェクトが大きくなってくるとwebpack.jsでコンパイルしたbundle.jsが肥大化します。  
 bundle.jsが肥大化するとbundle.jsの読み込みに時間がかかってしまい、初回のページの表示が遅くなります（SPAの欠点）  
 そこでAsyncComponentを作成して、非同期リソース読み込みを行います。  
@@ -48,6 +49,23 @@ export default (loader, collection) => (
 )
 ```
 
+@babel/plugin-syntax-dynamic-importプラグインを追加します。  
+
+```
+$ yarn add --dev @babel/plugin-syntax-dynamic-import
+```
+
+webpack.config.jsにプラグイン設定を追加します。
+
+```
+plugins: [
+  ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+  ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+  '@babel/plugin-syntax-dynamic-import', // dynamic-import
+  'react-hot-loader/babel', // react-hot-loader用
+],
+```
+
 次のようにimportをラップして読み込みを行います。
 
 ```
@@ -71,16 +89,3 @@ const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ 
 userpage.js、todopage.js、notfound.jsが出力されます。  
 なお、複数コンポーネントがある場合は、magic commentのコンポーネント名は被ってはいけません。  
 
-なお、ReactHotLoader使用時は次のようにrequireすることで、遅延レンダリングではなく  
-全て読み込み完了待ちするまで待ってからレンダリングすることができます。  
-
-```
-/*globals module: false require: false */
-
-// ReactHotLoader時は全部読み込んでしまう
-if (module.hot) {
-  require('./components/UserPage')
-  require('./components/TodoPage')
-  require('./components/NotFound')
-}
-```
