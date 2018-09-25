@@ -1,6 +1,6 @@
 # ReactRouterで画面遷移と遷移履歴の管理
 
-React Connected React Routerを使うと画面遷移状態をhistoryオブジェクトで管理することができます。  
+React RouterとConnected React Routerを使うと画面遷移状態をhistoryオブジェクトで管理することができます。  
 下記コマンドでreact-router-domとconnected-react-routerとhistoryをインストールします。  
 React Routerはバージョンごとで破壊的変更が入って互換性がないためv４を使用します。  
 
