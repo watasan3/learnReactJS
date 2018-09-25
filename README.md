@@ -84,7 +84,7 @@ module.exports = {
   mode: 'development', // 開発モード
   devtool: 'cheap-module-source-map', // ソースマップファイル出力
   entry: [
-    'babel-polyfill', // babelのpolyfill設定
+    '@babel/polyfill', // babelのpolyfill設定
     'react-hot-loader/patch',
     path.join(__dirname, '/index'), // エントリポイントのjsxファイル
   ],
@@ -120,17 +120,21 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['env', {
-              'targets': {
-                'browsers': ['last 2 versions', '> 1%'],
-              },
-              'modules': false,
-              'useBuiltIns': true
-            }],
-            'react',
-            'stage-0',
-          ],
-          plugins: ['transform-class-properties', 'transform-decorators-legacy', 'react-hot-loader/babel'],
+            ['@babel/preset-env', {
+                'targets': {
+                  'browsers': ['last 2 versions', '> 1%'],
+                },
+                'modules': false,
+                'useBuiltIns': 'usage',
+              }],
+              '@babel/preset-react',
+            ],
+            plugins: [
+              ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+              ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+              'react-hot-loader/babel', // react-hot-loader用
+            ],
+          },
         },
       },
     }],
