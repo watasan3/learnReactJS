@@ -171,6 +171,5 @@ $ yarn lint --fix
 /*globals module: false */
 
 // 本来ならば定義されていないグローバル変数エラーのlint表示が出るが、HMRはデバッグ時のみ有効なので無視したい
-// Webpack Hot Module Replacement API
 @hot(module)
 ```
