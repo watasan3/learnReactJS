@@ -1,7 +1,7 @@
 /*globals module: false require: false */
 import React from 'react'
-import { ConnectedRouter as Router } from 'react-router-redux'
 import { Route, Switch } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
 import { hot } from 'react-hot-loader'
 
 import asyncComponent from './AsyncComponent'
@@ -18,9 +18,9 @@ export default class App extends React.Component {
   render() {
     const { history } = this.props
     return (
-      <Router history={history}>
+      <ConnectedRouter history={history}>
         <Route component={AppRoute} />
-      </Router>
+      </ConnectedRouter>
     )
   }
 }

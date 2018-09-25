@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import client from 'axios'
 import thunk from 'redux-thunk'
-import { routerMiddleware } from 'react-router-redux'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 
 import reducer from './reducer/reducer'
 import theme from './theme'
@@ -30,7 +30,7 @@ const render = () => {
   // axiosをthunkの追加引数に加える
   const thunkWithClient = thunk.withExtraArgument(client)
   // redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
-  const store = createStore(reducer, initialData, composeEnhancers(applyMiddleware(routerMiddleware(history), thunkWithClient)))
+  const store = createStore(connectRouter(history)(reducer), initialData, composeEnhancers(applyMiddleware(routerMiddleware(history),thunkWithClient)))
 
   ReactDOM.hydrate(
     <MuiThemeProvider theme={theme}>
