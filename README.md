@@ -3,7 +3,7 @@
 リリースビルド用に下記のパッケージを追加でインストールしてあります。
 
 ```
-$ yarn add --dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin babel-preset-env babel-preset-stage-0 
+$ yarn add --dev npm-run-all autoprefixer precss html-webpack-plugin copy-webpack-plugin
 ```
 
 package.jsonは次のようになります。  
@@ -24,40 +24,40 @@ package.jsonは次のようになります。
     "build": "run-s rm build-webpack"
   },
   "devDependencies": {
-    "@material-ui/core": "^1.0.0",
-    "@material-ui/icons": "^1.0.0",
-    "autoprefixer": "^7.1.6",
-    "axios": "^0.17.1",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-loader": "^7.1.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@material-ui/core": "^3.1.1",
+    "@material-ui/icons": "^3.0.1",
+    "autoprefixer": "^9.1.5",
+    "axios": "^0.18.0",
+    "babel-eslint": "^9.0.0",
+    "babel-loader": "^8.0.2",
     "babel-preset-stage-0": "^6.24.1",
-    "copy-webpack-plugin": "^4.5.0",
-    "eslint": "^4.19.1",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-react": "^7.5.1",
+    "copy-webpack-plugin": "^4.5.2",
+    "eslint": "^5.6.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-react": "^7.11.1",
     "history": "^4.7.2",
     "html-webpack-plugin": "^3.2.0",
-    "npm-run-all": "^4.1.2",
-    "precss": "^2.0.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-hot-loader": "^4.1.2",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "4.2.2",
-    "react-router-redux": "^5.0.0-alpha.8",
-    "redux": "^3.7.2",
+    "npm-run-all": "^4.1.3",
+    "precss": "^3.1.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-hot-loader": "^4.3.11",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "redux": "^4.0.0",
     "redux-devtools": "^3.4.1",
-    "redux-form": "^7.2.0",
-    "redux-thunk": "^2.2.0",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.1.2",
-    "webpack-dev-server": "^3.1.3"
+    "redux-form": "^7.4.2",
+    "redux-thunk": "^2.3.0",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.9"
   }
 }
 ```

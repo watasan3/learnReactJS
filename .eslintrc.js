@@ -9,9 +9,13 @@ module.exports = {
   'parserOptions': {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
-      'jsx': true // JSX文法有効
+      'jsx': true, // JSX文法有効
+      'legacyDecorators': true
     },
     'sourceType': 'module'
+  },
+  'settings': { 
+    'react': { 'version' : '16.5.2' }
   },
   // reactプラグイン使用
   'plugins': [
