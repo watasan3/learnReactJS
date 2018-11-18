@@ -34,6 +34,9 @@ if (process.env.NODE_ENV === 'dev') {
 app.get('/', (req, res) => {
   // redux storeに代入する初期パラメータ、各ページの初期ステートと同じ構造にする
   const initialData = {
+    landing: {
+      page: 'UserPage',
+    },
     user: {
       users: null,
     },
@@ -42,10 +45,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/todo', (req, res) => {
-  const initialData = {}
+  const initialData = {
+    landing: {
+      page: 'TodoPage',
+    },
+  }
   ssr(req, res, initialData)
 })
-
 
 app.listen(7000, function () {
   console.log('app listening on port 7000')

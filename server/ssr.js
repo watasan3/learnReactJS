@@ -35,7 +35,7 @@ export default function ssr(req, res, initialData) {
   // Redux Storeの作成(initialDataには各Componentが参照するRedux Storeのstateを代入する)
   const store = createStore(connectRouter(history)(reducer), initialData, applyMiddleware(routerMiddleware(history), thunk))
 
-  const body = () => (
+  const body = ReactDOMServer.renderToString(
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
         <Provider store={store}>
@@ -57,9 +57,8 @@ export default function ssr(req, res, initialData) {
       bundles={req.bundles}
       style={sheetsRegistry.toString()} // Material-UIのスタイルをstyleタグに埋め込む
       initialData={initialData}
-    >
-      {body}
-    </HTML>
+      body={body}
+    />
   ).pipe(res)
 
 }
@@ -74,7 +73,7 @@ const HTML = (props) => {
         <style>{props.style}</style>
       </head>
       <body>
-        <div id='root'>{props.children}</div>
+        <div id='root' dangerouslySetInnerHTML={ {__html: props.body} } />
         <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)} />
         {
           props.bundles ?

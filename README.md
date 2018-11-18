@@ -318,6 +318,68 @@ export default createMuiTheme({
 })
 ```
 
+Reduxのストアをstore.jsに分離します。（後でランディングしたページを同期import、それ以外を非同期importに分けるため）  
+また、ストアの初期化データをscriptタグより取得処理を追加します。  
+
+```
+import createHistory from 'history/createBrowserHistory'
+import { createStore, applyMiddleware, compose } from 'redux'
+
+import client from 'axios'
+import thunk from 'redux-thunk'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
+
+import reducer from './reducer/reducer'
+
+// redux-devtoolの設定
+let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+// 本番時はredux-devtoolを無効化する
+if (process.env.NODE_ENV === 'production') {
+  composeEnhancers = compose
+}
+
+// redux storeの初期化データ
+const initialData = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'))
+
+// ブラウザ履歴保存用のストレージを作成
+export const history = createHistory()
+// axiosをthunkの追加引数に加える
+const thunkWithClient = thunk.withExtraArgument(client)
+// redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
+export const store = createStore(connectRouter(history)(reducer), initialData, composeEnhancers(applyMiddleware(routerMiddleware(history), thunkWithClient)))
+```
+
+サーバ側からランディング元を受け渡すreducerを作成します。(landing.js)
+
+```
+const initialState = {
+  page: null,
+}
+
+export default function reducer(state = initialState, action = {}) {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
+```
+
+reducer.jsの方にもlandingのreducerを追加して、ストアのパラメータをマージします。  
+
+```
+import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
+
+import landing from './landing'
+import user from './user'
+
+export default combineReducers({
+  form: formReducer,
+  landing,
+  user,
+})
+```
+
 index.jsを修正します。  
 レンダリングにはReact.renderではなくReact.hydrateを使用します。  
 React.hydrateはCSRとSSRで生成されたDOMとが一致する必要があります。  
@@ -327,35 +389,34 @@ createStore生成時にinitialDataとして付与しています。
 SSR側でのパラメータの渡し方は後述します。  
 
 ```
+/*globals module: false process: false */
+import React  from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
+import { store, history } from './store'
 
-const render = Component => {
-  const initialData = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'))
+import App from './App'
 
-  // ブラウザ履歴保存用のストレージを作成
-  const history = createHistory()
-  // axiosをthunkの追加引数に加える
-  const thunkWithClient = thunk.withExtraArgument(client)
-  // redux-thunkをミドルウェアに適用、historyをミドルウェアに追加
-  const store = createStore(reducer, initialData, composeEnhancers(applyMiddleware(routerMiddleware(history), thunkWithClient)))
+const render = () => {
 
   ReactDOM.hydrate(
-    <AppContainer>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Component history={history} />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App history={history} />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'),
   )
 }
 
+render()
 ```
 
 template.htmlです。  
 Redux Store初期パラメータ渡し用のscriptタグを追加してあります。  
-data-jsonパラメータ経由で取得します。  
+実際にはサーバ側レンダリング時にdata-jsonパラメータを埋め込んでクライアントサイドで取得します。  
 
 ```
 <html>
@@ -368,6 +429,33 @@ data-jsonパラメータ経由で取得します。
   <script id="initial-data" type="text/plain" data-json="{}"></script>
 </body>
 </html>
+```
+
+App.jsのimport処理を修正します。  
+ランディングしたページは同期読み込みする必要があるため（DOM一致のため）  
+storeからlandingパラメータを取得して同期読み込みか、非同期読み込みかを分離します。  
+
+```
+/*globals module: false require: false */
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
+import { hot } from 'react-hot-loader'
+import { store } from './store'
+
+import asyncComponent from './AsyncComponent'
+
+// SSRするページは同期読み込みする必要がある
+// それ以外はパフォーマンスのため遅延レンダリング
+// magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
+const UserPage = store.getState().landing.page === 'UserPage' ?
+  require('./components/UserPage').default :
+  asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
+const TodoPage = store.getState().landing.page === 'TodoPage' ?
+  require('./components/TodoPage').default :
+  asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
+const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+
 ```
 
 UserPage.jsです。  
@@ -472,6 +560,9 @@ if (process.env.NODE_ENV === 'dev') {
 app.get('/', (req, res) => {
   // redux storeに代入する初期パラメータ、各ページの初期ステートと同じ構造にする
   const initialData = {
+    landing: {
+      page: 'UserPage',
+    },
     user: {
       users: null,
     },
@@ -480,10 +571,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/todo', (req, res) => {
-  const initialData = {}
+  const initialData = {
+    landing: {
+      page: 'TodoPage',
+    },
+  }
   ssr(req, res, initialData)
 })
-
 
 app.listen(7000, function () {
   console.log('app listening on port 7000')
@@ -541,7 +635,7 @@ export default function ssr(req, res, initialData) {
   // Redux Storeの作成(initialDataには各Componentが参照するRedux Storeのstateを代入する)
   const store = createStore(connectRouter(history)(reducer), initialData, applyMiddleware(routerMiddleware(history), thunk))
 
-  const body = () => (
+  const body = ReactDOMServer.renderToString(
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
         <Provider store={store}>
@@ -563,9 +657,8 @@ export default function ssr(req, res, initialData) {
       bundles={req.bundles}
       style={sheetsRegistry.toString()} // Material-UIのスタイルをstyleタグに埋め込む
       initialData={initialData}
-    >
-      {body}
-    </HTML>
+      body={body}
+    />
   ).pipe(res)
 
 }
@@ -580,7 +673,7 @@ const HTML = (props) => {
         <style>{props.style}</style>
       </head>
       <body>
-        <div id='root'>{props.children}</div>
+        <div id='root' dangerouslySetInnerHTML={ {__html: props.body} } />
         <script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)} />
         {
           props.bundles ?
