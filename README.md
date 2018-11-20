@@ -77,12 +77,14 @@ const UserPage = asyncComponent(() => import('./components/UserPage'))
 0.jsのようにファイル名がリネームされて出力されてしまいます。  
 これを回避するためにWebpack 2.4.0以降でmagicコメントが使えます。  
 参考：[How to use Webpack’s new “magic comment” feature with React Universal Component + SSR](https://medium.com/faceyspacey/how-to-use-webpacks-new-magic-comment-feature-with-react-universal-component-ssr-a38fd3e296a)  
-このmagicコメントを指定することでwebpackでコンパイルされた後のファイル名を指定することができます。(App.js)  
+webpackChunkNameのmagicコメントを指定することでwebpackでコンパイルされた後のファイル名を指定することができます。(App.js)  
+また、Webpack 4.6.0以降でwebpackPrefetchのmagicコメントを指定するとlinkタグのprefetchと同等の効果があります。  
+prefetch等の先読みの技術は[この記事](https://webtan.impress.co.jp/e/2017/02/20/24816)が参考になります。  
 
 ```
-const UserPage = asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
-const TodoPage = asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
-const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+const UserPage = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage'))
+const TodoPage = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage'))
+const NotFound = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'notfound' */ './components/NotFound'))
 ```
 
 上記マジックコメントで指定すれば、webpackリリースビルド時に  

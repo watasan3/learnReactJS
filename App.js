@@ -8,9 +8,9 @@ import asyncComponent from './AsyncComponent'
 
 // 遅延レンダリング
 // magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
-const UserPage = asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
-const TodoPage = asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
-const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+const UserPage = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage'))
+const TodoPage = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage'))
+const NotFound = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'notfound' */ './components/NotFound'))
 
 @hot(module)
 export default class App extends React.Component {
