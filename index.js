@@ -6,9 +6,8 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 import { store, history } from './store'
 
-import App from './App'
-
-const render = () => {
+async function render() {
+  const App = await require('./App').default()
 
   ReactDOM.hydrate(
     <MuiThemeProvider theme={theme}>

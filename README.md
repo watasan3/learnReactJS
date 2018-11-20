@@ -184,6 +184,7 @@ HtmlWebpackPluginの読み込みhtmlをtemplate.htmlにリネームします。
         target: 'http://0.0.0.0:7000',
         secure: false,
         logLevel: 'debug',
+        changeOrigin: true,
       },
     },
   },
@@ -397,9 +398,8 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 import { store, history } from './store'
 
-import App from './App'
-
-const render = () => {
+async function render() {
+  const App = await require('./App').default()
 
   ReactDOM.hydrate(
     <MuiThemeProvider theme={theme}>
@@ -445,17 +445,41 @@ import { store } from './store'
 
 import asyncComponent from './AsyncComponent'
 
-// SSRするページは同期読み込みする必要がある
-// それ以外はパフォーマンスのため遅延レンダリング
-// magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
-const UserPage = store.getState().landing.page === 'UserPage' ?
-  require('./components/UserPage').default :
-  asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
-const TodoPage = store.getState().landing.page === 'TodoPage' ?
-  require('./components/TodoPage').default :
-  asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
-const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+export default async function Component() {
+  // SSRするページは同期読み込みする必要がある
+  // それ以外はパフォーマンスのため遅延レンダリング
+  // magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
+  const UserPage = store.getState().landing.page === 'UserPage' ?
+    (await import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage')).default :
+    asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage'))
+  const TodoPage = store.getState().landing.page === 'TodoPage' ?
+    (await import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage')).default :
+    asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage'))
+  const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
 
+  @hot(module)
+  class App extends React.Component {
+    render() {
+      const { history } = this.props
+      return (
+        <ConnectedRouter history={history}>
+          <Route component={AppRoute} />
+        </ConnectedRouter>
+      )
+    }
+  }
+
+  const AppRoute = () => (
+    <Switch>
+      <Route exact path="/" component={UserPage} />
+      <Route path="/todo" component={TodoPage} />
+      {/* それ以外のパス */}
+      <Route component={NotFound} />
+    </Switch>
+  )
+
+  return App
+}
 ```
 
 UserPage.jsです。  
@@ -533,6 +557,7 @@ const ssr = require('./ssr.build').default
 let bundles = []
 if (process.env.NODE_ENV === 'dev') {
   // webpack-dev-serverのbundle.jsにredirect
+  app.use(express.static('static'))
   app.get('/bundle.js', (req, res) => res.redirect('http://localhost:7070/bundle.js'))
 } else if (process.env.NODE_ENV === 'production') {
   const jsdom = require('jsdom')

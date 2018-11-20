@@ -7,35 +7,40 @@ import { store } from './store'
 
 import asyncComponent from './AsyncComponent'
 
-// SSRするページは同期読み込みする必要がある
-// それ以外はパフォーマンスのため遅延レンダリング
-// magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
-const UserPage = store.getState().landing.page === 'UserPage' ?
-  require('./components/UserPage').default :
-  asyncComponent(() => import(/* webpackChunkName: 'userpage' */ './components/UserPage'))
-const TodoPage = store.getState().landing.page === 'TodoPage' ?
-  require('./components/TodoPage').default :
-  asyncComponent(() => import(/* webpackChunkName: 'todopage' */ './components/TodoPage'))
-const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+export default async function Component() {
+  // SSRするページは同期読み込みする必要がある
+  // それ以外はパフォーマンスのため遅延レンダリング
+  // magicコメントでwebpackが勝手にファイル名をリネームするのを防ぐ
+  const UserPage = store.getState().landing.page === 'UserPage' ?
+    (await import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage')).default :
+    asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'userpage' */ './components/UserPage'))
+  const TodoPage = store.getState().landing.page === 'TodoPage' ?
+    (await import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage')).default :
+    asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage'))
+  const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
 
 
-@hot(module)
-export default class App extends React.Component {
-  render() {
-    const { history } = this.props
-    return (
-      <ConnectedRouter history={history}>
-        <Route component={AppRoute} />
-      </ConnectedRouter>
-    )
+  @hot(module)
+  class App extends React.Component {
+    render() {
+      const { history } = this.props
+      return (
+        <ConnectedRouter history={history}>
+          <Route component={AppRoute} />
+        </ConnectedRouter>
+      )
+    }
   }
+
+  const AppRoute = () => (
+    <Switch>
+      <Route exact path="/" component={UserPage} />
+      <Route path="/todo" component={TodoPage} />
+      {/* それ以外のパス */}
+      <Route component={NotFound} />
+    </Switch>
+  )
+
+  return App
 }
 
-const AppRoute = () => (
-  <Switch>
-    <Route exact path="/" component={UserPage} />
-    <Route path="/todo" component={TodoPage} />
-    {/* それ以外のパス */}
-    <Route component={NotFound} />
-  </Switch>
-)

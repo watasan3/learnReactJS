@@ -26,6 +26,7 @@ module.exports = {
         target: 'http://0.0.0.0:7000',
         secure: false,
         logLevel: 'debug',
+        changeOrigin: true,
       },
     },
   },
