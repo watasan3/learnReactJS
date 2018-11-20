@@ -17,7 +17,7 @@ export default async function Component() {
   const TodoPage = store.getState().landing.page === 'TodoPage' ?
     (await import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage')).default :
     asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'todopage' */ './components/TodoPage'))
-  const NotFound = asyncComponent(() => import(/* webpackChunkName: 'notfound' */ './components/NotFound'))
+  const NotFound = asyncComponent(() => import(/* webpackPrefetch: true, webpackChunkName: 'notfound' */ './components/NotFound'))
 
 
   @hot(module)
