@@ -2,6 +2,9 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 // Material-UIテーマを作成
 export default createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   // カラーパレット
   palette: {
     type: 'light',

@@ -4,6 +4,17 @@ const precss = require('precss')
 const autoprefixer = require('autoprefixer')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const threadLoader = require('thread-loader')
+
+const jsWorkerOptions = {
+  workers: process.env.CIRCLE_NODE_TOTAL || require('os').cpus().length - 1,
+  workerParallelJobs: 50,
+  poolTimeout: 2000,
+  poolParallelJobs: 50,
+  name: 'js-pool-client',
+}
+threadLoader.warmup(jsWorkerOptions, [ 'babel-loader' ])
+
 
 module.exports = {
   mode: 'development', // 開発モード
@@ -13,6 +24,10 @@ module.exports = {
     'react-hot-loader/patch',
     path.join(__dirname, '/index'), // エントリポイントのjsxファイル
   ],
+  resolve: {
+    modules: ['src', 'node_modules'],
+    extensions: ['.js', '.json'],
+  },
   // React Hot Loader用のデバッグサーバ(webpack-dev-server)の設定
   devServer: {
     contentBase: path.join(__dirname, '/static'), // template.htmlの格納場所
@@ -36,8 +51,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'template.html', // 出力ファイル名
-      template: 'static/template.html', // template対象のtemplate.htmlのパス
+      filename: 'index.html', // 出力ファイル名
+      template: '../static/index.html', // template対象のtemplate.htmlのパス
     }),
     new webpack.HotModuleReplacementPlugin(), // HMR(Hot Module Reload)プラグイン利用
     // autoprefixerプラグイン利用、cssのベンダープレフィックスを自動的につける
@@ -50,27 +65,30 @@ module.exports = {
       test: /\.js?$/, // 拡張子がjsで
       exclude: [/node_modules/, /dist/ ], // node_modules, distフォルダ配下は除外
       include: __dirname, // 直下のJSファイルが対象
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            ['@babel/preset-env', {
-              targets: {
-                browsers: ['last 2 versions', '> 1%'],
-              },
-              modules: false,
-              useBuiltIns: 'usage',
-            }],
-            '@babel/preset-react',
-          ],
-          plugins: [
-            ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
-            ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
-            '@babel/plugin-syntax-dynamic-import', // dynamic-import
-            'react-hot-loader/babel', // react-hot-loader用
-          ],
+      use: [
+        { loader: 'cache-loader' },
+        { loader: 'thread-loader', options: jsWorkerOptions },
+        { loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  browsers: ['last 2 versions', '> 1%'],
+                },
+                modules: false,
+                useBuiltIns: 'usage',
+              }],
+              '@babel/preset-react',
+            ],
+            plugins: [
+              ['@babel/plugin-proposal-decorators', { 'legacy': true }], // decorator用
+              ['@babel/plugin-proposal-class-properties', { loose: true }], // クラスのdefaultProps、アローファンクション用
+              '@babel/plugin-syntax-dynamic-import', // dynamic-import
+              'react-hot-loader/babel', // react-hot-loader用
+            ],
+          },
         },
-      },
+      ],
     }],
   },
 }

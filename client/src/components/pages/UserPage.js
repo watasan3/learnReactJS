@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { load } from '../reducer/user'
+import { load } from 'reducer/user'
 
 import { withTheme, withStyles } from '@material-ui/core/styles'
 import { Hidden, AppBar, Toolbar, Avatar, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from '@material-ui/core'
@@ -83,7 +83,7 @@ export default class UserPage extends React.Component {
                 <p style={{margin: 10, color: primary[500]}}>{'名前:' + user.name.first + ' ' + user.name.last} </p>
                 <p style={{margin: 10, color: secondary[500]}}>{'性別:' + (user.gender == 'male' ? '男性' : '女性')}</p>
                 <div style={{textAlign: 'right'}} >
-                  <Button variant='raised' color='secondary' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</Button>
+                  <Button variant='contained' color='secondary' onClick={() => this.handleClickOpen(user)}><Email style={{marginRight: 5, color: orange[200]}}/>メールする</Button>
                 </div>
               </CardContent>
             </Card>

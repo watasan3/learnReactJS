@@ -1,5 +1,5 @@
 node_modules
-dist
-*.build.js
-*.db
-*.map
+server/dist
+client/node_modules
+server/node_modules
+.DS_store

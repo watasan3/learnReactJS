@@ -2,7 +2,6 @@
 const webpack = require('webpack')
 const path = require('path')
 const webpackConfig = require('./webpack.config.js')
-const webpackServer = require('./webpack.server.js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -26,12 +25,18 @@ function createConfig() {
   }
   // 出力ファイル
   config.output = {
-    path: `${__dirname}/dist`,
+    path: `${__dirname}/../server/dist`,
     filename: 'js-[hash:8]/[name].js',
     chunkFilename: 'js-[hash:8]/[name].js',
     publicPath: '/',
   }
 
+  config.module.rules = config.module.rules.map(rule => {
+    if (String(rule.test) === String(/\.js$/)) {
+      rule.use = rule.use.filter(u => u.loader !== 'cache-loader')
+    }
+    return rule
+  })
   config.optimization = {
     splitChunks: {
       cacheGroups: {
@@ -50,6 +55,7 @@ function createConfig() {
   }
 
   config.plugins = [
+    new webpack.HashedModuleIdsPlugin(),
     // 環境変数をエクスポート
     new webpack.DefinePlugin({
       'process.env': {
@@ -59,37 +65,21 @@ function createConfig() {
     }),
     // HTMLテンプレートに生成したJSを埋め込む
     new HtmlWebpackPlugin({
-      filename: 'template.html',
-      template: 'static/template.html',
+      filename: 'index.html',
+      template: '../static/index.html',
     }),
   ]
 
   // staticフォルダのリソースをコピーする（CSS、画像ファイルなど）
   config.plugins.push(
-    new CopyWebpackPlugin([{ from: 'static', ignore: 'template.html' }]),
+    new CopyWebpackPlugin([{ from: '../static', ignore: ['index.html'] }]),
   )
 
   return config
 }
 
-// SSR用webpackビルド設定追加
-function createServerConfig() {
-  const config = Object.assign({}, webpackServer)
-  config.mode = 'production'
-  config.plugins = [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
-  ]
-  return config
-}
-
 const configs = [
   createConfig(),
-  createServerConfig(),
 ]
-
 
 module.exports = configs
