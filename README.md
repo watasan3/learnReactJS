@@ -621,6 +621,9 @@ createStoreでRedux Storeを作成します。
 `<script id='initial-data' type='text/plain' data-json={JSON.stringify(props.initialData)}></script>`  
 StaticRouter、Route、Switchで各apiパスでページのルーティングを割当します。(apiパスとReact Routerのルーティングが一致している必要があります)  
 template.htmlとDOM構造が一致した各ページのルーティングに対応したmetaタグ要素を変更したhtmlを返却します。  
+レンダリング結果はrenderToStringもしくはrenderToNodeStreamで返却する必要があります。  
+renderToNodeStreamはhydrate前提でrenderToStringより高速です。  
+参考：[Streaming Server-Side Rendering and Caching at Spectrum](https://zeit.co/blog/streaming-server-rendering-at-spectrum)
 
 ```
 import React from 'react'
