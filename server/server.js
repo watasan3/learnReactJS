@@ -6,6 +6,25 @@ const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
 const app = express()
 
+const mongoose = require('mongoose')
+mongoose.Promise = global.Promise
+mongoose.connect('mongodb://localhost/mongo_test')
+const models = require('./models')
+
+const passport = require('passport')
+const BearerStrategy = require('passport-http-bearer')
+const AnonymousStrategy = require('passport-anonymous')
+passport.use(new BearerStrategy(function(token, done) {
+  models.User.findOne({token, deactivate: {ne: true}}, function(err, user) {
+    if (err) return done(err)
+    if (!user) return done(null, false)
+    return done(null, user)
+  })
+}))
+passport.use(new AnonymousStrategy())
+const authenticate = passport.authenticate('bearer', {session: false})
+
+
 // 非同期I/O, タイマー, Promiseなどのトレース
 Error.stackTraceLimit = 20 // スタックトレース行を増やす
 const w = v => fs.writeSync(process.stdout.fd, v)
@@ -49,6 +68,16 @@ if (process.env.NODE_ENV === 'production') {
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
+
+const { user } = require('./routes')
+
+app.use(
+  '/api/user',
+  express.Router()
+    .post('/', user.create)
+    .get('/:id', authenticate, user.show)
+    .put('/:id', authenticate, user.update)
+)
 
 app.post('/api/upload', upload.single('image'), wrap(async (req, res) => {
   console.log(req.body)
