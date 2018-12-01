@@ -1,7 +1,7 @@
 import React from 'react'
 
 // 遅延レンダリングを行うコンポーネント
-export default (loader, collection) => (
+export default (loader) => (
   class AsyncComponent extends React.Component {
     constructor(props) {
       super(props)
@@ -26,7 +26,7 @@ export default (loader, collection) => (
     render() {
       if (this.state.Component) {
         // Wrapしたコンポーネントをレンダリングする
-        return <this.state.Component { ...this.props } { ...collection } />
+        return <this.state.Component { ...this.props } />
       }
 
       if (!this.state.startProgress) {
