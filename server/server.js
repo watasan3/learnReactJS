@@ -8,7 +8,7 @@ const app = express()
 
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost/mongo_test')
+mongoose.connect('mongodb://localhost:27017/mongo_test')
 const models = require('./models')
 
 const passport = require('passport')
@@ -75,7 +75,7 @@ app.use(
   '/api/user',
   express.Router()
     .post('/', user.create)
-    .get('/:id', authenticate, user.show)
+    .post('/login', user.login)
     .put('/:id', authenticate, user.update)
 )
 

@@ -8,8 +8,9 @@ const renderTextField = ({
   type='text',
   required = false,
   rootClass = '',
+  ...custom
 }) => (
-  <TextField type={type} required={required} classes={{root: rootClass}} error={!!(touched && error)} label={label} variant='outlined' helperText={touched && error} {...input}/>
+  <TextField type={type} required={required} classes={{root: rootClass}} error={!!(touched && error)} label={label} variant='outlined' helperText={touched && error} {...input} {...custom} />
 )
 
 export default renderTextField

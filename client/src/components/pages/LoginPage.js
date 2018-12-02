@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { show } from 'reducer/auth'
+import { login } from 'reducer/auth'
 import { reduxForm, Field } from 'redux-form'
 import renderTextField from 'components/forms/renderTextField'
 import Button from '@material-ui/core/Button'
@@ -25,12 +25,12 @@ import Button from '@material-ui/core/Button'
   state => ({
     user: state.auth.user,
   }),
-  { show }
+  { login }
 )
 export default class LoginPage extends React.Component {
 
   submit = (values) => {
-    this.props.show(values)
+    this.props.login(values)
       .then(() => this.props.history.push('/'))
   }
 
@@ -38,9 +38,9 @@ export default class LoginPage extends React.Component {
     const { handleSubmit } = this.props
 
     return (
-      <form onSubmit={handleSubmit(this.submit)}>
-        <Field name='email' component={renderTextField} />
-        <Field name='password' type='password' component={renderTextField} />
+      <form onSubmit={handleSubmit(this.submit)} style={{display: 'flex', flexDirection: 'column', maxWidth: 300}}>
+        <Field name='email' label='Eメール' autoComplete='username' component={renderTextField} />
+        <Field name='password' label='パスワード' type='password' autoComplete='current-password' component={renderTextField} />
         <Button type='submit' size='medium' variant='contained' color='primary' >ログイン</Button>
       </form>
     )

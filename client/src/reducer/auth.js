@@ -1,8 +1,9 @@
 import { SubmissionError } from 'redux-form'
 
 const CREATE = 'auth/CREATE'
-const SHOW = 'auth/SHOW'
+const LOGIN = 'auth/LOGIN'
 const UPDATE = 'auth/UPDATE'
+const LOGOUT = 'auth/LOGOUT'
 
 const initialState = {
   user: localStorage.getItem('user'),
@@ -18,7 +19,10 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         user: action.user || state.user,
       }
-    case SHOW:
+    case LOGIN:
+      // ユーザ登録時認証トークン保存
+      localStorage.setItem('user', JSON.stringify(action.user))
+
       return {
         ...state,
         user: action.user || state.user,
@@ -27,6 +31,13 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         user: action.user || state.user,
+      }
+    case LOGOUT:
+      localStorage.removeItem('user')
+
+      return {
+        ...state,
+        user: null,
       }
     default:
       return state
@@ -52,13 +63,13 @@ export function create(data) {
   }
 }
 
-export function show(id) {
+export function login({email, password}) {
   return (dispatch, getState, client) => {
     return client
-      .get(`/api/user/${id}`)
+      .post('/api/user/login', {email, password})
       .then(res => res.data)
       .then(user => {
-        dispatch({type: SHOW, user})
+        dispatch({type: LOGIN, user})
         return user
       })
   }
@@ -83,3 +94,8 @@ export function update(id, data) {
 }
 
 
+export function logout() {
+  return (dispatch) => {
+    return dispatch({type: LOGOUT})
+  }
+}

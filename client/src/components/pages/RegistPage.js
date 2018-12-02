@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { create } from 'reducer/auth'
 import { reduxForm, Field } from 'redux-form'
 import renderTextField from 'components/forms/renderTextField'
 import Button from '@material-ui/core/Button'
+import { create } from 'reducer/auth'
 
 @reduxForm({
   form: 'regist',
@@ -39,8 +39,8 @@ export default class RegistPage extends React.Component {
 
     return (
       <form onSubmit={handleSubmit(this.submit)} style={{display: 'flex', flexDirection: 'column', maxWidth: 300}}>
-        <Field name='email' label='Eメール' component={renderTextField} />
-        <Field name='password' label='パスワード' type='password' component={renderTextField} />
+        <Field name='email' label='Eメール' autoComplete='username' component={renderTextField} />
+        <Field name='password' label='パスワード' type='password' autoComplete='current-password' component={renderTextField} />
         <Button type='submit' size='medium' variant='contained' color='primary' >ユーザ登録</Button>
       </form>
     )

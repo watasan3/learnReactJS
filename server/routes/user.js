@@ -3,7 +3,7 @@ const { User } = require('../models')
 
 module.exports = {
   create,
-  show,
+  login,
   update,
 }
 
@@ -25,11 +25,15 @@ async function create(req, res) {
   if (!req.body.password) return res.status(400).json({message: 'invalid'})
   req.body.token = generateToken()
   const user = await User.create(req.body)
+
+  // セキュリティのため、返却したくないデータは消す
+  delete user.email
+  delete user.password
   res.json(user)
 }
 
-async function show(req, res) {
-  const user = await User.findOne({_id: req.params.id})
+async function login(req, res) {
+  const user = await User.findOne({email: req.body.email, password: req.body.password}).select('id token')
   if (user === null) return res.status(404).json({message: 'not found'})
   res.json(user)
 }

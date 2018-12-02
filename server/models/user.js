@@ -32,4 +32,4 @@ schema.pre('findOneAndUpdate', async function(next) {
 
 schema.plugin(mongooseLeanVirtuals)
 
-module.exports = mongoose.model('SchemaName', schema)
+module.exports = mongoose.model('User', schema)
