@@ -5,10 +5,6 @@ const Counter = () => {
   // stateの値、state更新関数の変数名は必ずしもstate, setStateにする必要はないが、わかりやすさのために今回はこう書いた
   const [state, setState] = React.useState({count: 0})
 
-  React.useEffect(() => {
-    console.log(state.count)
-  }, [state])
-
   return (
     <p>
       <button onClick={() => setState({count: state.count - 1})}>-</button>

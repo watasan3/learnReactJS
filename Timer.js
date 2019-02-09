@@ -9,11 +9,7 @@ const Timer = () => {
   // 省略した場合はレンダリングの度に第１引数の関数がコールバックされる
   React.useEffect(() => {
     const timerId = setTimeout(() => {
-      // 関数形式でパラメータの更新をすることもできる（推奨）
-      // 関数形式の場合はTimerがレンダリングされた回数に合わせて更新がされる
       setState(state => ({count: state.count + 1}))
-      // Timerコンポーネントが連続でレンダリングが走った場合にレンダリングの回数に合わせて、正しくインクリメントされない可能性あり
-      //setState({count: state.count + 1})
     }, 1000)
 
     // 戻り値にはクリーンアップ関数を指定（省略可）
