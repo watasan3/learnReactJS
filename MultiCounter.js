@@ -13,13 +13,13 @@ const MultiCounter = () => {
 
   return (
     <div>
-      <b>{state.count}</b>
       {/* 値による変更、連続でレンダリングが走った場合にレンダリングの回数に合わせて、正しくインクリメントされない */}
       {/* MultiCounterがレンダリングされたときのstateのため、5回連続で呼び出されてもcountは1だけ減ります */}
       <SuperButton onClick={() => setState({count: state.count + 1})}>値による変更</SuperButton>
       {/* 関数形式でパラメータの更新をすることもできる（推奨） */}
       {/* この場合は更新された値が都度引数として渡ってくるため、正常に+5される */}
       <SuperButton onClick={() => setState(state => ({count: state.count + 1}))}>関数形式でのパラメータ変更</SuperButton>
+      <div>カウント：{state.count}</div>
     </div>
   )
 }
