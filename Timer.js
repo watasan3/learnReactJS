@@ -1,7 +1,5 @@
 import React from 'react'
 
-let i = 0
-
 const Timer = () => {
   const [state, setState] = React.useState({count: 0})
 
