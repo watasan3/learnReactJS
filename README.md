@@ -274,7 +274,7 @@ render→setState→renderと無限ループになるからです。
 
 例えば、次のようにメソッドをクラスにbindする方法もあります。  
 
-```
+```Rect.js
 import React from 'react'
 
 export default class Rect extends React.Component {
