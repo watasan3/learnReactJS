@@ -262,7 +262,7 @@ export default Increment
 これまではRedux + ReactRedux等を使うことでアプリケーション内共通データ（コンポーネントを横断するデータ）を管理することができました。  
 現状以下の２つの課題が解決するまではRedux、ReactReduxは現役ですが、それらの課題がなくなり次第、必要なくなりそうです。
 - combineReducer（複数のreducerを１つに統合する機能）
-- redux-thank、redux-sagaミドルウェアに相当する非同期処理
+- redux-thunk、redux-sagaミドルウェアに相当する非同期処理
 → React v17で導入予定の非同期処理機能であるReact.Suspense
 
 参考：[React Hooksでredux / react-reduxでやってたことを色々やってみる](https://qiita.com/terrierscript/items/1516e946dfe91397c229)  
