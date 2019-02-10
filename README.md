@@ -108,8 +108,7 @@ export default Timer
 ```
 
 # ref参照によるDOMの直接制御(React.useRef、React.useLayoutEffect、React.useImperativeHandle)
-ref参照経由でのDOMの直接操作はReactのレンダリングフロー制御から外れるため、あまり積極的には使うべきではありませんが、  
-inputタグなどのUncontrolableなDOMに関して使わなければならないときがあったりします。  
+ref参照経由でのDOMの直接操作はReactのレンダリングフロー制御から外れるため、あまり積極的には使うべきではありませんが、inputタグなどのUncontrolableなDOMに関して使わなければならないときがあったりします。  
 React.useRefを使うことでref参照を生成することができます。  
 DOMのref属性にてref参照を取得した場合、生のHTMLElementがcurrentプロパティでアクセスすることができます。  
 また、React.useLayoutEffectを使うことで、レンダリング結果が描画される前にコールバック処理を行うことができます。  
@@ -155,10 +154,13 @@ React.useReducerはstateデータをreducerという純粋関数経由で更新�
 実際の更新はdispatch関数経由でreducer関数を呼び出し、stateの値を更新します。  
 `dispatch({type: 'increment', count: state.count + 1})`  
 これはアプリケーション内共通データは
+
  - １つのストアで保存すべき
  - １箇所で更新すべき(reducer)
  - １つの純粋関数経由からのみ更新できる(dispatch)
+
 という思想に基づいています。これらの思想に基づくライブラリにFlux, Redux、MobXがあります。  
+  
 reducer関数にてstateの値が更新されると再度Incrementコンポーネントがレンダリングされます。  
 また、React.Contextという機能を使うことで、子コンポーネント以下は親コンポーネントのパラメータを参照することができます。  
 （コンポーネントの親子階層が深い場合、孫ひ孫のコンポーネントまでprops経由でのバケツリレーをしなくて良くなります。）  
