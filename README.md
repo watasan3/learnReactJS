@@ -152,7 +152,7 @@ export default TextArea
 # アプリケーション内共通データの管理(React.userReducer、React.useContext)
 React.useReducerはstateデータをreducerという純粋関数経由で更新することができます。  
 実際の更新はdispatch関数経由でreducer関数を呼び出し、stateの値を更新します。  
-`dispatch({type: 'increment', count: state.count + 1})`  
+reducer関数にてstateの値が更新されると再度該当のコンポーネントがレンダリングされます。  
 これはアプリケーション内共通データは
 
  - １つのストアで保存すべき
@@ -161,7 +161,6 @@ React.useReducerはstateデータをreducerという純粋関数経由で更新�
 
 という思想に基づいています。これらの思想に基づくライブラリにFlux, Redux、MobXがあります。  
   
-reducer関数にてstateの値が更新されると再度Incrementコンポーネントがレンダリングされます。  
 また、React.Contextという機能を使うことで、子コンポーネント以下は親コンポーネントのパラメータを参照することができます。  
 （コンポーネントの親子階層が深い場合、孫ひ孫のコンポーネントまでprops経由でのバケツリレーをしなくて良くなります。）  
 
