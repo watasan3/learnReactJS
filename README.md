@@ -1,6 +1,6 @@
 # ReactHookについて
 ReactHookはReact 16.8以降に追加された機能です。  
-Stateless Functional Componentにstateを後付けで持たせることができる機能です。(Statelessでなくなりますので実質Functional Componentになりますね)  
+Stateless Functional Componentにstateを後付けで持たせることができる機能です。(Statelessでなくなりますので実質Functional Componentになります。)  
 Stateless Functional Componentでstateを後でつけたいという場合はクラスに書き直さずにReactHookを使うと良いです。  
 
 参考：[React 16.8: 正式版となったReact Hooksを今さら総ざらいする](https://qiita.com/uhyo/items/246fb1f30acfeb7699da)
@@ -115,7 +115,7 @@ DOMのref属性にてref参照を取得した場合、生のHTMLElementがcurren
 React.useEffectだとレンダリング結果後にコールバック処理をするため、ref参照のDOMを操作する場合等のレンダリング初回時にちらつきの原因になったりします。  
 （React.useLayoutEffectはレンダリングをブロッキングしてしまい、パフォーマンスが良くないため、そういった特殊なちらつきの対策をしたいという場合でない限りは基本的にuseEffectを使うべきです）  
 React.useImperativeHandlerはref参照のcurrent配下に独自メソッドを付与するということができます。  
-今回の例だと、teatareaのフォーカスが外れた際（onBlur）時に`methodRef.current.blur()`を呼び出しています。  
+今回の例だと、textareaのフォーカスが外れた際（onBlur）時に`methodRef.current.blur()`を呼び出しています。  
 
 ```TextArea.jsx
 import React from 'react'
@@ -164,6 +164,9 @@ React.useReducerはstateデータをreducerという純粋関数経由で更新�
 reducer関数にてstateの値が更新されると再度Incrementコンポーネントがレンダリングされます。  
 また、React.Contextという機能を使うことで、子コンポーネント以下は親コンポーネントのパラメータを参照することができます。  
 （コンポーネントの親子階層が深い場合、孫ひ孫のコンポーネントまでprops経由でのバケツリレーをしなくて良くなります。）  
+
+![dataflow](./dataflow.png)
+
 子コンポーネント以下にパラメータを渡すには`Context.Provider`のvalueに渡します。  
 子コンポーネント以下からパラメータを参照するには`Context.Consumer`から参照するか、React.useContext経由で参照することができます。  
 今回の例だと、CounterContext.Providerにstateの値、DispatchContext.Providerにdispatch関数を渡すことで、  
@@ -263,8 +266,8 @@ export default Increment
 - redux-thank、redux-sagaミドルウェアに相当する非同期処理
 → React v17で導入予定の非同期処理機能であるReact.Suspense
 
-参考：[React Hooksでredux / react-reduxでやってたことを色々やってみる](https://qiita.com/terrierscript/items/1516e946dfe91397c229)
-参考：[Reactの次期機能のSuspenseが凄くって、非同期処理がどんどん簡単になってた！](https://qiita.com/fumihiko-hidaka/items/c3aaedd073f7bf5a685f)
+参考：[React Hooksでredux / react-reduxでやってたことを色々やってみる](https://qiita.com/terrierscript/items/1516e946dfe91397c229)  
+参考：[Reactの次期機能のSuspenseが凄くって、非同期処理がどんどん簡単になってた！](https://qiita.com/fumihiko-hidaka/items/c3aaedd073f7bf5a685f)  
 
 何にせよ、今まで3rdパーティ頼みだったアプリケーション内データ管理機能がReact v17では統合されてReact自体で完結する図が見えてきます。  
 
