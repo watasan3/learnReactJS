@@ -258,13 +258,15 @@ export default Increment
 
 ## コラム：Redux(Flux, MobX)は不要になるのか？
 これまではRedux + ReactRedux等を使うことでアプリケーション内共通データ（コンポーネントを横断するデータ）を管理することができました。  
-現状以下の２つの課題が解決するまではRedux、React Reduxは現役ですが、それらの課題がなくなり次第、必要なくなりそうです。
+現状以下の２つの課題が解決するまではRedux、ReactReduxは現役ですが、それらの課題がなくなり次第、必要なくなりそうです。
 - combineReducer（複数のreducerを１つに統合する機能）
 - redux-thank、redux-sagaミドルウェアに相当する非同期処理
 → React v17で導入予定の非同期処理機能であるReact.Suspense
 
 参考：[React Hooksでredux / react-reduxでやってたことを色々やってみる](https://qiita.com/terrierscript/items/1516e946dfe91397c229)
 参考：[Reactの次期機能のSuspenseが凄くって、非同期処理がどんどん簡単になってた！](https://qiita.com/fumihiko-hidaka/items/c3aaedd073f7bf5a685f)
+
+何にせよ、今まで3rdパーティ頼みだったアプリケーション内データ管理機能がReact v17では統合されてReact自体で完結する図が見えてきます。  
 
 # メモ化によるパフォーマンス向上(React.useMemo, React.useCallback)
 React.useMemoやReact.useCallbackを使うことで変数や関数をレンダリングの度に再生成せずに再利用するため、パフォーマンスが向上します。  
