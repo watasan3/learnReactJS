@@ -3,6 +3,7 @@ import React from 'react'
 const reducer = (initialState = {count: 0}, action) => {
   switch (action.type) {
     case 'increment':
+      // stateの値を更新する
       return {
         count: action.count
       }
@@ -12,11 +13,13 @@ const reducer = (initialState = {count: 0}, action) => {
 }
 
 // 独自のReact Contextを作成
-const CounterContext = React.createContext(() => {})
-const DispatchContext = React.createContext(() => {})
+const CounterContext = React.createContext()
+const DispatchContext = React.createContext()
 
 const Increment = () => {
-  // dispatch
+  // const [stateの値, dispatch関数] = React.useReducer(reducer関数, stateの初期値)
+  // dispatch関数経由でreducer関数を呼び出し、stateの値を更新します。
+  // reducer関数にてstateの値が更新されると再度Incrementコンポーネントがレンダリングされます。
   const [state, dispatch] = React.useReducer(reducer, {count: 0})
 
   // React.useMemoを使うことで変数をメモ化する
