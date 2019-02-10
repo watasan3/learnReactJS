@@ -138,8 +138,9 @@ export default class App extends React.Component {
 
 ![lifecycle](./lifecycle.jpeg)
 
-よく使うライフサイクルメソッドとしては  
-描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
+コンポーネントは生成されてから画面遷移時等で破棄されるまでライフサイクルを持ちます。  
+ライフサイクルの特定のタイミングで呼ばれるライフサイクルメソッドが存在し、オーバライドすることで特定のタイミングで処理を実行することができます。  
+よく使うライフサイクルメソッドとしては描画時に呼ばれるrenderメソッドは必須なのでまず抑えておいてください  
 通信処理でデータ取得してレンダリングする際はcomponentDidMountを使います。  
 propsやstateが変更され、再レンダリングが必要な場合はcomponentShouldUpdateが呼ばれます。再レンダリングする（render関数を呼ぶ）にはtrue、しない場合はfalseを戻り値として返します（default true）  
 propsやstateの変更をみて、さらに何か処理したい場合には  componentDidUpdateをオーバライドします。(初回レンダリング時は呼ばれません)  
