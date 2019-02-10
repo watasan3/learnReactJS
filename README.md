@@ -9,10 +9,12 @@ Stateless Functional Componentでstateを後でつけたいという場合はク
 
 # useEffect
 
-# useContext
+# useRef+useLayoutEffect+useImperativeHandleのサンプル
 
+useImperativeHandle：ref参照にメソッドを生成するということ等ができますが、Reactのprops経由などで制御するという思想と反しているため、あまり積極的には使うべきではありません。
 
-# パフォーマンスに関して
-通常のReact.ComponentやReact.PureComponentよりもFunctional Componentはライフサイクルメソッドがないためレンダリングは高速です。  
-ただし再レンダリング可否に関しては制御できないので、頻繁に更新されるようなコンポーネントの配下に子コンポーネントとして配置するのは向いていません。  
-（その場合は、親コンポーネント側をPureComponentにするか、shouldComponentUpdateメソッドで親側で再レンダリング制御する必要があります）  
+# userReducer + useContext
+
+# その他
+useDebugValue：カスタムフックのデバッグ用のhookです。ライブラリ開発には使えるかもしれません。ここでは触れません
+

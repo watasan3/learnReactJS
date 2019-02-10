@@ -20,16 +20,16 @@ const Increment = () => {
   const [state, dispatch] = React.useReducer(reducer, {count: 0})
 
   // React.useMemoを使うことで変数をメモ化する
-  // 第２引数を空の配列[state.count]とすることで再レンダリングの際にstate.countの変更がない場合に変数を再生成せずに使い回す
+  // 第２引数を[state.count]とすることで再レンダリングの際にstate.countの変更がない場合に変数を再生成せずに使い回す
   const count = React.useMemo(() => state.count + [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0), [state.count])
-  // const count = state.count + [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0) のように書くこともできるが
-  // Incrementがレンダリングされる度にreduce処理がされるためパフォーマンスが下がる
+  // const count = state.count + [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0) 
+  // のように書くこともできるがIncrementがレンダリングされる度にreduce処理がされるためパフォーマンスが下がる
 
   // React.useCallbackを使うことで関数をメモ化する
   // 第２引数を[state]とすることで再レンダリングの際にstateの変更がない場合に関数を再生成せずに使い回す
   const updateCount = React.useCallback(() => dispatch({type: 'increment', count: state.count + 1}), [state])
-  // const updateCount = () => dispatch({type: 'increment', count: state.count + 1}) // のように書くこともできるが
-  // Incrementがレンダリングされる度に関数が再生成されるためパフォーマンスが下がる
+  // const updateCount = () => dispatch({type: 'increment', count: state.count + 1}) 
+  // のように書くこともできるがIncrementがレンダリングされる度に関数が再生成されるためパフォーマンスが下がる
 
   return (
     // Context.Providerを使うことで配下のコンポーネントはuseContextもしくはContext.Consumerでパラメータを参照できるようにする
