@@ -39,6 +39,32 @@ export default class Rect extends React.Component {
     super(props)
     // ステートオブジェクト
     this.state = { num : this.props.num }
+    console.log('constructor')
+  }
+
+  // レンダリング完了時に１度のみ呼ばれるライフサイクルメソッド
+  // apiコールなどの処理を行う
+  componentDidMount() {
+    console.log('componentDidMount')
+  }
+
+  // propsやstateの変更時に再度render関数を呼ぶか判定する
+  // default trueを返す（いかなるpropsやstateの変更時にもrender関数を呼ぶ）
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate')
+    return true
+  }
+
+  // state, propsが変更された際に呼ばれるライフサイクルメソッド
+  // 変更時に合わせて処理をしたい場合にオーバライドする
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate', prevState)
+  }
+
+  // componentが使わなくなって破棄される(Unmount)直前によばれるライフサイクルメソッド
+  // 後処理などを行う
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
   }
 
   // カウントアップ
@@ -47,7 +73,7 @@ export default class Rect extends React.Component {
     this.setState({ num : this.state.num + 1 })
   }
 
-  render () {
+  render (props) {
     // propsに属性値が渡ってくる
     const { bgcolor } = this.props
 
@@ -63,11 +89,11 @@ export default class Rect extends React.Component {
       verticalAlign: 'center',
     }
 
-    // 複数行になる場合は()で囲む
+    // DOMが複数行になる場合は()で囲む
     // 返却する最上位のDOMは１つのみ
     // JSX内のブロック{}はJS式が評価される
     return (
-      <div style={rectStyle} onClick={() => this.countUp()}>
+      <div style={rectStyle} onClick={(e) => this.countUp()}>
         <NumberPlate><i>{this.state.num}</i></NumberPlate>
       </div>
     )
@@ -110,18 +136,49 @@ export default class App extends React.Component {
 
 # Reactコンポーネントのライフサイクルについて
 
-全体図は良い図があったのでそちらを参考にしてください。  
-[React component ライフサイクル図](https://qiita.com/kawachi/items/092bfc281f88e3a6e456)
-各種メソッドの説明はこちら  
-[React Componentのライフサイクルのまとめと利用用途](https://qiita.com/yukika/items/1859743921a10d7e3e6b)
-  
-  
+![lifecycle](./lifecycle.jpeg)
+
+よく使うライフサイクルメソッドとしては  
 描画時に呼ばれるrenderメソッドはよく使うのでまず抑えておいてください  
-通信処理後のpropsの変更をみて、さらに何か処理したい場合には  
-~~componentWillReceivePropsメソッドを使ったりします。~~  
-componentWillMount、componentWillReceivePropsは廃止予定です。  
-React16.3以降はgetDerivedStateFromPropsを使います。  
-参考：[React v16.3 changes](http://blog.koba04.com/post/2018/04/04/react-v163-changes/)
+通信処理でデータ取得してレンダリングする際はcomponentDidMountを使います。  
+propsやstateが変更され、再レンダリングが必要な場合はcomponentShouldUpdateが呼ばれます。再レンダリングする（render関数を呼ぶ）にはtrue、しない場合はfalseを戻り値として返します（default true）  
+propsやstateの変更をみて、さらに何か処理したい場合には  componentDidUpdateをオーバライドします。(初回レンダリング時は呼ばれません)  
+画面遷移などでコンポーネントが破棄される時に後処理をする場合はcomponentWillUnmount内で行います。  
+  
+constructor > render > componentDidMount > shouldComponentUpdate > componentDidUpdate > componentWillUnmount
+の順番にライフサイクルメソッドが呼ばれます。  
+
+```Rect.js
+  // レンダリング完了時に１度のみ呼ばれるライフサイクルメソッド
+  // apiコールなどの処理を行う
+  componentDidMount() {
+    console.log('componentDidMount')
+  }
+
+  // propsやstateの変更時に再度render関数を呼ぶか判定する
+  // default trueを返す（いかなるpropsやstateの変更時にもrender関数を呼ぶ）
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate')
+    return true
+  }
+
+  // state, propsが変更された際に呼ばれるライフサイクルメソッド
+  // 変更時に合わせて処理をしたい場合にオーバライドする
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate', prevState)
+  }
+
+  // componentが使わなくなって破棄される(Unmount)直前によばれるライフサイクルメソッド
+  // 後処理などを行う
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
+  }
+
+```
+  
+shouldComponentUpdateに関してはレンダリングの最適化に関わるところですが、  
+内容が少し上級者向けのため、React Reduxの項目を習得した後で読むと良いと思います。  
+参考：[お前らのReactは遅い](https://qiita.com/teradonburi/items/5b8f79d26e1b319ac44f#sfc-vs-reactmemo-vs-purecomponent)
 
 # Stateless Functional Componentについて
 reactをimportするだけで関数もReactのコンポーネントになります。  

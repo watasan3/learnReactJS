@@ -13,6 +13,32 @@ export default class Rect extends React.Component {
     super(props)
     // ステートオブジェクト
     this.state = { num : this.props.num }
+    console.log('constructor')
+  }
+
+  // レンダリング完了時に１度のみ呼ばれるライフサイクルメソッド
+  // apiコールなどの処理を行う
+  componentDidMount() {
+    console.log('componentDidMount')
+  }
+
+  // propsやstateの変更時に再度render関数を呼ぶか判定する
+  // default trueを返す（いかなるpropsやstateの変更時にもrender関数を呼ぶ）
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate')
+    return true
+  }
+
+  // state, propsが変更された際に呼ばれるライフサイクルメソッド
+  // 変更時に合わせて処理をしたい場合にオーバライドする
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate', prevState)
+  }
+
+  // componentが使わなくなって破棄される(Unmount)直前によばれるライフサイクルメソッド
+  // 後処理などを行う
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
   }
 
   // カウントアップ
